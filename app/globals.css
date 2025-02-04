@@ -1,10 +1,20 @@
-@tailwind base;
+@import "tailwindcss";
+
+@layer tailwind {
+  @tailwind base;
+}
 @tailwind components;
 @tailwind utilities;
 
-@import "@mantine/core/styles.layer.css";
-@layer base, mantine;
-
 body {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic Pro", Helvetica, Arial,
+    sans-serif;
+  background: repeating-linear-gradient(
+    135deg,
+    #f0f0f0,
+    #f0f0f0 16px,
+    #e8e8e8 16px,
+    #e8e8e8 20px
+  ) !important;
+  overflow-y: scroll;
 }

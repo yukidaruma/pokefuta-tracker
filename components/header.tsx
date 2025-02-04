@@ -3,15 +3,15 @@
 import Link from "next/link";
 
 import { Burger } from "@mantine/core";
-import * as lucide from "lucide-react";
-import { useState } from "react";
+import * as Lucide from "lucide-react";
+import React from "react";
 
 const HeaderComponent: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const navItems = [
-    { href: "/", icon: lucide.List, label: "List" },
-    { href: "/map", icon: lucide.Map, label: "Map" },
-    { href: "/progress", icon: lucide.BarChart2, label: "Progress" },
+    { href: "/", icon: Lucide.List, label: "List" },
+    { href: "/map", icon: Lucide.Map, label: "Map" },
+    { href: "/progress", icon: Lucide.BarChart2, label: "Progress" },
   ];
 
   return (
@@ -22,11 +22,11 @@ const HeaderComponent: React.FC = () => {
         onClick={() => setIsSidebarOpen((prev) => !prev)}
       />
       <Link href="/">
-        <h1 className="ml-2 text-white text-2xl font-bold">Pokéfuta Tracker</h1>
+        <h1 className="ml-4 text-white text-2xl font-bold">Pokéfuta Tracker</h1>
       </Link>
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity ${
-          isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          isSidebarOpen ? "opacity-60" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsSidebarOpen(false)}
       />
@@ -43,7 +43,7 @@ const HeaderComponent: React.FC = () => {
                 className="flex items-center px-4 py-2 hover:bg-gray-100 transition-colors"
                 onClick={() => setIsSidebarOpen(false)}
               >
-                <item.icon className="h-6 w-6 mr-4" />
+                <item.icon color="gray" className="h-6 w-6 mr-4" />
                 <span>{item.label}</span>
               </Link>
             </li>

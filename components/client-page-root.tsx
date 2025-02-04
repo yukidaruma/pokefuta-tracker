@@ -1,9 +1,15 @@
 import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 
 const ClientPageRootComponent: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  return <MantineProvider>{children}</MantineProvider>;
+  return (
+    <MantineProvider>
+      <Notifications />
+      {children}
+    </MantineProvider>
+  );
 };
 
 export default ClientPageRootComponent;

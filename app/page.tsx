@@ -1,21 +1,14 @@
 "use client";
 
-import { Input, Select } from "@mantine/core";
-import * as lucide from "lucide-react";
-import Image from "next/image";
+import * as Mantine from "@mantine/core";
+import * as Lucide from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import React from "react";
 
 import data from "@/data.json";
-import prefs from "@/prefs.json";
-const { list, names } = data;
-
-const getPokemonName = (num: string | number) => {
-  return (names as Record<string, string>)[num];
-};
-const getPrefectureName = (code: string | number) => {
-  return prefs.find((pref) => pref.code === Number(code))!.ja;
-};
+import { useProgressStorage } from "@/hooks";
+import { getPokemonName, getPrefectureName, type PokefutaData } from "@/util";
+import PokefutaImage from "@/components/pokefuta-image";
 
 const IndexPage: React.FC = () => {
   const groupByOptions = [
@@ -24,12 +17,14 @@ const IndexPage: React.FC = () => {
   ] as const;
   type GroupByOption = (typeof groupByOptions)[number]["value"];
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [groupBy, setGroupBy] = useState<GroupByOption>(
+  const [hideVisited, setHideVisited] = React.useState(false);
+  const [progress, updateProgress] = useProgressStorage();
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [groupBy, setGroupBy] = React.useState<GroupByOption>(
     groupByOptions[0].value
   );
 
-  const normalizedSearchTerm = useMemo(() => {
+  const normalizedSearchTerm = React.useMemo(() => {
     return searchTerm
       .trim()
       .split("")
@@ -41,12 +36,18 @@ const IndexPage: React.FC = () => {
       })
       .join("");
   }, [searchTerm]);
-  const filteredPokefutas = useMemo(() => {
-    if (!normalizedSearchTerm) {
-      return list;
-    }
+  const filteredPokefutas = React.useMemo(() => {
+    return data.list.filter((pokefuta) => {
+      // Hide visited
+      if (hideVisited && progress[pokefuta.id]) {
+        return false;
+      }
 
-    return list.filter((pokefuta) => {
+      // If no search term is provided, do not apply filters
+      if (!normalizedSearchTerm) {
+        return data.list;
+      }
+
       if (/^\d+$/.test(normalizedSearchTerm)) {
         // By pokedex number
         return pokefuta.pokemons.some((pokeNum) => {
@@ -63,66 +64,79 @@ const IndexPage: React.FC = () => {
         pokefuta.address.includes(normalizedSearchTerm)
       );
     });
-  }, [normalizedSearchTerm]);
-  const groupedPokefutas = useMemo(() => {
+  }, [hideVisited, progress, normalizedSearchTerm]);
+  const groupedPokefutas = React.useMemo(() => {
     return filteredPokefutas.reduce((acc, pokefuta) => {
       const gruopKey = pokefuta.pref;
       acc[gruopKey] ??= [];
       acc[gruopKey].push(pokefuta);
       return acc;
-    }, {} as Record<string, Array<(typeof list)[number]>>);
-  }, [searchTerm, filteredPokefutas, groupBy]);
+    }, {} as Record<string, PokefutaData[]>);
+  }, [filteredPokefutas]);
 
   return (
     <div className="space-y-4">
-      <div className="flex space-x-2">
-        <div className="relative flex-1">
-          <Input
+      <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">
+        ポケふた一覧
+      </h2>
+
+      <div className="mt-4">
+        <div className="flex space-x-2">
+          <Mantine.TextInput
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setSearchTerm(e.target.value)
             }
-            className="pl-10"
+            leftSection={<Lucide.Search className="text-gray-400" />}
           />
-          <lucide.Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-        </div>
-        {/*
-        <Select
+          {/*
+        <Mantine.Select
           value={groupBy}
           onChange={(value) => setGroupBy(value as GroupByOption)}
           data={groupByOptions}
         />
         */}
+        </div>
+
+        <div className="mt-2 flex items-center space-x-2">
+          <Mantine.Checkbox
+            id="hide-visited"
+            onChange={(e) => setHideVisited(e.target.checked)}
+          />
+          <label htmlFor="hide-visited">訪問済みのポケふたを非表示にする</label>
+        </div>
       </div>
+
+      <div className="mt-8"></div>
 
       {Object.entries(groupedPokefutas).map(([group, items]) => {
         return (
           <div key={group} className="space-y-2">
-            <h2 className="text-xl font-bold">{getPrefectureName(group)}</h2>
+            <h3 className="text-2xl text-red-700 font-bold">
+              {getPrefectureName(group)}
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {items.map((pokefuta) => {
-                const names = pokefuta.pokemons
-                  .map((pokeNum) => getPokemonName(pokeNum))
-                  .join(", ");
+                const names = pokefuta.pokemons.map(getPokemonName).join(", ");
+                const hasVisited = progress[pokefuta.id] ?? false;
 
                 return (
                   <Link
                     key={pokefuta.id}
                     href={`/item/${pokefuta.id}`}
-                    className="flex space-x-2 bg-white p-4 rounded-lg shadow"
+                    className={`flex space-x-2 p-4 rounded-lg shadow ${
+                      hasVisited ? "bg-green-50" : ""
+                    }`}
                   >
-                    <Image
-                      alt={`Image of pokefuta with ${names}`}
-                      src={`/images/${pokefuta.id}.png`}
-                      width={72}
-                      height={72}
-                    />
+                    <PokefutaImage id={pokefuta.id} size={72} />
                     <div>
                       <p>{pokefuta.city}</p>
                       <p className="text-sm text-gray-600">{names}</p>
                     </div>
+                    <Mantine.Box flex={1} />
+                    <Lucide.ChevronRight className="self-center" />
                   </Link>
                 );
               })}
