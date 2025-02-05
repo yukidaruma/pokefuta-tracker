@@ -5,20 +5,13 @@ import { useParams } from "next/navigation";
 import * as Mantine from "@mantine/core";
 import * as Lucide from "lucide-react";
 
-import data from "@/data.json";
-import { useProgressStorage } from "@/hooks";
-import {
-  calcDistance,
-  getPokefutaData,
-  getPokefutaImage,
-  getPokemonName,
-  getPrefectureName,
-} from "@/util";
 import MapComponent from "@/components/map";
 import PokefutaImage from "@/components/pokefuta-image";
 import ExternalLink from "@/components/external-link";
 import Copyable from "@/components/copyable";
-import Link from "next/link";
+import PokefutasNearby from "@/components/pokefutas-nearby";
+import { useProgressStorage } from "@/hooks";
+import { getPokefutaData, getPokemonName, getPrefectureName } from "@/util";
 
 const ItemClientPage: React.FC = () => {
   const params = useParams();
@@ -31,10 +24,10 @@ const ItemClientPage: React.FC = () => {
     updateProgress(id, !hasVisited);
   };
 
-  const [lat, long] = pokefutaData.coords;
+  const [lat, lng] = pokefutaData.coords;
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col flex-1 space-y-4">
       <h2 className="text-2xl sm:text-3xl text-red-700 font-bold whitespace-pre-line md:whitespace-normal">
         {getPrefectureName(pokefutaData.pref)}
         {pokefutaData.city}
@@ -55,7 +48,12 @@ const ItemClientPage: React.FC = () => {
           </div>
         </div>
         <div className="mt-4 sm:mt-0 flex-1">
-          <MapComponent highlight={id} initialLat={lat} initialLng={long} />
+          <MapComponent
+            style={{ height: 400 }}
+            highlight={id}
+            initialLat={lat}
+            initialLng={lng}
+          />
           <div className="mt-4 flex flex-col space-y-4">
             <Copyable
               value={pokefutaData.address}
@@ -68,13 +66,13 @@ const ItemClientPage: React.FC = () => {
             </Copyable>
 
             <Copyable
-              value={`${lat}, ${long}`}
+              value={`${lat}, ${lng}`}
               copyMessage="座標をコピーしました"
             >
               <div className="flex items-center space-x-1">
                 <Lucide.Globe color="gray" />
                 <span>
-                  {lat}, {long}
+                  {lat}, {lng}
                 </span>
               </div>
             </Copyable>
@@ -91,7 +89,7 @@ const ItemClientPage: React.FC = () => {
             <div className="flex items-center space-x-1">
               <Lucide.ExternalLink color="gray" />
               <ExternalLink
-                href={`https://www.google.co.jp/maps/?q=${lat}+${long}`}
+                href={`https://www.google.co.jp/maps/?q=${lat}+${lng}`}
               >
                 Google Maps
               </ExternalLink>
@@ -112,61 +110,10 @@ const ItemClientPage: React.FC = () => {
             <Mantine.Divider className="my-6" />
 
             <h4 className="font-bold">周辺のポケふた</h4>
-            <PokefutasNearby progress={progress} lat={lat} long={long} />
+            <PokefutasNearby progress={progress} pokefutaData={pokefutaData} />
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-const PokefutasNearby: React.FC<{
-  progress: ReturnType<typeof useProgressStorage>[0];
-  lat: string;
-  long: string;
-}> = ({ progress, lat, long }) => {
-  // Get 5 nearby pokefutas
-  const nearby = data.list
-    .filter(
-      (pokefuta) => pokefuta.coords[0] !== lat && pokefuta.coords[1] !== long
-    )
-    .map((pokefuta) => {
-      const distance = calcDistance(
-        Number(lat),
-        Number(long),
-        Number(pokefuta.coords[0]),
-        Number(pokefuta.coords[1])
-      );
-      return { ...pokefuta, distance };
-    })
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, 6);
-
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {nearby.map((pokefuta) => {
-        const hasVisited = progress[pokefuta.id];
-
-        return (
-          <Link
-            key={pokefuta.id}
-            href={`/item/${pokefuta.id}`}
-            className={`flex items-center p-2 space-x-2 rounded-lg shadow ${
-              hasVisited ? "bg-green-50" : ""
-            }`}
-          >
-            <PokefutaImage id={pokefuta.id} size={80} />
-            <div className="flex flex-col">
-              <span>
-                {getPrefectureName(pokefuta.pref)} {pokefuta.city}
-              </span>
-              <span className="text-sm text-gray-600">
-                {pokefuta.distance.toFixed(1)} km
-              </span>
-            </div>
-          </Link>
-        );
-      })}
     </div>
   );
 };

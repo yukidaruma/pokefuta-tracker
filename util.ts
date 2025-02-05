@@ -1,3 +1,5 @@
+import React from "react";
+
 import data from "@/data.json";
 import prefs from "@/prefs.json";
 
@@ -16,15 +18,16 @@ export const getPrefectureName = (code: string | number) => {
   return prefs.find((pref) => pref.code === Number(code))!.ja;
 };
 
+// Calculate distance between two points in latitude and longitude
 export const calcDistance = (
   lat1: number,
-  lon1: number,
+  lng1: number,
   lat2: number,
-  lon2: number
+  lng2: number
 ) => {
   const R = 6378.137; // Earth radius in km
   const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
+  const dLon = toRad(lng2 - lng1);
   lat1 = toRad(lat1);
   lat2 = toRad(lat2);
 
@@ -38,6 +41,74 @@ export const calcDistance = (
 };
 
 // Converts numeric degrees to radians
-function toRad(Value: number) {
+const toRad = (Value: number) => {
   return (Value * Math.PI) / 180;
-}
+};
+
+// Filter pokefutas by search term
+export const useFilteredPokefutas = (
+  searchTerm: string,
+  progress: Record<number, boolean>,
+  options: { hideVisited: boolean }
+) => {
+  const normalizedSearchTerm = searchTerm
+    .trim()
+    .split("")
+    .map((char) => {
+      const code = char.charCodeAt(0);
+      return code >= 0x3041 && code <= 0x3096
+        ? String.fromCharCode(code + 0x60)
+        : char;
+    })
+    .join("");
+
+  return data.list.filter((pokefuta) => {
+    // Hide visited
+    if (options.hideVisited && progress[pokefuta.id]) {
+      return false;
+    }
+
+    // If no search term is provided, do not apply filters
+    if (!normalizedSearchTerm) {
+      return data.list;
+    }
+
+    if (/^\d+$/.test(normalizedSearchTerm)) {
+      // By pokedex number
+      return pokefuta.pokemons.some((pokeNum) => {
+        return pokeNum === normalizedSearchTerm;
+      });
+    }
+
+    return (
+      // By name
+      pokefuta.pokemons.some((pokeNum) => {
+        return getPokemonName(pokeNum).includes(normalizedSearchTerm);
+      }) ||
+      // By address
+      pokefuta.address.includes(normalizedSearchTerm)
+    );
+  });
+};
+
+// Get nearby pokefutas
+export const getNearbyPokefutas = (
+  count: number,
+  lat: number,
+  lng: number,
+  ignoreId?: number
+) => {
+  return data.list
+    .filter((pokefuta) => pokefuta.id !== ignoreId)
+    .map((pokefuta) => {
+      const distance = calcDistance(
+        Number(lat),
+        Number(lng),
+        Number(pokefuta.coords[0]),
+        Number(pokefuta.coords[1])
+      );
+      return { ...pokefuta, distance };
+    })
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, count);
+};

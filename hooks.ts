@@ -11,3 +11,13 @@ export const useProgressStorage = () => {
 
   return [progress, updateProgress] as const;
 };
+
+export const useGeolocationFirstTimeNoticeStorage = () => {
+  const [geolocationFirstTimeNotice, setGeolocationFirstTimeNotice] =
+    useLocalStorage<boolean>({
+      key: "geolocationFirstTimeNotice",
+      defaultValue: true,
+    });
+
+  return [geolocationFirstTimeNotice, setGeolocationFirstTimeNotice] as const;
+};

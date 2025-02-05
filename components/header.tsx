@@ -9,9 +9,9 @@ import React from "react";
 const HeaderComponent: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const navItems = [
-    { href: "/", icon: Lucide.List, label: "List" },
-    { href: "/map", icon: Lucide.Map, label: "Map" },
-    { href: "/progress", icon: Lucide.BarChart2, label: "Progress" },
+    { href: "/", icon: Lucide.List, label: "ポケふた一覧" },
+    { href: "/map", icon: Lucide.Map, label: "マップ" },
+    // { href: "/progress", icon: Lucide.BarChart2, label: "達成率" },
   ];
 
   return (
