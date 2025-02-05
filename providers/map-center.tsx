@@ -6,15 +6,13 @@ interface MapCenterContextProps {
   setCoordinates: (latitude: number, longitude: number) => void;
 }
 
-export const MapCenterContext = React.createContext<MapCenterContextProps>({
+const MapCenterContext = React.createContext<MapCenterContextProps>({
   latitude: null,
   longitude: null,
   setCoordinates: () => {},
 });
 
-export const MapCenterProvider: React.FC<React.PropsWithChildren> = ({
-  children,
-}) => {
+const MapCenterProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [latitude, setLatitude] = React.useState<number | null>(null);
   const [longitude, setLongitude] = React.useState<number | null>(null);
 
@@ -30,4 +28,6 @@ export const MapCenterProvider: React.FC<React.PropsWithChildren> = ({
   );
 };
 
-export const useMapCenterContext = () => React.useContext(MapCenterContext);
+const useMapCenterContext = () => React.useContext(MapCenterContext);
+
+export { MapCenterContext, MapCenterProvider, useMapCenterContext };

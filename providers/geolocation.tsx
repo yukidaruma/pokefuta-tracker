@@ -11,14 +11,14 @@ type GeolocationContextProps = {
   getGeolocation: () => void;
 };
 
-export const GeolocationContext = React.createContext<GeolocationContextProps>({
+const GeolocationContext = React.createContext<GeolocationContextProps>({
   latitude: null,
   longitude: null,
   error: null,
   getGeolocation: () => {},
 });
 
-export const GeolocationProvider: React.FC<React.PropsWithChildren> = ({
+const GeolocationProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const [loading, setLoading] = React.useState(false);
@@ -84,4 +84,6 @@ export const GeolocationProvider: React.FC<React.PropsWithChildren> = ({
   );
 };
 
-export const useGeolocationContext = () => React.useContext(GeolocationContext);
+const useGeolocationContext = () => React.useContext(GeolocationContext);
+
+export { GeolocationContext, GeolocationProvider, useGeolocationContext };

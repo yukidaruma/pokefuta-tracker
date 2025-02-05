@@ -7,6 +7,7 @@ import "./globals.css";
 
 import HeaderComponent from "@/components/header";
 import ClientPageRootComponent from "@/components/client-page-root";
+import { SearchProvider } from "@/providers/search";
 
 export const metadata: Metadata = {
   title: "Pokéfuta Tracker",
@@ -18,9 +19,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <div className="flex flex-col min-h-screen">
       <ClientPageRootComponent>
         <HeaderComponent />
-        <main className="w-full max-w-screen-xl mx-auto overflow-auto xl:my-8 xl:rounded-xl p-4 xl:p-8 bg-white flex flex-1">
-          {children}
-        </main>
+        <SearchProvider>
+          <main className="w-full max-w-screen-xl mx-auto overflow-auto xl:my-8 xl:rounded-xl p-4 xl:p-8 bg-white flex flex-1">
+            {children}
+          </main>
+        </SearchProvider>
       </ClientPageRootComponent>
     </div>
   );
