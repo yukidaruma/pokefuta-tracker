@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 
-import { Burger } from "@mantine/core";
 import * as Lucide from "lucide-react";
+import * as Mantine from "@mantine/core";
 import React from "react";
 
 const HeaderComponent: React.FC = () => {
@@ -16,7 +16,7 @@ const HeaderComponent: React.FC = () => {
 
   return (
     <header className="bg-red-600 p-4 flex items-center">
-      <Burger
+      <Mantine.Burger
         color="white"
         opened={isSidebarOpen}
         onClick={() => setIsSidebarOpen((prev) => !prev)}

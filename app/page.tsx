@@ -1,15 +1,16 @@
 "use client";
 
-import * as Mantine from "@mantine/core";
 import * as Lucide from "lucide-react";
+import * as Mantine from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 
+import data from "@/data.json";
 import { useProgressStorage } from "@/hooks";
 import {
+  getFilteredPokefutas,
   getPokemonName,
   getPrefectureName,
-  useFilteredPokefutas as filterPokefutas,
   type PokefutaData,
 } from "@/util";
 import PokefutaImage from "@/components/pokefuta-image";
@@ -29,7 +30,7 @@ const IndexPage: React.FC = () => {
   );
 
   const filteredPokefutas = React.useMemo(() => {
-    return filterPokefutas(searchTerm, progress, { hideVisited });
+    return getFilteredPokefutas(searchTerm, { progress, hideVisited });
   }, [searchTerm, progress, hideVisited]);
   const groupedPokefutas = React.useMemo(() => {
     return filteredPokefutas.reduce((acc, pokefuta) => {
@@ -91,7 +92,8 @@ const IndexPage: React.FC = () => {
       <div className="mt-8"></div>
 
       <p className="mt-2 text-gray-500">
-        検索結果: {filteredProgression} / {filteredPokefutas.length}件
+        検索結果: {filteredPokefutas.length} ({filteredProgression}) /{" "}
+        {data.list.length}件
       </p>
 
       {Object.entries(groupedPokefutas).map(([group, items]) => {

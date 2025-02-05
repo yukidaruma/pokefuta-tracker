@@ -2,8 +2,8 @@
 
 import { useParams } from "next/navigation";
 
-import * as Mantine from "@mantine/core";
 import * as Lucide from "lucide-react";
+import * as Mantine from "@mantine/core";
 
 import MapComponent from "@/components/map";
 import PokefutaImage from "@/components/pokefuta-image";

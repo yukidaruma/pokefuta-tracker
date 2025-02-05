@@ -1,5 +1,3 @@
-import React from "react";
-
 import data from "@/data.json";
 import prefs from "@/prefs.json";
 
@@ -46,10 +44,12 @@ const toRad = (Value: number) => {
 };
 
 // Filter pokefutas by search term
-export const useFilteredPokefutas = (
+export const getFilteredPokefutas = (
   searchTerm: string,
-  progress: Record<number, boolean>,
-  options: { hideVisited: boolean }
+  options: {
+    progress?: Record<number, boolean>;
+    hideVisited?: boolean;
+  } = {}
 ) => {
   const normalizedSearchTerm = searchTerm
     .trim()
@@ -64,7 +64,7 @@ export const useFilteredPokefutas = (
 
   return data.list.filter((pokefuta) => {
     // Hide visited
-    if (options.hideVisited && progress[pokefuta.id]) {
+    if (options.hideVisited && options.progress?.[pokefuta.id]) {
       return false;
     }
 
@@ -96,10 +96,15 @@ export const getNearbyPokefutas = (
   count: number,
   lat: number,
   lng: number,
-  ignoreId?: number
+  options?: {
+    filteredPokefutas?: PokefutaData[];
+    ignoreId?: number;
+  }
 ) => {
-  return data.list
-    .filter((pokefuta) => pokefuta.id !== ignoreId)
+  return (options?.filteredPokefutas ?? data.list)
+    .filter((pokefuta) => {
+      return !options?.ignoreId || pokefuta.id !== options.ignoreId;
+    })
     .map((pokefuta) => {
       const distance = calcDistance(
         Number(lat),

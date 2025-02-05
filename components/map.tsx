@@ -59,6 +59,57 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
     const mapCenterContext = useMapCenterContext();
     const router = useRouter();
 
+    const updateMarkerLayer = (map: Map) => {
+      const iconFeatures: Feature[] = [];
+
+      // Show only pokefutas meeting the conditions
+      const availablePokefutas = ids
+        ? data.list.filter((pokefuta) => ids.includes(pokefuta.id))
+        : data.list;
+      const highlightedPokefuta = availablePokefutas.find(
+        (pokefuta) => pokefuta.id === highlight
+      );
+      const pokefutas = highlightedPokefuta
+        ? availablePokefutas.filter(
+            (pokefuta) => pokefuta.pref === highlightedPokefuta.pref
+          )
+        : availablePokefutas;
+
+      for (const pokefuta of pokefutas) {
+        const iconFeature = new Feature({
+          geometry: new Point(
+            fromLonLat([Number(pokefuta.coords[1]), Number(pokefuta.coords[0])])
+          ),
+        });
+        const iconStyle = new Style({
+          image: new Icon({
+            src: getPokefutaImage(pokefuta.id),
+            opacity: highlight && highlight !== pokefuta.id ? 0.5 : 1,
+            height: 48,
+            width: 48,
+          }),
+        });
+
+        iconFeature.setId(pokefuta.id);
+        iconFeature.setStyle(iconStyle);
+
+        iconFeatures.push(iconFeature);
+      }
+
+      const oldLayer = map.getLayers().item(1);
+      if (oldLayer) {
+        // Replace layer if it already exists
+        map.removeLayer(oldLayer);
+        oldLayer.dispose();
+      }
+      const vectorLayer = new VectorLayer({
+        source: new VectorSource({
+          features: iconFeatures,
+        }),
+      });
+      map.addLayer(vectorLayer);
+    };
+
     React.useEffect(() => {
       if (mapRef.current && !map) {
         const newMap = new Map({
@@ -75,52 +126,6 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
             center: fromLonLat([Number(initialLng), Number(initialLat)]),
             zoom: 14,
           }),
-        });
-
-        const iconFeatures: Feature[] = [];
-
-        // Show only pokefutas meeting the conditions
-        const highlightedPokefuta = data.list.find(
-          (pokefuta) => pokefuta.id === highlight
-        );
-        const availablePokefutas = ids
-          ? data.list.filter((pokefuta) => ids.includes(pokefuta.id))
-          : data.list;
-        const pokefutas = highlightedPokefuta
-          ? availablePokefutas.filter(
-              (pokefuta) => pokefuta.pref === highlightedPokefuta.pref
-            )
-          : data.list;
-
-        for (const pokefuta of pokefutas) {
-          const iconFeature = new Feature({
-            geometry: new Point(
-              fromLonLat([
-                Number(pokefuta.coords[1]),
-                Number(pokefuta.coords[0]),
-              ])
-            ),
-          });
-          const iconStyle = new Style({
-            image: new Icon({
-              src: getPokefutaImage(pokefuta.id),
-              opacity: highlight && highlight !== pokefuta.id ? 0.5 : 1,
-              height: 48,
-              width: 48,
-            }),
-          });
-
-          iconFeature.setId(pokefuta.id);
-          iconFeature.setStyle(iconStyle);
-
-          iconFeatures.push(iconFeature);
-        }
-
-        const vectorSource = new VectorSource({
-          features: iconFeatures,
-        });
-        const vectorLayer = new VectorLayer({
-          source: vectorSource,
         });
 
         // Change cursor to pointer on hovering over a feature (non-highlighted ones only)
@@ -153,7 +158,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           mapCenterContext.setCoordinates(centerLatLong[1], centerLatLong[0]);
         });
 
-        newMap.addLayer(vectorLayer);
+        updateMarkerLayer(newMap);
         setMap(newMap);
       }
 
@@ -162,17 +167,20 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           map.setTarget(undefined);
         }
       };
-    }, [initialLat, initialLng, map]);
+    }, [map]);
+
+    React.useEffect(() => {
+      if (!map) {
+        return;
+      }
+
+      updateMarkerLayer(map);
+    }, [ids, highlight]);
 
     return (
       <div
         ref={(node) => {
           mapRef.current = node;
-          if (typeof ref === "function") {
-            ref(node);
-          } else if (ref) {
-            ref.current = node;
-          }
         }}
         style={{ ...style, width: "100%" }}
       />
