@@ -5,6 +5,7 @@ import "@mantine/core/styles.layer.css";
 import "@mantine/notifications/styles.css";
 import "./globals.css";
 
+import FooterComponent from "@/components/footer";
 import HeaderComponent from "@/components/header";
 import ClientPageRootComponent from "@/components/client-page-root";
 import { SearchProvider } from "@/providers/search";
@@ -24,6 +25,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             {children}
           </main>
         </SearchProvider>
+        <FooterComponent />
       </ClientPageRootComponent>
     </div>
   );
