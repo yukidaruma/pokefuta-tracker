@@ -13,6 +13,7 @@ const PokefutaImage: React.FC<PokefutaImageProps> = ({ id, size }) => {
 
   return (
     <Image
+      priority={false}
       alt={`Image of pokefuta with ${names}`}
       src={`/images/pokefuta/${pokefuta.id}.png`}
       width={size}
