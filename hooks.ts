@@ -6,7 +6,12 @@ export const useProgressStorage = () => {
     defaultValue: {},
   });
   const updateProgress = (id: string | number, value: boolean) => {
-    setProgress((prev) => ({ ...prev, [id]: value }));
+    if (value) {
+      setProgress((prev) => ({ ...prev, [id]: true }));
+    } else {
+      const { [id]: _, ...rest } = progress;
+      setProgress(rest);
+    }
   };
 
   return [progress, updateProgress] as const;
