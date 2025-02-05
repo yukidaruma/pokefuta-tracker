@@ -8,7 +8,7 @@ import { fromLonLat, toLonLat } from "ol/proj";
 import { Feature } from "ol";
 import { Point } from "ol/geom";
 import { Vector as VectorLayer } from "ol/layer";
-import { StadiaMaps, Vector as VectorSource } from "ol/source";
+import { OSM, StadiaMaps, Vector as VectorSource } from "ol/source";
 import { Icon, Style } from "ol/style";
 import React from "react";
 
@@ -116,10 +116,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           target: mapRef.current,
           layers: [
             new TileLayer({
-              source: new StadiaMaps({
-                layer: "osm_bright",
-                retina: true,
-              }),
+              source: new OSM(),
             }),
           ],
           view: new View({
