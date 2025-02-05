@@ -55,7 +55,7 @@ const ItemClientPage: React.FC = () => {
           </div>
         </div>
         <div className="mt-4 sm:mt-0 flex-1">
-          <MapComponent pinIcon={getPokefutaImage(id)} lat={lat} lng={long} />
+          <MapComponent highlight={id} initialLat={lat} initialLng={long} />
           <div className="mt-4 flex flex-col space-y-4">
             <Copyable
               value={pokefutaData.address}
