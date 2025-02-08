@@ -39,7 +39,7 @@ const IndexPage: React.FC = () => {
         }, {} as Record<string, PokefutaData[]>);
 
         return (
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             <div className="flex items-center space-x-4">
               <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">
                 ポケふた一覧

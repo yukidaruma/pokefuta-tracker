@@ -10,7 +10,7 @@ const HeaderComponent: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const navItems = [
     { href: "/", icon: Lucide.List, label: "ポケふた一覧" },
-    { href: "/map", icon: Lucide.Map, label: "マップ" },
+    { href: "/map", icon: Lucide.Map, label: "ポケふたマップ" },
     // { href: "/progress", icon: Lucide.BarChart2, label: "達成率" },
   ];
 

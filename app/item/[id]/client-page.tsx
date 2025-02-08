@@ -109,7 +109,7 @@ const ItemClientPage: React.FC = () => {
 
             <Mantine.Divider className="my-6" />
 
-            <h4 className="font-bold">周辺のポケふた</h4>
+            <h4 className="font-bold">このポケふたの周辺のポケふた</h4>
             <PokefutasNearby progress={progress} pokefutaData={pokefutaData} />
           </div>
         </div>

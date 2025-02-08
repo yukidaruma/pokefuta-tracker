@@ -122,6 +122,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           view: new View({
             center: fromLonLat([Number(initialLng), Number(initialLat)]),
             zoom: 14,
+            enableRotation: false,
           }),
         });
 
