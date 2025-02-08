@@ -12,7 +12,7 @@ import { OSM, StadiaMaps, Vector as VectorSource } from "ol/source";
 import { Icon, Style } from "ol/style";
 import React from "react";
 
-import data from "@/data.json";
+import data from "@/data/data.json";
 import { getPokefutaImage } from "@/util";
 import { useMapCenterContext } from "@/providers/map-center";
 

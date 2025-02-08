@@ -1,6 +1,6 @@
-import data from "@/data.json";
-import evolutions from "@/evolutions.json";
-import prefs from "@/prefs.json";
+import data from "@/data/data.json";
+import evolutions from "@/data/evolutions.json";
+import prefs from "@/data/prefs.json";
 
 export type PokefutaData = (typeof data.list)[number];
 
