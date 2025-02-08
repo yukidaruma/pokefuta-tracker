@@ -1,4 +1,5 @@
 import data from "@/data.json";
+import evolutions from "@/evolutions.json";
 import prefs from "@/prefs.json";
 
 export type PokefutaData = (typeof data.list)[number];
@@ -9,7 +10,7 @@ export const getPokefutaData = (id: number) => {
 export const getPokefutaImage = (id: number) => {
   return `/images/pokefuta/${id}.png`;
 };
-export const getPokemonName = (num: string | number) => {
+export const getPokemonName = (num: string | number): string | undefined => {
   return (data.names as Record<string, string>)[num];
 };
 export const getPrefectureName = (code: string | number) => {
@@ -49,6 +50,7 @@ export const getFilteredPokefutas = (
   options: {
     progress?: Record<number, boolean>;
     hideVisited?: boolean;
+    includeEvolutions?: boolean;
   } = {}
 ) => {
   const normalizedSearchTerm = searchTerm
@@ -62,6 +64,18 @@ export const getFilteredPokefutas = (
     })
     .join("");
 
+  const matchedEvoPokeNums = new Set<number>();
+  if (options.includeEvolutions) {
+    for (const evolutionChain of evolutions) {
+      for (const pokeNum of evolutionChain) {
+        if (getPokemonName(pokeNum)?.includes(normalizedSearchTerm)) {
+          evolutionChain.forEach((it) => matchedEvoPokeNums.add(it));
+          break;
+        }
+      }
+    }
+  }
+
   return data.list.filter((pokefuta) => {
     // Hide visited
     if (options.hideVisited && options.progress?.[pokefuta.id]) {
@@ -70,24 +84,33 @@ export const getFilteredPokefutas = (
 
     // If no search term is provided, do not apply filters
     if (!normalizedSearchTerm) {
-      return data.list;
+      return true;
     }
 
+    // By pokedex number
     if (/^\d+$/.test(normalizedSearchTerm)) {
-      // By pokedex number
       return pokefuta.pokemons.some((pokeNum) => {
         return pokeNum === normalizedSearchTerm;
       });
     }
 
-    return (
-      // By name
-      pokefuta.pokemons.some((pokeNum) => {
-        return getPokemonName(pokeNum).includes(normalizedSearchTerm);
-      }) ||
-      // By address
-      pokefuta.address.includes(normalizedSearchTerm)
-    );
+    // By address
+    if (pokefuta.address.includes(normalizedSearchTerm)) {
+      return true;
+    }
+
+    // By name
+    for (const pokeNum of pokefuta.pokemons) {
+      if (options.includeEvolutions) {
+        if (matchedEvoPokeNums.has(Number(pokeNum))) {
+          return true;
+        }
+      } else {
+        return pokefuta.pokemons.some((pokeNum) => {
+          return getPokemonName(pokeNum)?.includes(normalizedSearchTerm);
+        });
+      }
+    }
   });
 };
 

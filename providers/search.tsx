@@ -10,8 +10,10 @@ import { useProgressStorage } from "@/hooks";
 type SearchFieldsProps = {
   searchTerm: string;
   hideVisited: boolean;
+  includeEvolutions: boolean;
   setSearchTerm: (term: string) => void;
   setHideVisited: (hide: boolean) => void;
+  setIncludeEvolutions: (include: boolean) => void;
   filteredPokefutas: PokefutaData[];
   progression: number;
 };
@@ -19,8 +21,10 @@ type SearchFieldsProps = {
 const SearchFields: React.FC<SearchFieldsProps> = ({
   searchTerm,
   hideVisited,
+  includeEvolutions,
   setSearchTerm,
   setHideVisited,
+  setIncludeEvolutions,
   filteredPokefutas,
   progression,
 }) => {
@@ -53,6 +57,15 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
         <label htmlFor="hide-visited">訪問済みのポケふたを除外する</label>
       </div>
 
+      <div className="mt-2 flex items-center space-x-2">
+        <Mantine.Checkbox
+          id="include-evolution"
+          checked={includeEvolutions}
+          onChange={(e) => setIncludeEvolutions(e.target.checked)}
+        />
+        <label htmlFor="include-evolution">進化系を含む</label>
+      </div>
+
       <div className="mt-8"></div>
 
       <p className="mt-2 text-gray-500">
@@ -67,8 +80,10 @@ export default SearchFields;
 type SearchContextProps = {
   searchTerm: string;
   hideVisited: boolean;
+  includeEvolutions: boolean;
   setSearchTerm: (term: string) => void;
   setHideVisited: (hide: boolean) => void;
+  setIncludeEvolutions: (include: boolean) => void;
   filteredPokefutas: PokefutaData[];
   form: React.ReactNode;
 };
@@ -80,12 +95,18 @@ const SearchContext = React.createContext<SearchContextProps>(
 const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const [hideVisited, setHideVisited] = React.useState<boolean>(false);
+  const [includeEvolutions, setIncludeEvolutions] =
+    React.useState<boolean>(false);
 
   const [progress, _updateProgress] = useProgressStorage();
 
   const filteredPokefutas = React.useMemo(() => {
-    return getFilteredPokefutas(searchTerm, { progress, hideVisited });
-  }, [searchTerm, progress, hideVisited]);
+    return getFilteredPokefutas(searchTerm, {
+      progress,
+      hideVisited,
+      includeEvolutions,
+    });
+  }, [searchTerm, progress, hideVisited, includeEvolutions]);
   const filteredProgression = Object.entries(progress).filter(
     ([id, visited]) => {
       return (
@@ -100,15 +121,19 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
       value={{
         searchTerm,
         hideVisited,
+        includeEvolutions,
         setSearchTerm,
         setHideVisited,
+        setIncludeEvolutions,
         filteredPokefutas,
         form: (
           <SearchFields
+            searchTerm={searchTerm}
             hideVisited={hideVisited}
+            includeEvolutions={includeEvolutions}
             setSearchTerm={setSearchTerm}
             setHideVisited={setHideVisited}
-            searchTerm={searchTerm}
+            setIncludeEvolutions={setIncludeEvolutions}
             filteredPokefutas={filteredPokefutas}
             progression={filteredProgression}
           />
