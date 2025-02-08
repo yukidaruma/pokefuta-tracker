@@ -13,8 +13,11 @@ export const getPokefutaImage = (id: number) => {
 export const getPokemonName = (num: string | number): string | undefined => {
   return (data.names as Record<string, string>)[num];
 };
+export const getPrefectureByCode = (code: string | number) => {
+  return prefs.find((pref) => pref.code === Number(code));
+};
 export const getPrefectureName = (code: string | number) => {
-  return prefs.find((pref) => pref.code === Number(code))!.ja;
+  return getPrefectureByCode(code)!.ja;
 };
 
 // Calculate distance between two points in latitude and longitude

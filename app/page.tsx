@@ -5,11 +5,10 @@ import * as Mantine from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 
-import data from "@/data/data.json";
 import { useProgressStorage } from "@/hooks";
 import {
-  getFilteredPokefutas,
   getPokemonName,
+  getPrefectureByCode,
   getPrefectureName,
   type PokefutaData,
 } from "@/util";
@@ -18,6 +17,7 @@ import { SearchContext } from "@/providers/search";
 
 const IndexPage: React.FC = () => {
   const [progress, _updateProgress] = useProgressStorage();
+  const [selectedGroup, setSelectedGroup] = React.useState<string>(null!);
 
   const groupByOptions = [
     { value: "pref", label: "Prefecture" },
@@ -27,6 +27,35 @@ const IndexPage: React.FC = () => {
   const [groupBy, setGroupBy] = React.useState<GroupByOption>(
     groupByOptions[0].value
   );
+
+  // Workaround for sticky header
+  const scrollToGroup = (element: HTMLElement) => {
+    window.scrollTo({
+      top: element.offsetTop - 66,
+    });
+  };
+
+  React.useEffect(() => {
+    const hash = location.hash.slice(1);
+    const targetEl = document.getElementById(hash);
+    if (!targetEl) {
+      return;
+    }
+
+    setSelectedGroup(hash);
+    setTimeout(() => {
+      scrollToGroup(targetEl);
+    }, 0);
+  }, []);
+
+  React.useEffect(() => {
+    if (!selectedGroup) {
+      return;
+    }
+
+    location.hash = selectedGroup;
+    scrollToGroup(document.getElementById(selectedGroup)!);
+  }, [selectedGroup]);
 
   return (
     <SearchContext.Consumer>
@@ -48,12 +77,39 @@ const IndexPage: React.FC = () => {
 
             {form}
 
-            {Object.entries(groupedPokefutas).map(([group, items]) => {
+            {Object.entries(groupedPokefutas).map(([group, items], i) => {
+              const prefecture = getPrefectureByCode(group)!;
+              const isSelectedGroup = selectedGroup === prefecture.name;
+              const groupAsNumber = Number(group);
+              const groupProgress = items.reduce((acc, pokefuta) => {
+                if (pokefuta.pref === groupAsNumber) {
+                  return acc + (progress[pokefuta.id] ? 1 : 0);
+                }
+                return acc;
+              }, 0);
+
               return (
-                <div key={group} className="space-y-2">
-                  <h3 className="text-2xl text-red-700 font-bold">
-                    {getPrefectureName(group)}
-                  </h3>
+                <div
+                  id={prefecture.name}
+                  key={group}
+                  className={"space-y-2" + (i > 0) ? "mt-8" : ""}
+                >
+                  <div className="flex items-center space-x-2">
+                    <h3
+                      className="text-2xl text-red-700 font-bold cursor-pointer hover:underline"
+                      onClick={() => setSelectedGroup(prefecture.name)}
+                    >
+                      <a
+                        href={`#${prefecture.name}`}
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        {getPrefectureName(group)}
+                      </a>
+                    </h3>
+                    <span className="text-gray-500">
+                      ({groupProgress} / {items.length})
+                    </span>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {items.map((pokefuta) => {
                       const names = pokefuta.pokemons

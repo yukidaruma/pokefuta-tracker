@@ -19,6 +19,15 @@ body {
   overflow-y: scroll;
 }
 
+/* @react-map/japan */
+.map {
+  width: unset !important;
+}
+.map svg {
+  width: 100%;
+  max-width: 100dvw;
+}
+
 /* Fix zoom on input focus on iOS */
 input[type="color"],
 input[type="date"],

@@ -11,7 +11,7 @@ const HeaderComponent: React.FC = () => {
   const navItems = [
     { href: "/", icon: Lucide.List, label: "ポケふた一覧" },
     { href: "/map", icon: Lucide.Map, label: "ポケふたマップ" },
-    // { href: "/progress", icon: Lucide.BarChart2, label: "達成率" },
+    { href: "/progress", icon: Lucide.BarChart2, label: "訪問状況" },
   ];
 
   return (
