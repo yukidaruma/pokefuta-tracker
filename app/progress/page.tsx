@@ -160,17 +160,18 @@ const ProgressPage = () => {
           />
 
           <div className="flex flex-wrap space-x-4 justify-center max-w-[480px]">
-            <Mantine.Button className="flex space-x-2" onClick={copyImage}>
-              <Lucide.Copy size={24} />
-              <span>画像をコピー</span>
+            <Mantine.Button
+              leftSection={<Lucide.Copy size={24} />}
+              onClick={copyImage}
+            >
+              画像をコピー
             </Mantine.Button>
 
             <Mantine.Button
-              className="flex space-x-2"
+              leftSection={<Lucide.Share size={24} />}
               onClick={shareProgression}
             >
-              <Lucide.Share size={24} />
-              <span>共有</span>
+              共有
             </Mantine.Button>
           </div>
         </div>

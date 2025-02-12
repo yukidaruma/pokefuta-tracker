@@ -41,6 +41,7 @@ const MapPage = () => {
                     />
                     <Mantine.Divider />
                     <Mantine.Button
+                      leftSection={<Lucide.MousePointer2 size={24} />}
                       onClick={() => {
                         context.getGeolocation();
                         setGeolocationGen((gen) => gen + 1);

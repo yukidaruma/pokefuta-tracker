@@ -96,13 +96,18 @@ const ItemClientPage: React.FC = () => {
             </div>
 
             {hasVisited ? (
-              <Mantine.Button color="red" onClick={toggleVisited}>
-                <Lucide.X />
+              <Mantine.Button
+                leftSection={<Lucide.X />}
+                color="red"
+                onClick={toggleVisited}
+              >
                 <span>訪問済みを解除する</span>
               </Mantine.Button>
             ) : (
-              <Mantine.Button onClick={toggleVisited}>
-                <Lucide.Check />
+              <Mantine.Button
+                leftSection={<Lucide.Check />}
+                onClick={toggleVisited}
+              >
                 <span>訪問済みにする</span>
               </Mantine.Button>
             )}
