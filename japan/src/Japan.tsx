@@ -186,47 +186,47 @@ const JapanSingle = ({
 
   useEffect(() => {
     if (selectedState) {
-      const path = document.getElementById(`${selectedState}-${instanceId}`);
-      if (path) {
-        path.style.fill = selectColor || constants.SELECTED_COLOR;
-      }
+      // const path = document.getElementById(`${selectedState}-${instanceId}`);
+      // if (path) {
+      //   path.style.fill = selectColor || constants.SELECTED_COLOR;
+      // }
     }
   }, [selectedState, selectColor, instanceId]);
 
   const handleMouseEnter = (hoverStateId: string) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
+    // const path = document.getElementById(`${hoverStateId}-${instanceId}`);
     setStateHovered(hoverStateId);
-    if (path && !disableHover) {
-      path.style.fill = selectedState === hoverStateId ? selectColor || constants.SELECTED_COLOR : hoverColor || constants.HOVERCOLOR;
-    }
+    // if (path && !disableHover) {
+    //   path.style.fill = selectedState === hoverStateId ? selectColor || constants.SELECTED_COLOR : hoverColor || constants.HOVERCOLOR;
+    // }
   };
 
   const handleMouseLeave = (hoverStateId: string) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
-    setStateHovered(null);
-    if (path && !disableHover) {
-      path.style.fill = selectedState === hoverStateId ? selectColor || constants.SELECTED_COLOR : cityColors![hoverStateId] || (mapColor as string);
-    }
+    // const path = document.getElementById(`${hoverStateId}-${instanceId}`);
+    // setStateHovered(null);
+    // if (path && !disableHover) {
+    //   path.style.fill = selectedState === hoverStateId ? selectColor || constants.SELECTED_COLOR : cityColors![hoverStateId] || (mapColor as string);
+    // }
   };
 
   const handleClick = (stateCode: string) => {
     if (disableClick) return;
 
     if (selectedState === stateCode) {
-      const path = document.getElementById(`${stateCode}-${instanceId}`);
-      if (path) {
-        path.style.fill = cityColors![stateCode] || (mapColor as string);
-      }
-      setSelectedState(null);
+      // const path = document.getElementById(`${stateCode}-${instanceId}`);
+      // if (path) {
+      //   path.style.fill = cityColors![stateCode] || (mapColor as string);
+      // }
+      // setSelectedState(null);
       if (onSelect) {
         onSelect(null);
       }
     } else {
       if (selectedState) {
-        const previousPath = document.getElementById(`${selectedState}-${instanceId}`);
-        if (previousPath) {
-          previousPath.style.fill = cityColors![selectedState] || (mapColor as string);
-        }
+        // const previousPath = document.getElementById(`${selectedState}-${instanceId}`);
+        // if (previousPath) {
+        //   previousPath.style.fill = cityColors![selectedState] || (mapColor as string);
+        // }
       }
       setSelectedState(stateCode);
       if (onSelect) {
@@ -325,29 +325,29 @@ const JapanMultiple = ({
 
   useEffect(() => {
     selectedStates.forEach((selectedState) => {
-      const path = document.getElementById(`${selectedState}-${instanceId}`);
-      if (path) {
-        path.style.fill = selectColor || constants.SELECTED_COLOR;
-      }
+      // const path = document.getElementById(`${selectedState}-${instanceId}`);
+      // if (path) {
+      //   path.style.fill = selectColor || constants.SELECTED_COLOR;
+      // }
     });
   }, [selectedStates, selectColor, instanceId]);
 
   const handleMouseEnter = (hoverStateId: string) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
+    // const path = document.getElementById(`${hoverStateId}-${instanceId}`);
     setStateHovered(hoverStateId);
-    if (path && !disableHover) {
-      path.style.fill = selectedStates.includes(hoverStateId) ? selectColor || constants.SELECTED_COLOR : hoverColor || constants.HOVERCOLOR;
-    }
+    // if (path && !disableHover) {
+    //   path.style.fill = selectedStates.includes(hoverStateId) ? selectColor || constants.SELECTED_COLOR : hoverColor || constants.HOVERCOLOR;
+    // }
   };
 
   const handleMouseLeave = (hoverStateId: string) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
+    // const path = document.getElementById(`${hoverStateId}-${instanceId}`);
     setStateHovered(null);
-    if (path && !disableHover) {
-      path.style.fill = selectedStates.includes(hoverStateId)
-        ? selectColor || constants.SELECTED_COLOR
-        : cityColors![hoverStateId] || (mapColor as string);
-    }
+    // if (path && !disableHover) {
+    //   path.style.fill = selectedStates.includes(hoverStateId)
+    //     ? selectColor || constants.SELECTED_COLOR
+    //     : cityColors![hoverStateId] || (mapColor as string);
+    // }
   };
 
   const handleClick = (stateCode: string) => {
@@ -355,10 +355,10 @@ const JapanMultiple = ({
 
     if (selectedStates.includes(stateCode)) {
       const updatedSelectedStates = selectedStates.filter((state) => state !== stateCode);
-      const path = document.getElementById(`${stateCode}-${instanceId}`);
-      if (path) {
-        path.style.fill = cityColors![stateCode] || (mapColor as string);
-      }
+      // const path = document.getElementById(`${stateCode}-${instanceId}`);
+      // if (path) {
+      //   path.style.fill = cityColors![stateCode] || (mapColor as string);
+      // }
       setSelectedStates(updatedSelectedStates);
       if (onSelect) {
         onSelect(stateCode, updatedSelectedStates);
@@ -366,10 +366,10 @@ const JapanMultiple = ({
     } else {
       setSelectedStates((prevStates) => {
         const updatedStates = [...prevStates, stateCode];
-        const path = document.getElementById(`${stateCode}-${instanceId}`);
-        if (path) {
-          path.style.fill = selectColor || constants.SELECTED_COLOR;
-        }
+        // const path = document.getElementById(`${stateCode}-${instanceId}`);
+        // if (path) {
+        //   path.style.fill = selectColor || constants.SELECTED_COLOR;
+        // }
         if (onSelect) {
           onSelect(stateCode, updatedStates);
         }

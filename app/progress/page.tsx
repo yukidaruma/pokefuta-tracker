@@ -10,6 +10,7 @@ import prefs from "@/data/prefs.json";
 import { useProgressStorage } from "@/hooks";
 import { getPrefectureByCode, PokefutaData } from "@/util";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const regionNames = {
   tohoku: "北海道・東北",
@@ -129,17 +130,31 @@ const ProgressPage = () => {
     return acc;
   }, {} as Record<string, PokefutaData[]>);
 
+  const router = useRouter();
+
   return (
     <div className="flex-1">
       <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">訪問状況</h2>
       <div className="block lg:flex flex-1 space-x-4">
         <div className="max-w-[480px] w-full flex flex-col space-y-4">
           <ReactMapJapan
-            disableHover
-            disableClick
             type="select-single"
-            onSelect={(...args) => {
-              console.log(args);
+            onSelect={(selectedPref) => {
+              if (!selectedPref) {
+                return;
+              }
+
+              const lowerCaseSelectedPref = selectedPref.toLowerCase();
+              const hasPokefutaInPref = data.list.some(
+                (pokefuta) =>
+                  getPrefectureByCode(pokefuta.pref)!.name ===
+                  lowerCaseSelectedPref
+              );
+              if (!hasPokefutaInPref) {
+                return;
+              }
+
+              router.push(`/#${lowerCaseSelectedPref}`);
             }}
             cityColors={colors}
           />

@@ -28,11 +28,11 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
-var src_exports = {};
-__export(src_exports, {
-  default: () => src_default
+var index_exports = {};
+__export(index_exports, {
+  default: () => index_default
 });
-module.exports = __toCommonJS(src_exports);
+module.exports = __toCommonJS(index_exports);
 
 // src/Japan.tsx
 var import_react2 = __toESM(require("react"));
@@ -315,43 +315,21 @@ var JapanSingle = ({
   }, [cityColors, mapColor, instanceId]);
   (0, import_react2.useEffect)(() => {
     if (selectedState) {
-      const path = document.getElementById(`${selectedState}-${instanceId}`);
-      if (path) {
-        path.style.fill = selectColor || constants.SELECTED_COLOR;
-      }
     }
   }, [selectedState, selectColor, instanceId]);
   const handleMouseEnter = (hoverStateId) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
     setStateHovered(hoverStateId);
-    if (path && !disableHover) {
-      path.style.fill = selectedState === hoverStateId ? selectColor || constants.SELECTED_COLOR : hoverColor || constants.HOVERCOLOR;
-    }
   };
   const handleMouseLeave = (hoverStateId) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
-    setStateHovered(null);
-    if (path && !disableHover) {
-      path.style.fill = selectedState === hoverStateId ? selectColor || constants.SELECTED_COLOR : cityColors[hoverStateId] || mapColor;
-    }
   };
   const handleClick = (stateCode2) => {
     if (disableClick) return;
     if (selectedState === stateCode2) {
-      const path = document.getElementById(`${stateCode2}-${instanceId}`);
-      if (path) {
-        path.style.fill = cityColors[stateCode2] || mapColor;
-      }
-      setSelectedState(null);
       if (onSelect) {
         onSelect(null);
       }
     } else {
       if (selectedState) {
-        const previousPath = document.getElementById(`${selectedState}-${instanceId}`);
-        if (previousPath) {
-          previousPath.style.fill = cityColors[selectedState] || mapColor;
-        }
       }
       setSelectedState(stateCode2);
       if (onSelect) {
@@ -435,34 +413,18 @@ var JapanMultiple = ({
   }, [cityColors, mapColor, instanceId]);
   (0, import_react2.useEffect)(() => {
     selectedStates.forEach((selectedState) => {
-      const path = document.getElementById(`${selectedState}-${instanceId}`);
-      if (path) {
-        path.style.fill = selectColor || constants.SELECTED_COLOR;
-      }
     });
   }, [selectedStates, selectColor, instanceId]);
   const handleMouseEnter = (hoverStateId) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
     setStateHovered(hoverStateId);
-    if (path && !disableHover) {
-      path.style.fill = selectedStates.includes(hoverStateId) ? selectColor || constants.SELECTED_COLOR : hoverColor || constants.HOVERCOLOR;
-    }
   };
   const handleMouseLeave = (hoverStateId) => {
-    const path = document.getElementById(`${hoverStateId}-${instanceId}`);
     setStateHovered(null);
-    if (path && !disableHover) {
-      path.style.fill = selectedStates.includes(hoverStateId) ? selectColor || constants.SELECTED_COLOR : cityColors[hoverStateId] || mapColor;
-    }
   };
   const handleClick = (stateCode2) => {
     if (disableClick) return;
     if (selectedStates.includes(stateCode2)) {
       const updatedSelectedStates = selectedStates.filter((state) => state !== stateCode2);
-      const path = document.getElementById(`${stateCode2}-${instanceId}`);
-      if (path) {
-        path.style.fill = cityColors[stateCode2] || mapColor;
-      }
       setSelectedStates(updatedSelectedStates);
       if (onSelect) {
         onSelect(stateCode2, updatedSelectedStates);
@@ -470,10 +432,6 @@ var JapanMultiple = ({
     } else {
       setSelectedStates((prevStates) => {
         const updatedStates = [...prevStates, stateCode2];
-        const path = document.getElementById(`${stateCode2}-${instanceId}`);
-        if (path) {
-          path.style.fill = selectColor || constants.SELECTED_COLOR;
-        }
         if (onSelect) {
           onSelect(stateCode2, updatedStates);
         }
@@ -501,4 +459,4 @@ var JapanMultiple = ({
 var Japan_default = Japan;
 
 // src/index.ts
-var src_default = Japan_default;
+var index_default = Japan_default;
