@@ -122,7 +122,7 @@ const ProgressPage = () => {
 
     const progression = Object.keys(progress).length;
     await navigator.share({
-      text: `${progression} / ${data.list.length} のポケふたを訪問しました！\n\n#ポケふた #PokefutaTracker`,
+      text: `${progression} / ${data.list.length} のポケふたを訪問しました！\n${location.origin}\n\n#ポケふた #PokefutaTracker`,
       files: [new File([image], "map.png", { type: "image/png" })],
     });
   };
