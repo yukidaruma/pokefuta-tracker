@@ -26,9 +26,9 @@ const svgToImage = async (element: SVGElement) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d")!;
 
-  const { width, height } = element.getBoundingClientRect();
-  canvas.width = width * 2;
-  canvas.height = height * 2;
+  // The size ratio of the SVG map measured in DevTools is 960x1133.
+  canvas.width = 960;
+  canvas.height = 1133;
 
   // Draw SVG map to canvas
   //
@@ -36,13 +36,17 @@ const svgToImage = async (element: SVGElement) => {
   // so we need to add it to the <svg> element when converting to image
   const svgString = new XMLSerializer()
     .serializeToString(element)
-    .replace("<svg ", '<svg style="stroke: black; stroke-width: 0.5" ');
+    .replace(
+      "<svg ",
+      `<svg style="stroke: black; stroke-width: 0.5; width: 960px" `
+    );
   const img = new Image();
   await new Promise((resolve) => {
     img.src = `data:image/svg+xml;base64,${btoa(svgString)}`;
     img.onload = resolve;
+    img.onerror = console.error;
   });
-  ctx.drawImage(img, 0, 0);
+  ctx.drawImage(img, 0, 0, 960, 1133);
 
   return new Promise<Blob>((resolve) => {
     canvas.toBlob((blob) => {
@@ -136,7 +140,7 @@ const ProgressPage = () => {
     <div className="flex-1">
       <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">訪問状況</h2>
       <div className="block lg:flex flex-1 space-x-4">
-        <div className="max-w-[480px] w-full flex flex-col space-y-4">
+        <div className="max-w-[480px] w-full flex flex-col space-y-4 margin-x-auto">
           <ReactMapJapan
             type="select-single"
             onSelect={(selectedPref) => {
@@ -161,6 +165,7 @@ const ProgressPage = () => {
 
           <div className="flex flex-wrap space-x-4 justify-center max-w-[480px]">
             <Mantine.Button
+              className="hidden! sm:inline-block!"
               leftSection={<Lucide.Copy size={24} />}
               onClick={copyImage}
             >
