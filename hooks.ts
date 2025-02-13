@@ -13,8 +13,9 @@ export const useProgressStorage = () => {
       setProgress(rest);
     }
   };
+  const resetProgress = () => setProgress({});
 
-  return [progress, updateProgress] as const;
+  return [progress, updateProgress, resetProgress] as const;
 };
 
 export const useGeolocationFirstTimeNoticeStorage = () => {

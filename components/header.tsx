@@ -12,6 +12,7 @@ const HeaderComponent: React.FC = () => {
     { href: "/", icon: Lucide.List, label: "ポケふた一覧" },
     { href: "/map", icon: Lucide.Map, label: "ポケふたマップ" },
     { href: "/progress", icon: Lucide.BarChart2, label: "訪問状況" },
+    { href: "/settings", icon: Lucide.Settings, label: "設定" },
   ];
 
   return (

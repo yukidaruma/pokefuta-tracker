@@ -163,7 +163,7 @@ const ProgressPage = () => {
             cityColors={colors}
           />
 
-          <div className="flex flex-wrap space-x-4 justify-center max-w-[480px]">
+          <div className="flex flex-wrap space-x-6 justify-center max-w-[480px]">
             <Mantine.Button
               className="hidden! sm:inline-block!"
               leftSection={<Lucide.Copy size={24} />}
