@@ -86,6 +86,9 @@ type SearchContextProps = {
   setIncludeEvolutions: (include: boolean) => void;
   filteredPokefutas: PokefutaData[];
   form: React.ReactNode;
+  progress: Record<string, boolean>;
+  updateProgress: (id: number, visited: boolean) => void;
+  resetProgress: () => void;
 };
 
 const SearchContext = React.createContext<SearchContextProps>(
@@ -98,7 +101,7 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [includeEvolutions, setIncludeEvolutions] =
     React.useState<boolean>(false);
 
-  const [progress, _updateProgress] = useProgressStorage();
+  const [progress, updateProgress, resetProgress] = useProgressStorage();
 
   const filteredPokefutas = React.useMemo(() => {
     return getFilteredPokefutas(searchTerm, {
@@ -126,6 +129,9 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
         setHideVisited,
         setIncludeEvolutions,
         filteredPokefutas,
+        progress,
+        updateProgress,
+        resetProgress,
         form: (
           <SearchFields
             searchTerm={searchTerm}

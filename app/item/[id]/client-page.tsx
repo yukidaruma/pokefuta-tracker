@@ -10,7 +10,7 @@ import PokefutaImage from "@/components/pokefuta-image";
 import ExternalLink from "@/components/external-link";
 import Copyable from "@/components/copyable";
 import PokefutasNearby from "@/components/pokefutas-nearby";
-import { useProgressStorage } from "@/hooks";
+import { useSearchContext } from "@/providers/search";
 import { getPokefutaData, getPokemonName, getPrefectureName } from "@/util";
 
 const ItemClientPage: React.FC = () => {
@@ -18,7 +18,7 @@ const ItemClientPage: React.FC = () => {
   const id = Number(params.id as string);
   const pokefutaData = getPokefutaData(id)!;
 
-  const [progress, updateProgress] = useProgressStorage();
+  const { progress, updateProgress } = useSearchContext();
   const hasVisited = progress[id];
   const toggleVisited = () => {
     updateProgress(id, !hasVisited);
@@ -115,7 +115,7 @@ const ItemClientPage: React.FC = () => {
             <Mantine.Divider className="my-6" />
 
             <h4 className="font-bold">このポケふたの周辺のポケふた</h4>
-            <PokefutasNearby progress={progress} pokefutaData={pokefutaData} />
+            <PokefutasNearby pokefutaData={pokefutaData} />
           </div>
         </div>
       </div>

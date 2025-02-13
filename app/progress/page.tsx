@@ -2,15 +2,15 @@
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
-import React from "react";
 import ReactMapJapan from "@react-map/japan";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 import data from "@/data/data.json";
 import prefs from "@/data/prefs.json";
-import { useProgressStorage } from "@/hooks";
+import { useSearchContext } from "@/providers/search";
 import { getPrefectureByCode, PokefutaData } from "@/util";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const regionNames = {
   tohoku: "北海道・東北",
@@ -60,7 +60,7 @@ const capitalize = (str: string) => {
 };
 
 const ProgressPage = () => {
-  const [progress, _updateProgress] = useProgressStorage();
+  const { progress } = useSearchContext();
 
   const colors = React.useMemo(() => {
     const found = {} as Record<number, boolean>;

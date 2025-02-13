@@ -4,16 +4,17 @@ import {
   type PokefutaData,
 } from "@/util";
 import Link from "next/link";
+
 import PokefutaImage from "./pokefuta-image";
-import { useProgressStorage } from "@/hooks";
+import { useSearchContext } from "@/providers/search";
 
 const PokefutasNearby: React.FC<{
-  progress: ReturnType<typeof useProgressStorage>[0];
   pokefutaData?: PokefutaData;
   filteredPokefutas?: PokefutaData[];
   lat?: number;
   lng?: number;
-}> = ({ progress, pokefutaData, filteredPokefutas, lat, lng }) => {
+}> = ({ pokefutaData, filteredPokefutas, lat, lng }) => {
+  const { progress } = useSearchContext();
   const nearbyPokefutas = getNearbyPokefutas(
     6,
     pokefutaData ? Number(pokefutaData.coords[0]) : lat!,

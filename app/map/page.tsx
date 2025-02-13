@@ -6,19 +6,17 @@ import React from "react";
 
 import MapComponent, { MapComponentHandle } from "@/components/map";
 import PokefutasNearby from "@/components/pokefutas-nearby";
-import { useProgressStorage } from "@/hooks";
 import {
   GeolocationContext,
   GeolocationProvider,
   useGeolocationContext,
 } from "@/providers/geolocation";
 import { MapCenterContext, MapCenterProvider } from "@/providers/map-center";
-import { getFilteredPokefutas } from "@/util";
 import { SearchContext } from "@/providers/search";
+import { getFilteredPokefutas } from "@/util";
 
 const MapPage = () => {
   const [geolocationGen, setGeolocationGen] = React.useState(0);
-  const [progress, _updateProgress] = useProgressStorage();
 
   return (
     <SearchContext.Consumer>
@@ -59,7 +57,6 @@ const MapPage = () => {
                             <PokefutasNearby
                               lat={context.latitude}
                               lng={context.longitude}
-                              progress={progress}
                               filteredPokefutas={filteredPokefutas}
                             />
                           )

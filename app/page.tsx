@@ -5,7 +5,6 @@ import * as Mantine from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 
-import { useProgressStorage } from "@/hooks";
 import {
   getPokemonName,
   getPrefectureByCode,
@@ -13,10 +12,10 @@ import {
   type PokefutaData,
 } from "@/util";
 import PokefutaImage from "@/components/pokefuta-image";
-import { SearchContext } from "@/providers/search";
+import { SearchContext, useSearchContext } from "@/providers/search";
 
 const IndexPage: React.FC = () => {
-  const [progress, _updateProgress] = useProgressStorage();
+  const { progress } = useSearchContext();
   const [selectedGroup, setSelectedGroup] = React.useState<string>(null!);
 
   const groupByOptions = [

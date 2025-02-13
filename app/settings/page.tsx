@@ -3,16 +3,17 @@
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
-import { useProgressStorage } from "@/hooks";
-import Copyable from "@/components/copyable";
 import { notifications } from "@mantine/notifications";
+
+import Copyable from "@/components/copyable";
+import { useSearchContext } from "@/providers/search";
 
 const SettingsPage: React.FC = () => {
   const [importTextareaValue, setImportTextareaValue] = React.useState("");
   const [modalState, setModalState] = React.useState<
     "import" | "export" | "reset" | null
   >(null);
-  const [progress, _updateProgress, resetProgress] = useProgressStorage();
+  const { progress, updateProgress, resetProgress } = useSearchContext();
 
   const exportedData = {
     progress: Object.keys(progress).join(","),
@@ -36,7 +37,7 @@ const SettingsPage: React.FC = () => {
           return;
         }
 
-        _updateProgress(Number(id), true);
+        updateProgress(Number(id), true);
       });
       setModalState(null);
       setImportTextareaValue("");
