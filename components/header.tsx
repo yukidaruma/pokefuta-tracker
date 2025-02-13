@@ -5,14 +5,17 @@ import Link from "next/link";
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const HeaderComponent: React.FC = () => {
+  const { t } = useTranslation("common");
+
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const navItems = [
-    { href: "/", icon: Lucide.List, label: "ポケふた一覧" },
-    { href: "/map", icon: Lucide.Map, label: "ポケふたマップ" },
-    { href: "/progress", icon: Lucide.BarChart2, label: "訪問状況" },
-    { href: "/settings", icon: Lucide.Settings, label: "設定" },
+    { href: "/", icon: Lucide.List, label: t("title_list") },
+    { href: "/map", icon: Lucide.Map, label: t("title_map") },
+    { href: "/progress", icon: Lucide.BarChart2, label: t("title_progress") },
+    { href: "/settings", icon: Lucide.Settings, label: t("title_settings") },
   ];
 
   return (

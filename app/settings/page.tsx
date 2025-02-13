@@ -7,8 +7,11 @@ import { notifications } from "@mantine/notifications";
 
 import Copyable from "@/components/copyable";
 import { useSearchContext } from "@/providers/search";
+import { useTranslation } from "react-i18next";
 
 const SettingsPage: React.FC = () => {
+  const { t } = useTranslation("common");
+
   const [importTextareaValue, setImportTextareaValue] = React.useState("");
   const [modalState, setModalState] = React.useState<
     "import" | "export" | "reset" | null
@@ -43,13 +46,12 @@ const SettingsPage: React.FC = () => {
       setImportTextareaValue("");
 
       notifications.show({
-        message: "データをインポートしました",
+        message: t("import_success"),
       });
     } catch (e) {
       notifications.show({
-        title: "エラー",
-        message:
-          "データのインポートに失敗しました。データの形式をお確かめの上、再度お試しください",
+        title: t("error"),
+        message: t("import_error"),
         color: "red",
         autoClose: 5000,
       });
@@ -62,21 +64,25 @@ const SettingsPage: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">設定</h2>
+      <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">
+        {t("title_settings")}
+      </h2>
 
-      <h3 className="mt-4 text-2xl text-red-700 font-bold">データ管理</h3>
+      <h3 className="mt-4 text-2xl text-red-700 font-bold">
+        {t("manage_data")}
+      </h3>
       <div className="mt-2 flex space-x-6">
         <Mantine.Button
           leftSection={<Lucide.ArrowBigDown size={24} />}
           onClick={() => setModalState("import")}
         >
-          インポート
+          {t("import")}
         </Mantine.Button>
         <Mantine.Button
           leftSection={<Lucide.ArrowBigUp size={24} />}
           onClick={() => setModalState("export")}
         >
-          エクスポート
+          {t("export")}
         </Mantine.Button>
       </div>
 
@@ -86,13 +92,13 @@ const SettingsPage: React.FC = () => {
         leftSection={<Lucide.X size={24} />}
         onClick={() => setModalState("reset")}
       >
-        リセット
+        {t("reset")}
       </Mantine.Button>
 
       <Mantine.Modal
         opened={modalState === "import"}
         onClose={() => setModalState(null)}
-        title={<span className="font-bold">データのインポート</span>}
+        title={<span className="font-bold">{t("import_data")}</span>}
       >
         <Mantine.Textarea
           onChange={(e) => setImportTextareaValue(e.currentTarget.value)}
@@ -105,13 +111,13 @@ const SettingsPage: React.FC = () => {
           onClick={onClickImport}
           disabled={importTextareaValue.trim() === ""}
         >
-          インポートする
+          {t("to_import")}
         </Mantine.Button>
       </Mantine.Modal>
       <Mantine.Modal
         opened={modalState === "export"}
         onClose={() => setModalState(null)}
-        title={<span className="font-bold">データのエクスポート</span>}
+        title={<span className="font-bold">{t("export_data")}</span>}
       >
         <Mantine.Textarea
           onClick={(e) => e.currentTarget.select()}
@@ -120,14 +126,14 @@ const SettingsPage: React.FC = () => {
         />
         <Copyable
           value={serializedData}
-          copyMessage="データをコピーしました"
+          copyMessage={t("export_success_copy")}
           button={
             <Mantine.Button
               leftSection={<Lucide.Copy />}
               className="mt-4"
               w="100%"
             >
-              コピーする
+              {t("to_copy")}
             </Mantine.Button>
           }
         />
@@ -135,19 +141,17 @@ const SettingsPage: React.FC = () => {
       <Mantine.Modal
         opened={modalState === "reset"}
         onClose={() => setModalState(null)}
-        title={<span className="font-bold">データのリセット</span>}
+        title={<span className="font-bold">{t("reset_data")}</span>}
       >
-        <p>
-          データをリセットすると、すべてのポケふたの訪問状況が失われます。一度リセットしたデータを元に戻すことはできません。
-        </p>
-        <p className="mt-2">本当にデータをリセットしますか？</p>
+        <p>{t("reset_warning")}</p>
+        <p className="mt-2">{t("reset_confirmation")}</p>
 
         <div className="mt-6 flex justify-between">
           <Mantine.Button color="black" onClick={() => setModalState(null)}>
-            キャンセル
+            {t("cancel")}
           </Mantine.Button>
           <Mantine.Button color="red" onClick={onClickReset}>
-            リセットする
+            {t("to_reset")}
           </Mantine.Button>
         </div>
       </Mantine.Modal>

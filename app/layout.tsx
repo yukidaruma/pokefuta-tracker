@@ -5,6 +5,7 @@ import "@mantine/core/styles.layer.css";
 import "@mantine/notifications/styles.css";
 import "./globals.css";
 
+import "@/i18n";
 import FooterComponent from "@/components/footer";
 import HeaderComponent from "@/components/header";
 import ClientPageRootComponent from "@/components/client-page-root";

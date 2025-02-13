@@ -4,17 +4,15 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import Link from "next/link";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
-import {
-  getPokemonName,
-  getPrefectureByCode,
-  getPrefectureName,
-  type PokefutaData,
-} from "@/util";
+import { getPokemonName, getPrefectureByCode, type PokefutaData } from "@/util";
 import PokefutaImage from "@/components/pokefuta-image";
 import { SearchContext, useSearchContext } from "@/providers/search";
 
 const IndexPage: React.FC = () => {
+  const { t } = useTranslation("common");
+
   const { progress } = useSearchContext();
   const [selectedGroup, setSelectedGroup] = React.useState<string>(null!);
 
@@ -70,7 +68,7 @@ const IndexPage: React.FC = () => {
           <div className="space-y-4 w-full">
             <div className="flex items-center space-x-4">
               <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">
-                ポケふた一覧
+                {t("title_list")}
               </h2>
             </div>
 
@@ -78,7 +76,6 @@ const IndexPage: React.FC = () => {
 
             {Object.entries(groupedPokefutas).map(([group, items], i) => {
               const prefecture = getPrefectureByCode(group)!;
-              const isSelectedGroup = selectedGroup === prefecture.name;
               const groupAsNumber = Number(group);
               const groupProgress = items.reduce((acc, pokefuta) => {
                 if (pokefuta.pref === groupAsNumber) {
@@ -102,7 +99,7 @@ const IndexPage: React.FC = () => {
                         href={`#${prefecture.name}`}
                         onClick={(e) => e.preventDefault()}
                       >
-                        {getPrefectureName(group)}
+                        {(t as any)(`pref_${getPrefectureByCode(group)!.name}`)}
                       </a>
                     </h3>
                     <span className="text-gray-500">

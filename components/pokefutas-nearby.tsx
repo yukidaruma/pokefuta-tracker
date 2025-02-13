@@ -1,9 +1,10 @@
 import {
   getNearbyPokefutas,
-  getPrefectureName,
+  getPrefectureByCode,
   type PokefutaData,
 } from "@/util";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 import PokefutaImage from "./pokefuta-image";
 import { useSearchContext } from "@/providers/search";
@@ -14,6 +15,7 @@ const PokefutasNearby: React.FC<{
   lat?: number;
   lng?: number;
 }> = ({ pokefutaData, filteredPokefutas, lat, lng }) => {
+  const { t } = useTranslation("common");
   const { progress } = useSearchContext();
   const nearbyPokefutas = getNearbyPokefutas(
     6,
@@ -42,7 +44,10 @@ const PokefutasNearby: React.FC<{
               <PokefutaImage id={pokefuta.id} size={80} />
               <div className="flex flex-col">
                 <span>
-                  {getPrefectureName(pokefuta.pref)} {pokefuta.city}
+                  {(t as any)(
+                    `pref_${getPrefectureByCode(pokefuta.pref)!.name}`
+                  )}{" "}
+                  {pokefuta.city}
                 </span>
                 <span className="text-sm text-gray-600">
                   {pokefuta.distance.toFixed(1)} km
@@ -52,9 +57,7 @@ const PokefutasNearby: React.FC<{
           );
         })
       ) : (
-        <div className="text-gray-500">
-          検索キーワードに該当するポケふたが見つかりませんでした
-        </div>
+        <div className="text-gray-500">{t("no_pokefutas_found")}</div>
       )}
     </div>
   );

@@ -3,6 +3,7 @@
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import MapComponent, { MapComponentHandle } from "@/components/map";
 import PokefutasNearby from "@/components/pokefutas-nearby";
@@ -16,6 +17,7 @@ import { SearchContext } from "@/providers/search";
 import { getFilteredPokefutas } from "@/util";
 
 const MapPage = () => {
+  const { t } = useTranslation("common");
   const [geolocationGen, setGeolocationGen] = React.useState(0);
 
   return (
@@ -23,7 +25,7 @@ const MapPage = () => {
       {({ form, filteredPokefutas }) => (
         <div className="flex flex-col flex-1 space-y-4">
           <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">
-            ポケふたマップ
+            {t("title_map")}
           </h2>
 
           {form}
@@ -45,11 +47,11 @@ const MapPage = () => {
                         setGeolocationGen((gen) => gen + 1);
                       }}
                     >
-                      GPSを利用して現在地を表示する
+                      {t("map_use_gps")}
                     </Mantine.Button>
 
                     <div>
-                      <p className="font-bold">地図の中心位置周辺のポケふた</p>
+                      <p className="font-bold">{t("map_nearby_pokefutas")}</p>
                       <MapCenterContext.Consumer>
                         {(context) =>
                           context.latitude &&

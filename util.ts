@@ -16,9 +16,6 @@ export const getPokemonName = (num: string | number): string | undefined => {
 export const getPrefectureByCode = (code: string | number) => {
   return prefs.find((pref) => pref.code === Number(code));
 };
-export const getPrefectureName = (code: string | number) => {
-  return getPrefectureByCode(code)!.ja;
-};
 
 // Calculate distance between two points in latitude and longitude
 export const calcDistance = (

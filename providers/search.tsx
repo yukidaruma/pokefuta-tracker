@@ -6,6 +6,7 @@ import React from "react";
 
 import { getFilteredPokefutas, PokefutaData } from "@/util";
 import { useProgressStorage } from "@/hooks";
+import { useTranslation } from "react-i18next";
 
 type SearchFieldsProps = {
   searchTerm: string;
@@ -28,11 +29,13 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
   filteredPokefutas,
   progression,
 }) => {
+  const { t } = useTranslation("common");
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center">
         <div className="flex justify-center content-center items-center">
-          <span style={{ flexShrink: 0 }}>検索</span>
+          <span style={{ flexShrink: 0 }}>{t("search")}</span>
           <Mantine.TextInput
             className="ml-2 w-full sm:w-[inital]"
             type="text"
@@ -44,7 +47,7 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
           />
         </div>
         <span className="ml-12 mt-2 sm:ml-2 sm:mt-0 text-sm text-gray-500">
-          例: 「ピカチュウ」「北海道」
+          {t("search_example")}
         </span>
       </div>
 
@@ -54,7 +57,7 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
           checked={hideVisited}
           onChange={(e) => setHideVisited(e.target.checked)}
         />
-        <label htmlFor="hide-visited">訪問済みのポケふたを除外する</label>
+        <label htmlFor="hide-visited">{t("search_exclude_visited")}</label>
       </div>
 
       <div className="mt-2 flex items-center space-x-2">
@@ -63,14 +66,14 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
           checked={includeEvolutions}
           onChange={(e) => setIncludeEvolutions(e.target.checked)}
         />
-        <label htmlFor="include-evolution">進化系を含む</label>
+        <label htmlFor="include-evolution">{t("search_include_evos")}</label>
       </div>
 
       <div className="mt-8"></div>
 
       <p className="mt-2 text-gray-500">
-        検索結果: {filteredPokefutas.length}{" "}
-        {hideVisited || `(訪問済み: ${progression})`}
+        {t("search_found")}: {filteredPokefutas.length}{" "}
+        {hideVisited || `(${t("visited")}: ${progression})`}
       </p>
     </div>
   );

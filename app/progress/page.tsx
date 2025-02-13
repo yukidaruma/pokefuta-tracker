@@ -6,21 +6,12 @@ import ReactMapJapan from "@react-map/japan";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import data from "@/data/data.json";
 import prefs from "@/data/prefs.json";
 import { useSearchContext } from "@/providers/search";
 import { getPrefectureByCode, PokefutaData } from "@/util";
-
-const regionNames = {
-  tohoku: "北海道・東北",
-  kanto: "関東",
-  chubu: "中部",
-  kinki: "近畿",
-  chugoku: "中国",
-  shikoku: "四国",
-  kyushu: "九州・沖縄",
-} as Record<string, string>;
 
 const svgToImage = async (element: SVGElement) => {
   const canvas = document.createElement("canvas");
@@ -60,6 +51,7 @@ const capitalize = (str: string) => {
 };
 
 const ProgressPage = () => {
+  const { t } = useTranslation("common");
   const { progress } = useSearchContext();
 
   const colors = React.useMemo(() => {
@@ -138,7 +130,9 @@ const ProgressPage = () => {
 
   return (
     <div className="flex-1">
-      <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">訪問状況</h2>
+      <h2 className="text-2xl sm:text-3xl text-red-700 font-bold">
+        {t("title_progress")}
+      </h2>
       <div className="block lg:flex flex-1 space-x-4">
         <div className="max-w-[480px] w-full flex flex-col space-y-4 margin-x-auto">
           <ReactMapJapan
@@ -169,14 +163,14 @@ const ProgressPage = () => {
               leftSection={<Lucide.Copy size={24} />}
               onClick={copyImage}
             >
-              画像をコピー
+              {t("copy_image")}
             </Mantine.Button>
 
             <Mantine.Button
               leftSection={<Lucide.Share size={24} />}
               onClick={shareProgression}
             >
-              共有
+              {t("share")}
             </Mantine.Button>
           </div>
         </div>
@@ -204,7 +198,7 @@ const ProgressPage = () => {
                 <Mantine.Accordion.Control>
                   <div className="flex items-center justify-between">
                     <span className="text-red-700 font-bold">
-                      {regionNames[group]}
+                      {(t as any)(`region_${group}`)}
                     </span>
                     <div className="flex items-center space-x-2">
                       <Mantine.Progress w={60} color="red" value={percentage} />
@@ -231,10 +225,10 @@ const ProgressPage = () => {
                           <Link
                             href={`/#${prefecture!.name}`}
                             key={pref}
-                            className="flex items-center p-2 space-x-2 rounded-lg shadow cursor-pointer"
+                            className="flex items-center p-2 space-x-1 rounded-lg shadow cursor-pointer"
                           >
                             <span className="font-bold hover:underline">
-                              {prefecture!.ja}
+                              {(t as any)(`pref_${prefecture!.name}`)}
                             </span>
                             <span className="flex-1"></span>
                             <Mantine.Progress

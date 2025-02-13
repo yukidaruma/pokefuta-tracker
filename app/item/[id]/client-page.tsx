@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
+import { useTranslation } from "react-i18next";
 
 import MapComponent from "@/components/map";
 import PokefutaImage from "@/components/pokefuta-image";
@@ -11,9 +12,11 @@ import ExternalLink from "@/components/external-link";
 import Copyable from "@/components/copyable";
 import PokefutasNearby from "@/components/pokefutas-nearby";
 import { useSearchContext } from "@/providers/search";
-import { getPokefutaData, getPokemonName, getPrefectureName } from "@/util";
+import { getPokefutaData, getPokemonName, getPrefectureByCode } from "@/util";
 
 const ItemClientPage: React.FC = () => {
+  const { t } = useTranslation("common");
+
   const params = useParams();
   const id = Number(params.id as string);
   const pokefutaData = getPokefutaData(id)!;
@@ -29,7 +32,7 @@ const ItemClientPage: React.FC = () => {
   return (
     <div className="flex flex-col flex-1 space-y-4">
       <h2 className="text-2xl sm:text-3xl text-red-700 font-bold whitespace-pre-line md:whitespace-normal">
-        {getPrefectureName(pokefutaData.pref)}
+        {(t as any)(`pref_${getPrefectureByCode(pokefutaData.pref)!.name}`)}
         {pokefutaData.city}
         {"\n"}
         {pokefutaData.pokemons.map(getPokemonName).join("・")}のポケふた
