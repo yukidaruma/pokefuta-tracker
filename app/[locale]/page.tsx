@@ -127,6 +127,7 @@ const IndexPage: React.FC = () => {
                           className={`flex space-x-2 p-4 rounded-lg shadow ${
                             hasVisited ? "bg-green-50" : ""
                           }`}
+                          prefetch={false}
                         >
                           <PokefutaImage id={pokefuta.id} size={72} />
                           <div>
