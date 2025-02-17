@@ -1,9 +1,8 @@
 {
   "#": "General messages",
-  "back_to_top_page": "Back to top page",
+  "app_description": "Pokéfuta Tracker helps you record visits to Pokémon manhole covers (PokeLids) in Japan",
   "cancel": "Cancel",
   "error": "Error",
-  "error_not_found": "Page not found",
   "search": "Search",
   "search_example": "e.g. \"Pikachu\", \"Hokkaido\"",
   "search_exclude_visited": "Exclude visited ones",
@@ -70,6 +69,14 @@
 
   "#": "/ page",
   "title_list": "List of Pokéfutas",
+
+  "#": "/[id] page",
+  "link_to_official_pokefuta_page": "Official PokeLids page",
+  "pokefutas_nearby": "Pokéfutas nearby",
+  "title_item_address": "{{city}}, {{pref}}",
+  "title_item_pokemons": "Pokéfuta of {{pokemons}}",
+  "to_mark_as_unvisited": "Mark as unvisited",
+  "to_mark_as_visited": "Mark as visited",
 
   "#": "/map page",
   "title_map": "Pokéfuta map",

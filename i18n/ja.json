@@ -1,9 +1,8 @@
 {
   "#": "General messages",
-  "back_to_top_page": "トップページに戻る",
+  "app_description": "ポケふたの訪問記録アプリ",
   "cancel": "キャンセル",
   "error": "エラー",
-  "error_not_found": "ページが見つかりません",
   "search": "検索",
   "search_example": "例: 「ピカチュウ」「北海道」",
   "search_exclude_visited": "訪問済みのポケふたを除外する",
@@ -70,6 +69,14 @@
 
   "#": "/ page",
   "title_list": "ポケふた一覧",
+
+  "#": "/[id] page",
+  "link_to_official_pokefuta_page": "ポケふた公式ページ",
+  "pokefutas_nearby": "このポケふたの周辺のポケふた",
+  "title_item_address": "{{pref}}{{city}}",
+  "title_item_pokemons": "{{pokemons}}のポケふた",
+  "to_mark_as_unvisited": "訪問済みを解除する",
+  "to_mark_as_visited": "訪問済みにする",
 
   "#": "/map page",
   "title_map": "ポケふたマップ",

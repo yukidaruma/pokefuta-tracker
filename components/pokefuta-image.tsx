@@ -9,7 +9,9 @@ type PokefutaImageProps = {
 
 const PokefutaImage: React.FC<PokefutaImageProps> = ({ id, size }) => {
   const pokefuta = getPokefutaData(id)!;
-  const names = pokefuta.pokemons.map(getPokemonName).join(", ");
+  const names = pokefuta.pokemons
+    .map((num) => getPokemonName(num, true))
+    .join(", ");
 
   return (
     <Image

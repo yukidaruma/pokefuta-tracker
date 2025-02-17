@@ -6,11 +6,11 @@ import React from "react";
 import { notifications } from "@mantine/notifications";
 
 import Copyable from "@/components/copyable";
+import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
-import { useTranslation } from "react-i18next";
 
 const SettingsPage: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
 
   const [importTextareaValue, setImportTextareaValue] = React.useState("");
   const [modalState, setModalState] = React.useState<

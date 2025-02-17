@@ -4,18 +4,23 @@ import { useParams } from "next/navigation";
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
-import { useTranslation } from "react-i18next";
 
 import MapComponent from "@/components/map";
 import PokefutaImage from "@/components/pokefuta-image";
 import ExternalLink from "@/components/external-link";
 import Copyable from "@/components/copyable";
 import PokefutasNearby from "@/components/pokefutas-nearby";
+import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
-import { getPokefutaData, getPokemonName, getPrefectureByCode } from "@/util";
+import {
+  getPokefutaData,
+  getPokemonNamesCombined,
+  getPrefectureByCode,
+  getTranslatedCityName,
+} from "@/util";
 
 const ItemClientPage: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation();
 
   const params = useParams();
   const id = Number(params.id as string);
@@ -28,14 +33,22 @@ const ItemClientPage: React.FC = () => {
   };
 
   const [lat, lng] = pokefutaData.coords;
+  const isEnglish = i18n.language === "en";
 
   return (
     <div className="flex flex-col flex-1 space-y-4">
       <h2 className="text-2xl sm:text-3xl text-red-700 font-bold whitespace-pre-line md:whitespace-normal">
-        {(t as any)(`pref_${getPrefectureByCode(pokefutaData.pref)!.name}`)}
-        {pokefutaData.city}
-        {"\n"}
-        {pokefutaData.pokemons.map(getPokemonName).join("・")}のポケふた
+        {t("title_item_address", {
+          pref: (t as any)(
+            `pref_${getPrefectureByCode(pokefutaData.pref)!.name}`
+          ),
+          city: getTranslatedCityName(pokefutaData.city, isEnglish),
+        })}
+        <span className="sm:hidden">{"\n"}</span>
+        <span className="hidden sm:inline"> - </span>
+        {t("title_item_pokemons", {
+          pokemons: getPokemonNamesCombined(pokefutaData.pokemons, isEnglish),
+        })}
       </h2>
 
       <div className="flex flex-col md:flex-row">
@@ -83,9 +96,11 @@ const ItemClientPage: React.FC = () => {
             <div className="flex items-center space-x-1">
               <Lucide.ExternalLink color="gray" />
               <ExternalLink
-                href={`https://local.pokemon.jp/manhole/desc/${id}/`}
+                href={`https://local.pokemon.jp/${
+                  isEnglish ? "en/" : ""
+                }manhole/desc/${id}/`}
               >
-                ポケふた公式ページ
+                {t("link_to_official_pokefuta_page")}
               </ExternalLink>
             </div>
 
@@ -104,20 +119,20 @@ const ItemClientPage: React.FC = () => {
                 color="red"
                 onClick={toggleVisited}
               >
-                <span>訪問済みを解除する</span>
+                <span>{t("to_mark_as_visited")}</span>
               </Mantine.Button>
             ) : (
               <Mantine.Button
                 leftSection={<Lucide.Check />}
                 onClick={toggleVisited}
               >
-                <span>訪問済みにする</span>
+                <span>{t("to_mark_as_unvisited")}</span>
               </Mantine.Button>
             )}
 
             <Mantine.Divider className="my-6" />
 
-            <h4 className="font-bold">このポケふたの周辺のポケふた</h4>
+            <h4 className="font-bold">{t("pokefutas_nearby")}</h4>
             <PokefutasNearby pokefutaData={pokefutaData} />
           </div>
         </div>

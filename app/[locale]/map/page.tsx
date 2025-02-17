@@ -3,10 +3,10 @@
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 import MapComponent, { MapComponentHandle } from "@/components/map";
 import PokefutasNearby from "@/components/pokefutas-nearby";
+import { useTranslation } from "@/i18n-client";
 import {
   GeolocationContext,
   GeolocationProvider,
@@ -17,7 +17,7 @@ import { SearchContext } from "@/providers/search";
 import { getFilteredPokefutas } from "@/util";
 
 const MapPage = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
   const [geolocationGen, setGeolocationGen] = React.useState(0);
 
   return (

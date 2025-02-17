@@ -4,14 +4,19 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import Link from "next/link";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
-import { getPokemonName, getPrefectureByCode, type PokefutaData } from "@/util";
 import PokefutaImage from "@/components/pokefuta-image";
 import { SearchContext, useSearchContext } from "@/providers/search";
+import {
+  getPokemonName,
+  getPrefectureByCode,
+  getTranslatedCityName,
+  type PokefutaData,
+} from "@/util";
+import { useTranslation } from "@/i18n-client";
 
 const IndexPage: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation();
 
   const { progress } = useSearchContext();
   const [selectedGroup, setSelectedGroup] = React.useState<string>(null!);
@@ -53,6 +58,8 @@ const IndexPage: React.FC = () => {
     location.hash = selectedGroup;
     scrollToGroup(document.getElementById(selectedGroup)!);
   }, [selectedGroup]);
+
+  const isEnglish = i18n.language === "en";
 
   return (
     <SearchContext.Consumer>
@@ -109,7 +116,7 @@ const IndexPage: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {items.map((pokefuta) => {
                       const names = pokefuta.pokemons
-                        .map(getPokemonName)
+                        .map((num) => getPokemonName(num, isEnglish))
                         .join(", ");
                       const hasVisited = progress[pokefuta.id] ?? false;
 
@@ -123,7 +130,9 @@ const IndexPage: React.FC = () => {
                         >
                           <PokefutaImage id={pokefuta.id} size={72} />
                           <div>
-                            <p>{pokefuta.city}</p>
+                            <p>
+                              {getTranslatedCityName(pokefuta.city, isEnglish)}
+                            </p>
                             <p className="text-sm text-gray-600">{names}</p>
                           </div>
                           <Mantine.Box flex={1} />

@@ -6,10 +6,10 @@ import ReactMapJapan from "@react-map/japan";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 import data from "@/data/data.json";
 import prefs from "@/data/prefs.json";
+import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
 import { getPrefectureByCode, PokefutaData } from "@/util";
 
@@ -51,7 +51,7 @@ const capitalize = (str: string) => {
 };
 
 const ProgressPage = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
   const { progress } = useSearchContext();
 
   const colors = React.useMemo(() => {

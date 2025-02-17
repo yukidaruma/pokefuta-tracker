@@ -2,9 +2,9 @@
 
 import React from "react";
 import * as Mantine from "@mantine/core";
-import { useTranslation } from "react-i18next";
 
 import { useGeolocationFirstTimeNoticeStorage } from "@/hooks";
+import { useTranslation } from "@/i18n-client";
 
 type GeolocationContextProps = {
   latitude: number | null;
@@ -23,7 +23,7 @@ const GeolocationContext = React.createContext<GeolocationContextProps>({
 const GeolocationProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
   const [loading, setLoading] = React.useState(false);
   const [latitude, setLatitude] = React.useState<number | null>(null);
   const [longitude, setLongitude] = React.useState<number | null>(null);

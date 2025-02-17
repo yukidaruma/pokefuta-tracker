@@ -1,14 +1,14 @@
 "use client";
 
-import Link from "next/link";
-
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
+import Link from "next/link";
 import React from "react";
-import { useTranslation } from "react-i18next";
+
+import { useTranslation } from "@/i18n-client";
 
 const HeaderComponent: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
 
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const navItems = [

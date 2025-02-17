@@ -1,6 +1,7 @@
 import data from "@/data/data.json";
 import evolutions from "@/data/evolutions.json";
 import prefs from "@/data/prefs.json";
+import cityTranslation from "@/data/municipality-translation.json";
 
 export type PokefutaData = (typeof data.list)[number];
 
@@ -10,11 +11,30 @@ export const getPokefutaData = (id: number) => {
 export const getPokefutaImage = (id: number) => {
   return `/images/pokefuta/${id}.png`;
 };
-export const getPokemonName = (num: string | number): string | undefined => {
-  return (data.names as Record<string, string>)[num];
+export const getPokemonName = (
+  num: string | number,
+  isEnglish: boolean = false
+): string | undefined => {
+  const langKey = isEnglish ? "namesEn" : ("names" satisfies keyof typeof data);
+  return (data[langKey] as Record<string, string>)[num];
+};
+export const getPokemonNamesCombined = (
+  num: Array<string | number>,
+  isEnglish: boolean = false
+) => {
+  const separator = isEnglish ? ", " : "・";
+  return num.map((num) => getPokemonName(num, isEnglish)).join(separator);
 };
 export const getPrefectureByCode = (code: string | number) => {
   return prefs.find((pref) => pref.code === Number(code));
+};
+export const getTranslatedCityName = (
+  cityName: string,
+  isEnglish: boolean = false
+) => {
+  return isEnglish
+    ? (cityTranslation as Record<string, string>)[cityName]
+    : cityName;
 };
 
 // Calculate distance between two points in latitude and longitude

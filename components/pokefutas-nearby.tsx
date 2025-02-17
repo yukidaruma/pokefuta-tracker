@@ -1,13 +1,14 @@
+import Link from "next/link";
+
+import PokefutaImage from "./pokefuta-image";
+import { useTranslation } from "@/i18n-client";
+import { useSearchContext } from "@/providers/search";
 import {
   getNearbyPokefutas,
   getPrefectureByCode,
+  getTranslatedCityName,
   type PokefutaData,
 } from "@/util";
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-
-import PokefutaImage from "./pokefuta-image";
-import { useSearchContext } from "@/providers/search";
 
 const PokefutasNearby: React.FC<{
   pokefutaData?: PokefutaData;
@@ -15,7 +16,7 @@ const PokefutasNearby: React.FC<{
   lat?: number;
   lng?: number;
 }> = ({ pokefutaData, filteredPokefutas, lat, lng }) => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation();
   const { progress } = useSearchContext();
   const nearbyPokefutas = getNearbyPokefutas(
     6,
@@ -26,6 +27,8 @@ const PokefutasNearby: React.FC<{
       filteredPokefutas: filteredPokefutas,
     }
   );
+
+  const isEnglish = i18n.language === "en";
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -44,10 +47,12 @@ const PokefutasNearby: React.FC<{
               <PokefutaImage id={pokefuta.id} size={80} />
               <div className="flex flex-col">
                 <span>
-                  {(t as any)(
-                    `pref_${getPrefectureByCode(pokefuta.pref)!.name}`
-                  )}{" "}
-                  {pokefuta.city}
+                  {t("title_item_address", {
+                    pref: (t as any)(
+                      `pref_${getPrefectureByCode(pokefuta.pref)!.name}`
+                    ),
+                    city: getTranslatedCityName(pokefuta.city, isEnglish),
+                  })}
                 </span>
                 <span className="text-sm text-gray-600">
                   {pokefuta.distance.toFixed(1)} km

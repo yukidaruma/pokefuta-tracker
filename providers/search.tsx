@@ -6,7 +6,7 @@ import React from "react";
 
 import { getFilteredPokefutas, PokefutaData } from "@/util";
 import { useProgressStorage } from "@/hooks";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@/i18n-client";
 
 type SearchFieldsProps = {
   searchTerm: string;
@@ -29,7 +29,7 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
   filteredPokefutas,
   progression,
 }) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
 
   return (
     <div>
