@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/link";
 
 // Importing `useTranslation` from this file will cause an error.
 

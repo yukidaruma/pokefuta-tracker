@@ -1,6 +1,5 @@
-import Link from "next/link";
-
 import PokefutaImage from "./pokefuta-image";
+import Link from "@/components/link";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
 import {

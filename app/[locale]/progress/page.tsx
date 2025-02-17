@@ -3,10 +3,10 @@
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import ReactMapJapan from "@react-map/japan";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
+import Link from "@/components/link";
 import data from "@/data/data.json";
 import prefs from "@/data/prefs.json";
 import { useTranslation } from "@/i18n-client";

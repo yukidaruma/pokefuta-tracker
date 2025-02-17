@@ -2,9 +2,9 @@
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
-import Link from "next/link";
 import React from "react";
 
+import Link from "@/components/link";
 import { useTranslation } from "@/i18n-client";
 
 const HeaderComponent: React.FC = () => {
