@@ -91,7 +91,7 @@
   "title_progress": "Progression",
   "copy_image": "Copy image",
 
-  "#": "Settings",
+  "#": "/settings page",
   "title_settings": "Settings",
   "manage_data": "Data",
   "export": "Export",
@@ -101,6 +101,7 @@
   "import_data": "Importing data",
   "import_success": "Successfully imported the data",
   "import_error": "Error",
+  "language": "Language",
   "to_copy": "Copy",
   "to_export": "Export",
   "to_import": "Import",

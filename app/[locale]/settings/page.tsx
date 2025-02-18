@@ -2,6 +2,7 @@
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { notifications } from "@mantine/notifications";
 
@@ -10,7 +11,8 @@ import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
 
 const SettingsPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const router = useRouter();
 
   const [importTextareaValue, setImportTextareaValue] = React.useState("");
   const [modalState, setModalState] = React.useState<
@@ -60,6 +62,13 @@ const SettingsPage: React.FC = () => {
   const onClickReset = () => {
     localStorage.clear();
     location.reload();
+  };
+  const onChangeLanguage = (
+    language: string | null, // Actually language is always non-null
+    _option: Mantine.ComboboxItem
+  ) => {
+    i18n.changeLanguage(language!);
+    router.push(`/${language}/settings`);
   };
 
   return (
@@ -155,6 +164,17 @@ const SettingsPage: React.FC = () => {
           </Mantine.Button>
         </div>
       </Mantine.Modal>
+
+      <h3 className="mt-4 text-2xl text-red-700 font-bold">{t("language")}</h3>
+      <Mantine.Select
+        defaultValue={i18n.language}
+        onChange={onChangeLanguage}
+        data={[
+          { value: "en", label: "English / 英語" },
+          { value: "ja", label: "Japanese / 日本語" },
+        ]}
+        allowDeselect={false}
+      />
     </div>
   );
 };
