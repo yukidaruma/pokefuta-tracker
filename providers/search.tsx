@@ -4,7 +4,14 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
 
-import { getFilteredPokefutas, PokefutaData } from "@/util";
+import cityTranslation from "@/data/municipality-translation.json";
+import data from "@/data/data.json";
+import {
+  getFilteredPokefutas,
+  normalizeKana,
+  PokefutaData,
+  unique,
+} from "@/util";
 import { useProgressStorage } from "@/hooks";
 import { useTranslation } from "@/i18n-client";
 
@@ -29,22 +36,90 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
   filteredPokefutas,
   progression,
 }) => {
-  const { t } = useTranslation();
+  const [popupOpened, setPopupOpened] = React.useState(false);
+  const { t, i18n } = useTranslation();
+
+  type SearchIndex = [normalized: string, original: string];
+  const searchIndexes = React.useMemo(() => {
+    const prefNames = Object.entries(
+      i18n.getResourceBundle(i18n.language, "common") as Record<string, string>
+    ).flatMap(([key, value]) => (key.startsWith("pref_") ? [value] : []));
+    let indexes =
+      i18n.language === "en"
+        ? [
+            ...Object.values(data.namesEn),
+            ...prefNames,
+            ...Object.values(cityTranslation),
+          ]
+        : [
+            ...Object.values(data.names),
+            ...prefNames,
+            ...Object.keys(cityTranslation),
+          ];
+
+    // For English, normalize by converting letter case
+    // For Japanese, search target is already normalied
+    // Pokemons like "チェリム" has 2 forms with identical name, so we need to make them unique
+    return unique(indexes).map(
+      (phrase) => [phrase.toLowerCase(), phrase] as SearchIndex
+    );
+  }, [i18n.language]);
+  const suggestions = React.useMemo(() => {
+    const normalizedSearchTerm = normalizeKana(searchTerm).toLowerCase();
+    return searchIndexes
+      .filter(([normalized]) => normalized.startsWith(normalizedSearchTerm))
+      .map(([_, original]) => original);
+  }, [searchIndexes, searchTerm]);
 
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center">
         <div className="flex justify-center content-center items-center">
           <span style={{ flexShrink: 0 }}>{t("search")}</span>
-          <Mantine.TextInput
-            className="ml-2 w-full sm:w-[inital]"
-            type="text"
-            value={searchTerm}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchTerm(e.target.value)
-            }
-            leftSection={<Lucide.Search className="text-gray-400" />}
-          />
+
+          {/* Show suggestions based on searchTerm */}
+          <Mantine.Popover
+            opened={popupOpened}
+            width="target"
+            position="bottom"
+          >
+            <Mantine.Popover.Target>
+              <Mantine.TextInput
+                className="ml-2 w-full sm:w-72"
+                type="text"
+                value={searchTerm}
+                onFocus={() => setPopupOpened(true)}
+                onBlur={() => setPopupOpened(false)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchTerm(e.target.value)
+                }
+                leftSection={<Lucide.Search className="text-gray-400" />}
+              />
+            </Mantine.Popover.Target>
+            <Mantine.Popover.Dropdown>
+              {searchTerm.trim().length === 0 ? (
+                <span className="text-gray-500">
+                  {t("search_suggestions_hint")}
+                </span>
+              ) : suggestions.length === 0 ? (
+                <span className="text-gray-500">
+                  {t("search_suggestions_empty")}
+                </span>
+              ) : (
+                <div>
+                  {suggestions.slice(0, 5).map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      className="block w-full text-left hover:bg-gray-200"
+                      onClick={() => setSearchTerm(suggestion)}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </Mantine.Popover.Dropdown>
+          </Mantine.Popover>
         </div>
         <span className="ml-12 mt-2 sm:ml-2 sm:mt-0 text-sm text-gray-500">
           {/* Even though we can search by Pokedex number, we don't show it here */}
@@ -100,6 +175,7 @@ const SearchContext = React.createContext<SearchContextProps>(
 );
 
 const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const [hideVisited, setHideVisited] = React.useState<boolean>(false);
   const [includeEvolutions, setIncludeEvolutions] =
@@ -109,6 +185,7 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const filteredPokefutas = React.useMemo(() => {
     return getFilteredPokefutas(searchTerm, {
+      language: i18n.language,
       progress,
       hideVisited,
       includeEvolutions,

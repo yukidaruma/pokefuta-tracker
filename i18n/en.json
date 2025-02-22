@@ -8,6 +8,8 @@
   "search_exclude_visited": "Exclude visited ones",
   "search_found": "Found",
   "search_include_evos": "Include evolutions",
+  "search_suggestions_empty": "No suggestions found",
+  "search_suggestions_hint": "Suggestions will appear here...",
   "share": "Share",
   "visited": "Visited",
 

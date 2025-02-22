@@ -19,7 +19,7 @@ const HeaderComponent: React.FC = () => {
   ];
 
   return (
-    <header className="bg-red-600 p-4 flex items-center sticky top-0 z-50">
+    <header className="bg-red-600 p-4 flex items-center sticky top-0 z-[1000]">
       <Mantine.Burger
         color="white"
         opened={isSidebarOpen}

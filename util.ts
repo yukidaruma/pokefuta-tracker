@@ -37,6 +37,11 @@ export const getTranslatedCityName = (
     : cityName;
 };
 
+// Remove duplicates from an array
+export const unique = <T>(arr: T[]): T[] => {
+  return Array.from(new Set(arr));
+};
+
 // Calculate distance between two points in latitude and longitude
 export const calcDistance = (
   lat1: number,
@@ -64,16 +69,9 @@ const toRad = (Value: number) => {
   return (Value * Math.PI) / 180;
 };
 
-// Filter pokefutas by search term
-export const getFilteredPokefutas = (
-  searchTerm: string,
-  options: {
-    progress?: Record<number, boolean>;
-    hideVisited?: boolean;
-    includeEvolutions?: boolean;
-  } = {}
-) => {
-  const normalizedSearchTerm = searchTerm
+// Normalize search term by converting hiragana to katakana
+export const normalizeKana = (searchTerm: string) => {
+  return searchTerm
     .trim()
     .split("")
     .map((char) => {
@@ -83,12 +81,30 @@ export const getFilteredPokefutas = (
         : char;
     })
     .join("");
+};
+
+// Filter pokefutas by search term
+export const getFilteredPokefutas = (
+  searchTerm: string,
+  options: {
+    language: string;
+    progress?: Record<number, boolean>;
+    hideVisited?: boolean;
+    includeEvolutions?: boolean;
+  }
+) => {
+  const isEnglish = options.language === "en";
+  const normalizedSearchTerm = normalizeKana(searchTerm).toLowerCase();
 
   const matchedEvoPokeNums = new Set<number>();
   if (options.includeEvolutions) {
     for (const evolutionChain of evolutions) {
       for (const pokeNum of evolutionChain) {
-        if (getPokemonName(pokeNum)?.includes(normalizedSearchTerm)) {
+        if (
+          getPokemonName(pokeNum, isEnglish)
+            ?.toLowerCase()
+            .includes(normalizedSearchTerm)
+        ) {
           evolutionChain.forEach((it) => matchedEvoPokeNums.add(it));
           break;
         }
@@ -120,6 +136,23 @@ export const getFilteredPokefutas = (
       return true;
     }
 
+    // For English, use address in English
+    if (isEnglish) {
+      const translatedCity = (cityTranslation as Record<string, string>)[
+        pokefuta.city
+      ]!;
+      const translatedPref = prefs.find(
+        (pref) => pref.code === pokefuta.pref
+      )!.name;
+
+      if (
+        translatedCity.toLowerCase().includes(normalizedSearchTerm) ||
+        translatedPref.toLowerCase().includes(normalizedSearchTerm)
+      ) {
+        return true;
+      }
+    }
+
     // By name
     for (const pokeNum of pokefuta.pokemons) {
       if (options.includeEvolutions) {
@@ -128,7 +161,9 @@ export const getFilteredPokefutas = (
         }
       } else {
         return pokefuta.pokemons.some((pokeNum) => {
-          return getPokemonName(pokeNum)?.includes(normalizedSearchTerm);
+          return getPokemonName(pokeNum, isEnglish)
+            ?.toLowerCase()
+            .includes(normalizedSearchTerm);
         });
       }
     }
