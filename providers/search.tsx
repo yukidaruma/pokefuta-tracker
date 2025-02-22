@@ -40,6 +40,7 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
   const { t, i18n } = useTranslation();
 
   type SearchIndex = [normalized: string, original: string];
+  const normalizedSearchTerm = normalizeKana(searchTerm).toLowerCase();
   const searchIndexes = React.useMemo(() => {
     const prefNames = Object.entries(
       i18n.getResourceBundle(i18n.language, "common") as Record<string, string>
@@ -65,11 +66,10 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
     );
   }, [i18n.language]);
   const suggestions = React.useMemo(() => {
-    const normalizedSearchTerm = normalizeKana(searchTerm).toLowerCase();
     return searchIndexes
       .filter(([normalized]) => normalized.startsWith(normalizedSearchTerm))
       .map(([_, original]) => original);
-  }, [searchIndexes, searchTerm]);
+  }, [searchIndexes, normalizedSearchTerm]);
 
   return (
     <div>
@@ -110,10 +110,16 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
                   {suggestions.slice(0, 5).map((suggestion) => (
                     <button
                       key={suggestion}
-                      className="block w-full text-left hover:bg-gray-200"
+                      className="block w-full cursor-pointer text-left p-2 rounded-sm hover:bg-gray-200"
                       onClick={() => setSearchTerm(suggestion)}
                     >
-                      {suggestion}
+                      {/* TODO: Only highlight starting letters */}
+                      <Mantine.Highlight
+                        highlight={normalizedSearchTerm}
+                        highlightStyles={{ fontWeight: "bold" }}
+                      >
+                        {suggestion}
+                      </Mantine.Highlight>
                     </button>
                   ))}
                 </div>
