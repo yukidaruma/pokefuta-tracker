@@ -95,18 +95,25 @@ export const getFilteredPokefutas = (
 ) => {
   const isEnglish = options.language === "en";
   const normalizedSearchTerm = normalizeKana(searchTerm).toLowerCase();
+  const isSearchByPokedexNumber = /^\d+$/.test(normalizedSearchTerm);
 
   const matchedEvoPokeNums = new Set<number>();
   if (options.includeEvolutions) {
-    for (const evolutionChain of evolutions) {
+    // Since no pokemon appears in multiple evolution chains, we can stop searching early
+    outer: for (const evolutionChain of evolutions) {
       for (const pokeNum of evolutionChain) {
-        if (
+        if (isSearchByPokedexNumber) {
+          if (pokeNum.toString() === normalizedSearchTerm) {
+            evolutionChain.forEach((it) => matchedEvoPokeNums.add(it));
+            break outer;
+          }
+        } else if (
           getPokemonName(pokeNum, isEnglish)
             ?.toLowerCase()
             .includes(normalizedSearchTerm)
         ) {
           evolutionChain.forEach((it) => matchedEvoPokeNums.add(it));
-          break;
+          break outer;
         }
       }
     }
@@ -123,33 +130,36 @@ export const getFilteredPokefutas = (
       return true;
     }
 
-    // By Pokedex number
-    if (/^\d+$/.test(normalizedSearchTerm)) {
-      return pokefuta.pokemons.some((pokeNum) => {
-        // Some pokemon have multiple forms, so we need to check only the base form
-        return pokeNum.split("-")[0] === normalizedSearchTerm;
-      });
-    }
-
-    // By address
-    if (pokefuta.address.includes(normalizedSearchTerm)) {
-      return true;
-    }
-
-    // For English, use address in English
-    if (isEnglish) {
-      const translatedCity = (cityTranslation as Record<string, string>)[
-        pokefuta.city
-      ]!;
-      const translatedPref = prefs.find(
-        (pref) => pref.code === pokefuta.pref
-      )!.name;
-
-      if (
-        translatedCity.toLowerCase().includes(normalizedSearchTerm) ||
-        translatedPref.toLowerCase().includes(normalizedSearchTerm)
-      ) {
+    // By Pokedex number (skipping address search)
+    // If includeEvolutions is true, skip both name and address search, so we use matchedEvoPokeNums later
+    if (isSearchByPokedexNumber) {
+      if (!options.includeEvolutions) {
+        return pokefuta.pokemons.some((pokeNum) => {
+          // Some pokemon have multiple forms, so we need to check only the base form
+          return pokeNum.split("-")[0] === normalizedSearchTerm;
+        });
+      }
+    } else {
+      // By address
+      if (pokefuta.address.includes(normalizedSearchTerm)) {
         return true;
+      }
+
+      // For English, use address in English
+      if (isEnglish) {
+        const translatedCity = (cityTranslation as Record<string, string>)[
+          pokefuta.city
+        ]!;
+        const translatedPref = prefs.find(
+          (pref) => pref.code === pokefuta.pref
+        )!.name;
+
+        if (
+          translatedCity.toLowerCase().includes(normalizedSearchTerm) ||
+          translatedPref.toLowerCase().includes(normalizedSearchTerm)
+        ) {
+          return true;
+        }
       }
     }
 
