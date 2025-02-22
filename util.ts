@@ -107,10 +107,11 @@ export const getFilteredPokefutas = (
       return true;
     }
 
-    // By pokedex number
+    // By Pokedex number
     if (/^\d+$/.test(normalizedSearchTerm)) {
       return pokefuta.pokemons.some((pokeNum) => {
-        return pokeNum === normalizedSearchTerm;
+        // Some pokemon have multiple forms, so we need to check only the base form
+        return pokeNum.split("-")[0] === normalizedSearchTerm;
       });
     }
 

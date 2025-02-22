@@ -47,6 +47,7 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
           />
         </div>
         <span className="ml-12 mt-2 sm:ml-2 sm:mt-0 text-sm text-gray-500">
+          {/* Even though we can search by Pokedex number, we don't show it here */}
           {t("search_example")}
         </span>
       </div>
