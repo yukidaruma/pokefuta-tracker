@@ -66,17 +66,8 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           fromLonLat([Number(pokefuta.coords[1]), Number(pokefuta.coords[0])])
         ),
       });
-      const iconStyle = new Style({
-        image: new Icon({
-          src: getPokefutaImage(pokefuta.id),
-          opacity: highlight && highlight !== pokefuta.id ? 0.5 : 1,
-          height: 48,
-          width: 48,
-        }),
-      });
 
       iconFeature.setId(pokefuta.id);
-      iconFeature.setStyle(iconStyle);
       iconFeature.setProperties({
         id: pokefuta.id,
       });
@@ -111,48 +102,46 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
 
       const iconsPerRow = 4032 / 96;
       const pokefutaRows = Math.ceil(maxPokefutaId / iconsPerRow);
+      const style = {
+        "icon-src": "/images/pokefuta/sprite.png",
+        "icon-size": [96, 96],
+        "icon-scale": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          6,
+          0.25,
+          10,
+          0.5,
+          14,
+          0.75,
+          18,
+          1,
+        ],
+        "icon-offset": [
+          "interpolate",
+          ["linear"],
+          ["get", "id"],
+
+          ...Array.from({ length: pokefutaRows }, (_, i) => [
+            // Offset of start of the row
+            1 + iconsPerRow * i,
+            [0, i * 96],
+
+            // Offset of end of the row
+            iconsPerRow * (i + 1),
+            [4032 - 96, 96 * i],
+          ]).flat(),
+        ],
+      } as Record<string, any>;
+      if (highlight) {
+        style["icon-opacity"] = ["match", ["get", "id"], highlight, 1, 0.5];
+      }
+
       const vectorLayer = new WebGLVectorLayer({
-        style: {
-          "icon-src": "/images/pokefuta/sprite.png",
-          "icon-size": [96, 96],
-          "icon-scale": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            6,
-            0.25,
-            10,
-            0.5,
-            14,
-            0.75,
-            18,
-            1,
-          ],
-          "icon-offset": [
-            "interpolate",
-            ["linear"],
-            ["get", "id"],
-
-            ...Array.from({ length: pokefutaRows }, (_, i) => [
-              // Offset of start of the row
-              1 + iconsPerRow * i,
-              [0, i * 96],
-
-              // Offset of end of the row
-              iconsPerRow * (i + 1),
-              [4032 - 96, 96 * i],
-            ]).flat(),
-          ],
-        },
+        style,
         source: new VectorSource({
           features: iconFeatures.filter((feature) => {
-            if (highlight) {
-              return (
-                feature.getId() === highlight ||
-                feature.getProperties().id === highlight
-              );
-            }
-
             return pokefutas.some(
               (pokefuta) => pokefuta.id === feature.getId()
             );
