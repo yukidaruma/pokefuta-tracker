@@ -59,8 +59,37 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
     const mapCenterContext = useMapCenterContext();
     const router = useRouter();
 
+    const iconFeatures: Feature[] = [];
+    for (const pokefuta of data.list) {
+      const iconFeature = new Feature({
+        geometry: new Point(
+          fromLonLat([Number(pokefuta.coords[1]), Number(pokefuta.coords[0])])
+        ),
+      });
+      const iconStyle = new Style({
+        image: new Icon({
+          src: getPokefutaImage(pokefuta.id),
+          opacity: highlight && highlight !== pokefuta.id ? 0.5 : 1,
+          height: 48,
+          width: 48,
+        }),
+      });
+
+      iconFeature.setId(pokefuta.id);
+      iconFeature.setStyle(iconStyle);
+      iconFeature.setProperties({
+        id: pokefuta.id,
+      });
+
+      iconFeatures.push(iconFeature);
+    }
+
     const updateMarkerLayer = (map: Map) => {
-      const iconFeatures: Feature[] = [];
+      const oldLayer = map.getLayers().item(1);
+      if (oldLayer) {
+        // Replace layer if it already exists
+        map.removeLayer(oldLayer);
+      }
 
       // Show only pokefutas meeting the conditions
       const availablePokefutas = ids
@@ -75,35 +104,6 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           )
         : availablePokefutas;
 
-      for (const pokefuta of pokefutas) {
-        const iconFeature = new Feature({
-          geometry: new Point(
-            fromLonLat([Number(pokefuta.coords[1]), Number(pokefuta.coords[0])])
-          ),
-        });
-        const iconStyle = new Style({
-          image: new Icon({
-            src: getPokefutaImage(pokefuta.id),
-            opacity: highlight && highlight !== pokefuta.id ? 0.5 : 1,
-            height: 48,
-            width: 48,
-          }),
-        });
-
-        iconFeature.setId(pokefuta.id);
-        iconFeature.setStyle(iconStyle);
-        iconFeature.setProperties({
-          id: pokefuta.id,
-        });
-
-        iconFeatures.push(iconFeature);
-      }
-
-      const oldLayer = map.getLayers().item(1);
-      if (oldLayer) {
-        // Replace layer if it already exists
-        map.removeLayer(oldLayer);
-      }
       const maxPokefutaId = pokefutas.reduce(
         (max, pokefuta) => Math.max(max, pokefuta.id),
         0
@@ -145,7 +145,18 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           ],
         },
         source: new VectorSource({
-          features: iconFeatures,
+          features: iconFeatures.filter((feature) => {
+            if (highlight) {
+              return (
+                feature.getId() === highlight ||
+                feature.getProperties().id === highlight
+              );
+            }
+
+            return pokefutas.some(
+              (pokefuta) => pokefuta.id === feature.getId()
+            );
+          }),
         }),
       });
       map.addLayer(vectorLayer);
