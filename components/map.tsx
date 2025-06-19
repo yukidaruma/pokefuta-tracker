@@ -3,12 +3,12 @@
 import { useRouter } from "next/navigation";
 import "ol/ol.css";
 import { Map, View } from "ol";
-import TileLayer from "ol/layer/Tile";
+import { MapboxVectorLayer } from "ol-mapbox-style";
 import { fromLonLat, toLonLat } from "ol/proj";
 import { Feature } from "ol";
 import { Point } from "ol/geom";
 import { Vector as VectorLayer } from "ol/layer";
-import { OSM, StadiaMaps, Vector as VectorSource } from "ol/source";
+import { Vector as VectorSource } from "ol/source";
 import { Icon, Style } from "ol/style";
 import React from "react";
 
@@ -115,8 +115,8 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         const newMap = new Map({
           target: mapRef.current,
           layers: [
-            new TileLayer({
-              source: new OSM(),
+            new MapboxVectorLayer({
+              styleUrl: "https://tiles.openfreemap.org/styles/bright",
             }),
           ],
           view: new View({
