@@ -119,14 +119,14 @@ const ItemClientPage: React.FC = () => {
                 color="red"
                 onClick={toggleVisited}
               >
-                <span>{t("to_mark_as_visited")}</span>
+                <span>{t("to_mark_as_unvisited")}</span>
               </Mantine.Button>
             ) : (
               <Mantine.Button
                 leftSection={<Lucide.Check />}
                 onClick={toggleVisited}
               >
-                <span>{t("to_mark_as_unvisited")}</span>
+                <span>{t("to_mark_as_visited")}</span>
               </Mantine.Button>
             )}
 
