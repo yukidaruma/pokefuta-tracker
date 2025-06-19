@@ -99,7 +99,7 @@ const MapPageChild: React.FC<{
   return (
     <MapComponent
       ref={mapRef}
-      style={{ minHeight: 320, flex: 1 }}
+      style={{ height: 600 }}
       ids={filteredPokefutas?.map((item) => item.id)}
     />
   );

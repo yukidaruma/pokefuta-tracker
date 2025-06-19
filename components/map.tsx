@@ -116,6 +116,19 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         style: {
           "icon-src": "/images/pokefuta/sprite.png",
           "icon-size": [96, 96],
+          "icon-scale": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            6,
+            0.25,
+            10,
+            0.5,
+            14,
+            0.75,
+            18,
+            1,
+          ],
           "icon-offset": [
             "interpolate",
             ["linear"],
@@ -152,6 +165,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
             center: fromLonLat([Number(initialLng), Number(initialLat)]),
             zoom: 14,
             enableRotation: false,
+            maxZoom: 18,
           }),
         });
 

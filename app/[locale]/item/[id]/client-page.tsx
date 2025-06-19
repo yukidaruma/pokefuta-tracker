@@ -65,7 +65,7 @@ const ItemClientPage: React.FC = () => {
         </div>
         <div className="mt-4 sm:mt-0 flex-1">
           <MapComponent
-            style={{ height: 400 }}
+            style={{ height: 450 }}
             highlight={id}
             initialLat={lat}
             initialLng={lng}
