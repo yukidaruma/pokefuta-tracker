@@ -7,14 +7,14 @@ import TileLayer from "ol/layer/Tile";
 import { fromLonLat, toLonLat } from "ol/proj";
 import { Feature } from "ol";
 import { Point } from "ol/geom";
-import { Vector as VectorLayer } from "ol/layer";
-import { OSM, StadiaMaps, Vector as VectorSource } from "ol/source";
+import { OSM, Vector as VectorSource } from "ol/source";
 import { Icon, Style } from "ol/style";
 import React from "react";
 
 import data from "@/data/data.json";
 import { getPokefutaImage } from "@/util";
 import { useMapCenterContext } from "@/providers/map-center";
+import WebGLVectorLayer from "ol/layer/WebGLVector";
 
 export type MapComponentProps = {
   style?: React.CSSProperties;
@@ -92,6 +92,9 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
 
         iconFeature.setId(pokefuta.id);
         iconFeature.setStyle(iconStyle);
+        iconFeature.setProperties({
+          id: pokefuta.id,
+        });
 
         iconFeatures.push(iconFeature);
       }
@@ -102,7 +105,33 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         map.removeLayer(oldLayer);
         oldLayer.dispose();
       }
-      const vectorLayer = new VectorLayer({
+      const maxPokefutaId = pokefutas.reduce(
+        (max, pokefuta) => Math.max(max, pokefuta.id),
+        0
+      );
+
+      const iconsPerRow = 4032 / 96;
+      const pokefutaRows = Math.ceil(maxPokefutaId / iconsPerRow);
+      const vectorLayer = new WebGLVectorLayer({
+        style: {
+          "icon-src": "/images/pokefuta/sprite.png",
+          "icon-size": [96, 96],
+          "icon-offset": [
+            "interpolate",
+            ["linear"],
+            ["get", "id"],
+
+            ...Array.from({ length: pokefutaRows }, (_, i) => [
+              // Offset of start of the row
+              1 + iconsPerRow * i,
+              [0, i * 96],
+
+              // Offset of end of the row
+              iconsPerRow * (i + 1),
+              [4032 - 96, 96 * i],
+            ]).flat(),
+          ],
+        },
         source: new VectorSource({
           features: iconFeatures,
         }),
