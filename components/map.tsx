@@ -103,7 +103,6 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
       if (oldLayer) {
         // Replace layer if it already exists
         map.removeLayer(oldLayer);
-        oldLayer.dispose();
       }
       const maxPokefutaId = pokefutas.reduce(
         (max, pokefuta) => Math.max(max, pokefuta.id),
