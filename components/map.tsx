@@ -15,6 +15,7 @@ import React from "react";
 import data from "@/data/data.json";
 import { getPokefutaImage } from "@/util";
 import { useMapCenterContext } from "@/providers/map-center";
+import { FeatureLike } from "ol/Feature";
 
 export type MapComponentProps = {
   style?: React.CSSProperties;
@@ -92,6 +93,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
 
         iconFeature.setId(pokefuta.id);
         iconFeature.setStyle(iconStyle);
+        iconFeature.setProperties({ pokefuta: true }, true);
 
         iconFeatures.push(iconFeature);
       }
@@ -126,22 +128,26 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           }),
         });
 
+        const isClickableFeature = (feature: FeatureLike | null) => {
+          return (
+            feature &&
+            feature instanceof Feature &&
+            feature.getProperties()?.pokefuta &&
+            (!highlight || feature.getId() !== highlight)
+          );
+        };
+
         // Change cursor to pointer on hovering over a feature (non-highlighted ones only)
         newMap.on("pointermove", function (e) {
           const hoveredFeature = newMap.getFeaturesAtPixel(e.pixel)[0];
-          const isClickable =
-            hoveredFeature &&
-            (!highlight || hoveredFeature.getId() !== highlight);
-          newMap.getViewport().style.cursor = isClickable ? "pointer" : "";
+          newMap.getViewport().style.cursor = isClickableFeature(hoveredFeature)
+            ? "pointer"
+            : "";
         });
 
         newMap.on("click", function (e) {
           const clickedFeature = newMap.getFeaturesAtPixel(e.pixel)[0];
-          const isClickable =
-            clickedFeature &&
-            (!highlight || clickedFeature.getId() !== highlight);
-
-          if (isClickable) {
+          if (isClickableFeature(clickedFeature)) {
             router.push(`/item/${clickedFeature.getId()}`);
           }
         });
