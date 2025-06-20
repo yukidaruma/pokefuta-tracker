@@ -166,7 +166,7 @@ export const getFilteredPokefutas = (
     // By name
     for (const pokeNum of pokefuta.pokemons) {
       if (options.includeEvolutions) {
-        if (matchedEvoPokeNums.has(Number(pokeNum))) {
+        if (matchedEvoPokeNums.has(Number(pokeNum.split("-")[0]))) {
           return true;
         }
       } else {
