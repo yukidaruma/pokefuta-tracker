@@ -1,25 +1,25 @@
 "use client";
 
+import React from "react";
 import { useRouter } from "next/navigation";
+
 import "ol/ol.css";
-import { Map, View } from "ol";
-import TileLayer from "ol/layer/Tile";
+import { Feature, Map, View } from "ol";
 import { fromLonLat, toLonLat } from "ol/proj";
-import { Feature } from "ol";
 import { Point } from "ol/geom";
 import { OSM, Vector as VectorSource } from "ol/source";
-import { Icon, Style } from "ol/style";
-import React from "react";
+import TileLayer from "ol/layer/Tile";
+import WebGLVectorLayer from "ol/layer/WebGLVector";
 
 import data from "@/data/data.json";
 import { useMapCenterContext } from "@/providers/map-center";
-import WebGLVectorLayer from "ol/layer/WebGLVector";
 import { SPRITES_PER_ROW } from "@/util";
 
 export type MapComponentProps = {
   style?: React.CSSProperties;
   initialLat?: string | number;
   initialLng?: string | number;
+  hasCrosshair?: boolean;
 
   // Ids to show on the map
   ids?: number[];
@@ -43,6 +43,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
       initialLng = 139.775397,
       initialLat = 35.717715,
 
+      hasCrosshair,
       ids,
       highlight,
     },
@@ -86,9 +87,6 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
       const availablePokefutas = ids
         ? data.list.filter((pokefuta) => ids.includes(pokefuta.id))
         : data.list;
-      const highlightedPokefuta = availablePokefutas.find(
-        (pokefuta) => pokefuta.id === highlight
-      );
 
       const maxPokefutaId = availablePokefutas.reduce(
         (max, pokefuta) => Math.max(max, pokefuta.id),
@@ -216,8 +214,31 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         ref={(node) => {
           mapRef.current = node;
         }}
-        style={{ ...style, width: "100%" }}
-      />
+        style={{ ...style, position: "relative", width: "100%" }}
+      >
+        {hasCrosshair && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              pointerEvents: "none",
+              transform: "translate(-50%, -50%)",
+              zIndex: 10,
+            }}
+          >
+            <svg
+              width={20}
+              height={20}
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 2V22M2 12H22" stroke="#0006" strokeWidth={2} />
+            </svg>
+          </div>
+        )}
+      </div>
     );
   }
 );

@@ -101,6 +101,7 @@ const MapPageChild: React.FC<{
       ref={mapRef}
       style={{ height: 600 }}
       ids={filteredPokefutas?.map((item) => item.id)}
+      hasCrosshair
     />
   );
 };
