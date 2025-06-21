@@ -12,7 +12,6 @@ import { Icon, Style } from "ol/style";
 import React from "react";
 
 import data from "@/data/data.json";
-import { getPokefutaImage } from "@/util";
 import { useMapCenterContext } from "@/providers/map-center";
 import WebGLVectorLayer from "ol/layer/WebGLVector";
 
@@ -89,13 +88,8 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
       const highlightedPokefuta = availablePokefutas.find(
         (pokefuta) => pokefuta.id === highlight
       );
-      const pokefutas = highlightedPokefuta
-        ? availablePokefutas.filter(
-            (pokefuta) => pokefuta.pref === highlightedPokefuta.pref
-          )
-        : availablePokefutas;
 
-      const maxPokefutaId = pokefutas.reduce(
+      const maxPokefutaId = availablePokefutas.reduce(
         (max, pokefuta) => Math.max(max, pokefuta.id),
         0
       );
@@ -142,7 +136,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         style,
         source: new VectorSource({
           features: iconFeatures.filter((feature) => {
-            return pokefutas.some(
+            return availablePokefutas.some(
               (pokefuta) => pokefuta.id === feature.getId()
             );
           }),
