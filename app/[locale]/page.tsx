@@ -64,12 +64,15 @@ const IndexPage: React.FC = () => {
   return (
     <SearchContext.Consumer>
       {({ form, filteredPokefutas }) => {
-        const groupedPokefutas = filteredPokefutas.reduce((acc, pokefuta) => {
-          const gruopKey = pokefuta.pref;
-          acc[gruopKey] ??= [];
-          acc[gruopKey].push(pokefuta);
-          return acc;
-        }, {} as Record<string, PokefutaData[]>);
+        const groupedPokefutas = filteredPokefutas.reduce(
+          (acc, pokefuta) => {
+            const gruopKey = pokefuta.pref;
+            acc[gruopKey] ??= [];
+            acc[gruopKey].push(pokefuta);
+            return acc;
+          },
+          {} as Record<string, PokefutaData[]>
+        );
 
         return (
           <div className="space-y-4 w-full">
@@ -129,7 +132,7 @@ const IndexPage: React.FC = () => {
                           }`}
                           prefetch={false}
                         >
-                          <PokefutaImage id={pokefuta.id} size={72} />
+                          <PokefutaImage id={pokefuta.id} size={72} isSprite />
                           <div>
                             <p>
                               {getTranslatedCityName(pokefuta.city, isEnglish)}

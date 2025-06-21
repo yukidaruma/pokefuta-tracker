@@ -43,7 +43,7 @@ const PokefutasNearby: React.FC<{
                 hasVisited ? "bg-green-50" : ""
               }`}
             >
-              <PokefutaImage id={pokefuta.id} size={80} />
+              <PokefutaImage id={pokefuta.id} size={80} isSprite />
               <div className="flex flex-col">
                 <span>
                   {t("title_item_address", {

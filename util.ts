@@ -5,6 +5,10 @@ import cityTranslation from "@/data/municipality-translation.json";
 
 export type PokefutaData = (typeof data.list)[number];
 
+export const SPRITE_SHEET_WIDTH = 4032;
+export const SPRITE_SIZE = 96;
+export const SPRITES_PER_ROW = SPRITE_SHEET_WIDTH / SPRITE_SIZE;
+
 export const getPokefutaData = (id: number) => {
   return data.list.find((item) => item.id === id) ?? null;
 };

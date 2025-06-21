@@ -14,6 +14,7 @@ import React from "react";
 import data from "@/data/data.json";
 import { useMapCenterContext } from "@/providers/map-center";
 import WebGLVectorLayer from "ol/layer/WebGLVector";
+import { SPRITES_PER_ROW } from "@/util";
 
 export type MapComponentProps = {
   style?: React.CSSProperties;
@@ -94,8 +95,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         0
       );
 
-      const iconsPerRow = 4032 / 96;
-      const pokefutaRows = Math.ceil(maxPokefutaId / iconsPerRow);
+      const pokefutaRows = Math.ceil(maxPokefutaId / SPRITES_PER_ROW);
       const style = {
         "icon-src": "/images/pokefuta/sprite.png",
         "icon-size": [96, 96],
@@ -119,11 +119,11 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
 
           ...Array.from({ length: pokefutaRows }, (_, i) => [
             // Offset of start of the row
-            1 + iconsPerRow * i,
+            1 + SPRITES_PER_ROW * i,
             [0, i * 96],
 
             // Offset of end of the row
-            iconsPerRow * (i + 1),
+            SPRITES_PER_ROW * (i + 1),
             [4032 - 96, 96 * i],
           ]).flat(),
         ],
