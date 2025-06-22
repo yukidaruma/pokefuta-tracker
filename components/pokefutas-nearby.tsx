@@ -3,6 +3,8 @@ import { useSearchContext } from "@/providers/search";
 import { getNearbyPokefutas, type PokefutaData } from "@/util";
 import { PokefutaCard } from "./pokefuta-card";
 
+export const DEFAULT_POKEFUTAS_NEARBY_COUNT = 6;
+
 const PokefutasNearby: React.FC<{
   pokefutaData?: PokefutaData;
   count?: number;
@@ -12,7 +14,7 @@ const PokefutasNearby: React.FC<{
   maxDistance?: number; // in km
 }> = ({
   pokefutaData,
-  count = 6,
+  count = DEFAULT_POKEFUTAS_NEARBY_COUNT,
   filteredPokefutas,
   lat,
   lng,

@@ -12,8 +12,9 @@ import Copyable from "@/components/copyable";
 import ExternalLink from "@/components/external-link";
 import MapComponent from "@/components/map";
 import PokefutaImage from "@/components/pokefuta-image";
-import { PokefutaCard } from "@/components/pokefuta-card";
-import PokefutasNearby from "@/components/pokefutas-nearby";
+import PokefutasNearby, {
+  DEFAULT_POKEFUTAS_NEARBY_COUNT,
+} from "@/components/pokefutas-nearby";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
 import {
@@ -170,22 +171,28 @@ const ItemClientPage: React.FC = () => {
                   ({evolutionFamilyPokefutas.length})
                 </span>
               </h4>
-              {!showAll && (
-                <Mantine.Button
-                  className="ml-2"
-                  variant="subtle"
-                  size="compact-xs"
-                  onClick={() => setShowAll(true)}
-                >
-                  {t("show_all")}
-                </Mantine.Button>
-              )}
+              {!showAll &&
+                evolutionFamilyPokefutas.length >
+                  DEFAULT_POKEFUTAS_NEARBY_COUNT && (
+                  <Mantine.Button
+                    className="ml-2"
+                    variant="subtle"
+                    size="compact-xs"
+                    onClick={() => setShowAll(true)}
+                  >
+                    {t("show_all")}
+                  </Mantine.Button>
+                )}
             </div>
 
             <PokefutasNearby
               pokefutaData={pokefutaData}
-              count={showAll ? Number.MAX_SAFE_INTEGER : 6}
               filteredPokefutas={evolutionFamilyPokefutas}
+              count={
+                showAll
+                  ? Number.MAX_SAFE_INTEGER
+                  : DEFAULT_POKEFUTAS_NEARBY_COUNT
+              }
             />
           </div>
         </div>
