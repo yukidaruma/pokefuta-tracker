@@ -17,6 +17,7 @@ import { SPRITES_PER_ROW } from "@/util";
 
 export type MapComponentProps = {
   style?: React.CSSProperties;
+  zoom?: number;
   initialLat?: string | number;
   initialLng?: string | number;
   hasCrosshair?: boolean;
@@ -38,6 +39,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
   (
     {
       style,
+      zoom = 14,
 
       // Fall back to Pokefuta in Ueno Park (172)
       initialLng = 139.775397,
@@ -154,7 +156,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           ],
           view: new View({
             center: fromLonLat([Number(initialLng), Number(initialLat)]),
-            zoom: 14,
+            zoom,
             enableRotation: false,
             maxZoom: 18,
           }),

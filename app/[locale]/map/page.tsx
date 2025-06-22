@@ -100,6 +100,7 @@ const MapPageChild: React.FC<{
     <MapComponent
       ref={mapRef}
       style={{ height: 600 }}
+      zoom={4.8}
       ids={filteredPokefutas?.map((item) => item.id)}
       hasCrosshair
     />
