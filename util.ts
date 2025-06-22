@@ -195,8 +195,13 @@ export const getNearbyPokefutas = (
   options?: {
     filteredPokefutas?: PokefutaData[];
     ignoreId?: number;
+    maxDistance?: number; // in km
   }
-) => {
+): Array<
+  PokefutaData & {
+    distance: number; // in km
+  }
+> => {
   return (options?.filteredPokefutas ?? data.list)
     .filter((pokefuta) => {
       return !options?.ignoreId || pokefuta.id !== options.ignoreId;
@@ -211,5 +216,8 @@ export const getNearbyPokefutas = (
       return { ...pokefuta, distance };
     })
     .sort((a, b) => a.distance - b.distance)
+    .filter((pokefuta) => {
+      return !options?.maxDistance || pokefuta.distance <= options.maxDistance;
+    })
     .slice(0, count);
 };

@@ -161,7 +161,7 @@ const ItemClientPage: React.FC = () => {
             <Mantine.Divider className="my-6" />
 
             <h4 className="font-bold">{t("pokefutas_nearby")}</h4>
-            <PokefutasNearby pokefutaData={pokefutaData} />
+            <PokefutasNearby pokefutaData={pokefutaData} maxDistance={150} />
 
             <div className="flex items-center">
               <h4 className="font-bold">
