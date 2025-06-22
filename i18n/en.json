@@ -69,6 +69,10 @@
   "pref_kagoshima": "Kagoshima",
   "pref_okinawa": "Okinawa",
 
+  "#": "Tips",
+  "tips": "Tips",
+  "tip_1": "You can long-press a Pokéfuta in the list to mark it as visited.",
+
   "#": "/ page",
   "title_list": "List of Pokéfutas",
 
