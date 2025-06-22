@@ -44,6 +44,24 @@ export const normalizePokemonNumber = (pokeNum: string) => {
   return Number(pokeNum.toString().split("-")[0]);
 };
 
+// Build a URL for Google Maps navigation
+export const buildGoogleMapsNavigationUrl = (
+  coords: Array<[lat: number | string, lng: number | string]>
+) => {
+  const params: Record<string, string> = {
+    api: "1",
+    destination: coords[coords.length - 1].join(","),
+  };
+  if (coords.length > 1) {
+    params.waypoints = coords
+      .slice(0, -1)
+      .map((coord) => coord.join(","))
+      .join("|");
+  }
+
+  return "https://www.google.com/maps/dir/?" + new URLSearchParams(params);
+};
+
 // Remove duplicates from an array
 export const unique = <T>(arr: T[]): T[] => {
   return Array.from(new Set(arr));

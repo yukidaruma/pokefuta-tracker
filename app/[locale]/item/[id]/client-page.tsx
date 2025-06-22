@@ -18,6 +18,7 @@ import PokefutasNearby, {
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
 import {
+  buildGoogleMapsNavigationUrl,
   getPokefutaData,
   getPokemonNamesCombined,
   getPrefectureByCode,
@@ -142,6 +143,17 @@ const ItemClientPage: React.FC = () => {
                 href={`https://www.google.co.jp/maps/?q=${lat}+${lng}`}
               >
                 Google Maps
+              </ExternalLink>
+            </div>
+
+            <div className="flex items-center space-x-1">
+              <Lucide.ExternalLink color="gray" />
+              <ExternalLink
+                href={buildGoogleMapsNavigationUrl([
+                  pokefutaData.coords as [string, string],
+                ])}
+              >
+                {t("link_to_google_maps_navigation")}
               </ExternalLink>
             </div>
 
