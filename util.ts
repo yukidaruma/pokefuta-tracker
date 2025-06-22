@@ -40,6 +40,9 @@ export const getTranslatedCityName = (
     ? (cityTranslation as Record<string, string>)[cityName]
     : cityName;
 };
+export const normalizePokemonNumber = (pokeNum: string) => {
+  return Number(pokeNum.toString().split("-")[0]);
+};
 
 // Remove duplicates from an array
 export const unique = <T>(arr: T[]): T[] => {
@@ -170,7 +173,7 @@ export const getFilteredPokefutas = (
     // By name
     for (const pokeNum of pokefuta.pokemons) {
       if (options.includeEvolutions) {
-        if (matchedEvoPokeNums.has(Number(pokeNum.split("-")[0]))) {
+        if (matchedEvoPokeNums.has(normalizePokemonNumber(pokeNum))) {
           return true;
         }
       } else {

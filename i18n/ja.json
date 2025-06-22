@@ -11,6 +11,7 @@
   "search_suggestions_empty": "候補が見つかりません",
   "search_suggestions_hint": "候補が表示されます",
   "share": "共有",
+  "show_all": "すべて表示する",
   "visited": "訪問済み",
 
   "#": "Location names",
@@ -79,6 +80,7 @@
   "#": "/[id] page",
   "link_to_official_pokefuta_page": "ポケふた公式ページ",
   "pokefutas_nearby": "このポケふたの周辺のポケふた",
+  "pokefutas_of_evolution_family": "関連するポケモンのポケふた",
   "title_item_address": "{{pref}}{{city}}",
   "title_item_pokemons": "{{pokemons}}のポケふた",
   "to_mark_as_unvisited": "訪問済みを解除する",

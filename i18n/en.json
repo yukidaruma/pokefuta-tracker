@@ -11,6 +11,7 @@
   "search_suggestions_empty": "No suggestions found",
   "search_suggestions_hint": "Suggestions will appear here...",
   "share": "Share",
+  "show_all": "Show all",
   "visited": "Visited",
 
   "#": "Location names",
@@ -79,6 +80,7 @@
   "#": "/[id] page",
   "link_to_official_pokefuta_page": "Official PokeLids page",
   "pokefutas_nearby": "Pokéfutas nearby",
+  "pokefutas_of_evolution_family": "Pokéfutas of evolution family",
   "title_item_address": "{{city}}, {{pref}}",
   "title_item_pokemons": "Pokéfuta of {{pokemons}}",
   "to_mark_as_unvisited": "Mark as unvisited",

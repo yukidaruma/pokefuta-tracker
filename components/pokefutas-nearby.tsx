@@ -1,30 +1,24 @@
-import PokefutaImage from "./pokefuta-image";
-import Link from "@/components/link";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
-import {
-  getNearbyPokefutas,
-  getPrefectureByCode,
-  getTranslatedCityName,
-  type PokefutaData,
-} from "@/util";
+import { getNearbyPokefutas, type PokefutaData } from "@/util";
 import { PokefutaCard } from "./pokefuta-card";
 
 const PokefutasNearby: React.FC<{
   pokefutaData?: PokefutaData;
+  count?: number;
   filteredPokefutas?: PokefutaData[];
   lat?: number;
   lng?: number;
-}> = ({ pokefutaData, filteredPokefutas, lat, lng }) => {
+}> = ({ pokefutaData, count = 6, filteredPokefutas, lat, lng }) => {
   const { t, i18n } = useTranslation();
   const { progress, updateProgress } = useSearchContext();
   const nearbyPokefutas = getNearbyPokefutas(
-    6,
+    count,
     pokefutaData ? Number(pokefutaData.coords[0]) : lat!,
     pokefutaData ? Number(pokefutaData.coords[1]) : lng!,
     {
       ignoreId: pokefutaData?.id,
-      filteredPokefutas: filteredPokefutas,
+      filteredPokefutas,
     }
   );
 

@@ -1,14 +1,18 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 
+import data from "@/data/data.json";
+import evolutions from "@/data/evolutions.json";
+import Copyable from "@/components/copyable";
+import ExternalLink from "@/components/external-link";
 import MapComponent from "@/components/map";
 import PokefutaImage from "@/components/pokefuta-image";
-import ExternalLink from "@/components/external-link";
-import Copyable from "@/components/copyable";
+import { PokefutaCard } from "@/components/pokefuta-card";
 import PokefutasNearby from "@/components/pokefutas-nearby";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
@@ -17,6 +21,7 @@ import {
   getPokemonNamesCombined,
   getPrefectureByCode,
   getTranslatedCityName,
+  normalizePokemonNumber,
 } from "@/util";
 
 const ItemClientPage: React.FC = () => {
@@ -26,6 +31,7 @@ const ItemClientPage: React.FC = () => {
   const id = Number(params.id as string);
   const pokefutaData = getPokefutaData(id)!;
 
+  const [showAll, setShowAll] = useState(false);
   const { progress, updateProgress } = useSearchContext();
   const hasVisited = progress[id];
   const toggleVisited = () => {
@@ -34,6 +40,28 @@ const ItemClientPage: React.FC = () => {
 
   const [lat, lng] = pokefutaData.coords;
   const isEnglish = i18n.language === "en";
+
+  const evolutionFamilyPokefutas = useMemo(() => {
+    const familyPokemonNumbers = new Set();
+
+    const pokemonNumbers = pokefutaData.pokemons.map(normalizePokemonNumber);
+    outer: for (const evolutionChain of evolutions) {
+      for (const pokeNum of evolutionChain) {
+        if (pokemonNumbers.includes(pokeNum)) {
+          for (const pokeNum2 of evolutionChain) {
+            familyPokemonNumbers.add(pokeNum2);
+          }
+          continue outer;
+        }
+      }
+    }
+
+    return data.list.filter((pokefuta) => {
+      return pokefuta.pokemons.some((pokeNum) =>
+        familyPokemonNumbers.has(normalizePokemonNumber(pokeNum))
+      );
+    });
+  }, [id]);
 
   return (
     <div className="flex flex-col flex-1 space-y-4">
@@ -134,6 +162,31 @@ const ItemClientPage: React.FC = () => {
 
             <h4 className="font-bold">{t("pokefutas_nearby")}</h4>
             <PokefutasNearby pokefutaData={pokefutaData} />
+
+            <div className="flex items-center">
+              <h4 className="font-bold">
+                <span>{t("pokefutas_of_evolution_family")}</span>
+                <span className="text-xs">
+                  ({evolutionFamilyPokefutas.length})
+                </span>
+              </h4>
+              {!showAll && (
+                <Mantine.Button
+                  className="ml-2"
+                  variant="subtle"
+                  size="compact-xs"
+                  onClick={() => setShowAll(true)}
+                >
+                  {t("show_all")}
+                </Mantine.Button>
+              )}
+            </div>
+
+            <PokefutasNearby
+              pokefutaData={pokefutaData}
+              count={showAll ? Number.MAX_SAFE_INTEGER : 6}
+              filteredPokefutas={evolutionFamilyPokefutas}
+            />
           </div>
         </div>
       </div>
