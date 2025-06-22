@@ -15,6 +15,9 @@ import data from "@/data/data.json";
 import { useMapCenterContext } from "@/providers/map-center";
 import { SPRITES_PER_ROW } from "@/util";
 
+export const ZOOM_LEVEL_WHOLE_JAPAN = 4.8;
+const ZOOM_LEVEL_ZOOMED_IN = 14;
+
 export type MapComponentProps = {
   style?: React.CSSProperties;
   zoom?: number;
@@ -39,7 +42,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
   (
     {
       style,
-      zoom = 14,
+      zoom = ZOOM_LEVEL_ZOOMED_IN,
 
       // Fall back to Pokefuta in Ueno Park (172)
       initialLng = 139.775397,
@@ -54,6 +57,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
     React.useImperativeHandle(ref, () => ({
       setCenter(lat: number, lng: number) {
         map?.getView().setCenter(fromLonLat([lng, lat]));
+        map?.getView().setZoom(ZOOM_LEVEL_ZOOMED_IN);
       },
     }));
 

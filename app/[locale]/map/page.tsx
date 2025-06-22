@@ -4,7 +4,10 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
 
-import MapComponent, { MapComponentHandle } from "@/components/map";
+import MapComponent, {
+  MapComponentHandle,
+  ZOOM_LEVEL_WHOLE_JAPAN,
+} from "@/components/map";
 import PokefutasNearby from "@/components/pokefutas-nearby";
 import { useTranslation } from "@/i18n-client";
 import {
@@ -100,7 +103,7 @@ const MapPageChild: React.FC<{
     <MapComponent
       ref={mapRef}
       style={{ height: 600 }}
-      zoom={4.8}
+      zoom={ZOOM_LEVEL_WHOLE_JAPAN}
       ids={filteredPokefutas?.map((item) => item.id)}
       hasCrosshair
     />
