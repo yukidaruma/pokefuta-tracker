@@ -7,6 +7,7 @@ import React from "react";
 import { notifications } from "@mantine/notifications";
 
 import Copyable from "@/components/copyable";
+import MantineModal from "@/components/modal";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
 
@@ -104,7 +105,7 @@ const SettingsPage: React.FC = () => {
         {t("reset")}
       </Mantine.Button>
 
-      <Mantine.Modal
+      <MantineModal
         opened={modalState === "import"}
         onClose={() => setModalState(null)}
         title={<span className="font-bold">{t("import_data")}</span>}
@@ -122,8 +123,8 @@ const SettingsPage: React.FC = () => {
         >
           {t("to_import")}
         </Mantine.Button>
-      </Mantine.Modal>
-      <Mantine.Modal
+      </MantineModal>
+      <MantineModal
         opened={modalState === "export"}
         onClose={() => setModalState(null)}
         title={<span className="font-bold">{t("export_data")}</span>}
@@ -146,8 +147,8 @@ const SettingsPage: React.FC = () => {
             </Mantine.Button>
           }
         />
-      </Mantine.Modal>
-      <Mantine.Modal
+      </MantineModal>
+      <MantineModal
         opened={modalState === "reset"}
         onClose={() => setModalState(null)}
         title={<span className="font-bold">{t("reset_data")}</span>}
@@ -163,7 +164,7 @@ const SettingsPage: React.FC = () => {
             {t("to_reset")}
           </Mantine.Button>
         </div>
-      </Mantine.Modal>
+      </MantineModal>
 
       <h3 className="mt-4 text-2xl text-red-700 font-bold">{t("language")}</h3>
       <Mantine.Select

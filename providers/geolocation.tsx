@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import * as Mantine from "@mantine/core";
 
 import { useGeolocationFirstTimeNoticeStorage } from "@/hooks";
 import { useTranslation } from "@/i18n-client";
+import MantineModal from "@/components/modal";
 
 type GeolocationContextProps = {
   latitude: number | null;
@@ -53,19 +53,19 @@ const GeolocationProvider: React.FC<React.PropsWithChildren> = ({
 
   return (
     <>
-      <Mantine.Modal opened={loading && firstTimeNotice} onClose={() => {}}>
+      <MantineModal opened={loading && firstTimeNotice} onClose={() => {}}>
         <p>{t("geolocation_notice")}</p>
 
         <p className="mt-4">{t("geolocation_notice_privacy")}</p>
-      </Mantine.Modal>
-      <Mantine.Modal
+      </MantineModal>
+      <MantineModal
         opened={Boolean(error)}
         onClose={() => {
           setError(null);
         }}
       >
         <p>{t("geolocation_error")}</p>
-      </Mantine.Modal>
+      </MantineModal>
 
       <GeolocationContext.Provider
         value={{
