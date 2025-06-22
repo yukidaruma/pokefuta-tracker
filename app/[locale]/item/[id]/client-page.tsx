@@ -22,7 +22,7 @@ import {
 const ItemClientPage: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  const params = useParams();
+  const params = useParams()!;
   const id = Number(params.id as string);
   const pokefutaData = getPokefutaData(id)!;
 
@@ -52,7 +52,7 @@ const ItemClientPage: React.FC = () => {
       </h2>
 
       <div className="flex flex-col md:flex-row">
-        <div className="flex self-start justify-center flex-1 mx-auto">
+        <div className="flex self-start justify-center flex-1 mx-auto max-w-[480px]">
           <div className="sm:hidden">
             <PokefutaImage id={id} size={200} />
           </div>
@@ -63,7 +63,7 @@ const ItemClientPage: React.FC = () => {
             <PokefutaImage id={id} size={360} />
           </div>
         </div>
-        <div className="mt-4 sm:mt-0 flex-1">
+        <div className="mt-4 md:mt-0 flex-1">
           <MapComponent
             style={{ height: 450 }}
             highlight={id}

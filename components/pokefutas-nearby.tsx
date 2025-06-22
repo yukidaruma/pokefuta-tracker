@@ -8,6 +8,7 @@ import {
   getTranslatedCityName,
   type PokefutaData,
 } from "@/util";
+import { PokefutaCard } from "./pokefuta-card";
 
 const PokefutasNearby: React.FC<{
   pokefutaData?: PokefutaData;
@@ -33,31 +34,17 @@ const PokefutasNearby: React.FC<{
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {nearbyPokefutas.length > 0 ? (
         nearbyPokefutas.map((pokefuta) => {
-          const hasVisited = progress[pokefuta.id];
-
           return (
-            <Link
+            <PokefutaCard
               key={pokefuta.id}
-              href={`/item/${pokefuta.id}`}
-              className={`flex items-center p-2 space-x-2 rounded-lg shadow ${
-                hasVisited ? "bg-green-50" : ""
-              }`}
+              isEnglish={isEnglish}
+              pokefuta={pokefuta}
+              progress={progress}
             >
-              <PokefutaImage id={pokefuta.id} size={80} isSprite />
-              <div className="flex flex-col">
-                <span>
-                  {t("title_item_address", {
-                    pref: (t as any)(
-                      `pref_${getPrefectureByCode(pokefuta.pref)!.name}`
-                    ),
-                    city: getTranslatedCityName(pokefuta.city, isEnglish),
-                  })}
-                </span>
-                <span className="text-sm text-gray-600">
-                  {pokefuta.distance.toFixed(1)} km
-                </span>
-              </div>
-            </Link>
+              <span className="text-xs text-gray-600">
+                {pokefuta.distance.toFixed(1)} km
+              </span>
+            </PokefutaCard>
           );
         })
       ) : (

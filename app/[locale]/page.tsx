@@ -1,19 +1,11 @@
 "use client";
 
-import * as Lucide from "lucide-react";
-import * as Mantine from "@mantine/core";
 import React from "react";
 
-import Link from "@/components/link";
-import PokefutaImage from "@/components/pokefuta-image";
 import { SearchContext, useSearchContext } from "@/providers/search";
-import {
-  getPokemonName,
-  getPrefectureByCode,
-  getTranslatedCityName,
-  type PokefutaData,
-} from "@/util";
+import { getPrefectureByCode, type PokefutaData } from "@/util";
 import { useTranslation } from "@/i18n-client";
+import { PokefutaCard } from "@/components/pokefuta-card";
 
 const IndexPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -118,30 +110,13 @@ const IndexPage: React.FC = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {items.map((pokefuta) => {
-                      const names = pokefuta.pokemons
-                        .map((num) => getPokemonName(num, isEnglish))
-                        .join(", ");
-                      const hasVisited = progress[pokefuta.id] ?? false;
-
                       return (
-                        <Link
+                        <PokefutaCard
                           key={pokefuta.id}
-                          href={`/item/${pokefuta.id}`}
-                          className={`flex space-x-2 p-4 rounded-lg shadow ${
-                            hasVisited ? "bg-green-50" : ""
-                          }`}
-                          prefetch={false}
-                        >
-                          <PokefutaImage id={pokefuta.id} size={72} isSprite />
-                          <div>
-                            <p>
-                              {getTranslatedCityName(pokefuta.city, isEnglish)}
-                            </p>
-                            <p className="text-sm text-gray-600">{names}</p>
-                          </div>
-                          <Mantine.Box flex={1} />
-                          <Lucide.ChevronRight className="self-center" />
-                        </Link>
+                          isEnglish={isEnglish}
+                          pokefuta={pokefuta}
+                          progress={progress}
+                        />
                       );
                     })}
                   </div>
