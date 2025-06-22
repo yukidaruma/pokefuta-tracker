@@ -40,10 +40,17 @@ export const PokefutaCard: React.FC<{
       }}
       key={pokefuta.id}
       href={`/item/${pokefuta.id}`}
-      className={`flex space-x-2 p-4 rounded-lg shadow ${
+      className={`flex space-x-2 p-4 rounded-lg shadow select-none ${
         hasVisited ? "bg-green-50" : ""
       }`}
       prefetch={false}
+      onContextMenu={
+        /* Disable context menu on Android */
+        (e) => e.preventDefault()
+      }
+      style={{
+        WebkitTouchCallout: "none", // Disable long press menu on iOS
+      }}
       {...handlers}
     >
       <PokefutaImage id={pokefuta.id} size={72} isSprite />
