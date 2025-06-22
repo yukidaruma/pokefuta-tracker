@@ -42,7 +42,7 @@ export function useTranslation(
   options = {}
 ) {
   const pathname = usePathname();
-  lng = pathname.split("/")[1];
+  lng = pathname?.split("/")[1];
   const ret = useTranslationOrg(namespaces, options);
   const { i18n } = ret;
   if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
