@@ -58,8 +58,11 @@ const ItemClientPage: React.FC = () => {
     }
 
     return data.list.filter((pokefuta) => {
-      return pokefuta.pokemons.some((pokeNum) =>
-        familyPokemonNumbers.has(normalizePokemonNumber(pokeNum))
+      return (
+        pokefuta.id !== id && // Exclude current Pokéfuta
+        pokefuta.pokemons.some((pokeNum) =>
+          familyPokemonNumbers.has(normalizePokemonNumber(pokeNum))
+        )
       );
     });
   }, [id]);
