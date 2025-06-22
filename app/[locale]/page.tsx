@@ -10,7 +10,7 @@ import { PokefutaCard } from "@/components/pokefuta-card";
 const IndexPage: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  const { progress } = useSearchContext();
+  const { progress, updateProgress } = useSearchContext();
   const [selectedGroup, setSelectedGroup] = React.useState<string>(null!);
 
   const groupByOptions = [
@@ -116,6 +116,7 @@ const IndexPage: React.FC = () => {
                           isEnglish={isEnglish}
                           pokefuta={pokefuta}
                           progress={progress}
+                          updateProgress={updateProgress}
                         />
                       );
                     })}

@@ -17,7 +17,7 @@ const PokefutasNearby: React.FC<{
   lng?: number;
 }> = ({ pokefutaData, filteredPokefutas, lat, lng }) => {
   const { t, i18n } = useTranslation();
-  const { progress } = useSearchContext();
+  const { progress, updateProgress } = useSearchContext();
   const nearbyPokefutas = getNearbyPokefutas(
     6,
     pokefutaData ? Number(pokefutaData.coords[0]) : lat!,
@@ -40,6 +40,7 @@ const PokefutasNearby: React.FC<{
               isEnglish={isEnglish}
               pokefuta={pokefuta}
               progress={progress}
+              updateProgress={updateProgress}
             >
               <span className="text-xs text-gray-600">
                 {pokefuta.distance.toFixed(1)} km
