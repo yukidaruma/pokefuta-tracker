@@ -13,7 +13,8 @@ export const config = {
 export function middleware(req: NextRequest) {
   if (
     req.nextUrl.pathname.includes("icon") ||
-    req.nextUrl.pathname.includes("chrome")
+    req.nextUrl.pathname.includes("chrome") ||
+    req.nextUrl.pathname.endsWith("xml") // sitemap.xml
   ) {
     return NextResponse.next();
   }
