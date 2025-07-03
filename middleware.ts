@@ -44,9 +44,9 @@ export function middleware(req: NextRequest) {
     ) &&
     !req.nextUrl.pathname.startsWith("/_next")
   ) {
-    return NextResponse.redirect(
-      new URL(`/${lng}${req.nextUrl.pathname}`, req.url)
-    );
+    const path = `/${lng}${req.nextUrl.pathname}`;
+    const normalizedPath = path.replace(/\/+$/g, "");
+    return NextResponse.redirect(new URL(normalizedPath, req.url));
   }
 
   const response = NextResponse.next();
