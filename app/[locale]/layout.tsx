@@ -48,9 +48,12 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   );
 };
 
-const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const RootLayout: React.FC<{
+  children: React.ReactNode;
+  params: { locale: string };
+}> = ({ children, params }) => {
   return (
-    <html lang="en" data-mantine-color-scheme="light">
+    <html lang={params.locale} data-mantine-color-scheme="light">
       <body className="antialiased">
         <Layout>{children}</Layout>
       </body>

@@ -4,7 +4,7 @@ import resourcesToBackend from "i18next-resources-to-backend";
 
 import enCommon from "@/i18n/en.json";
 import jaCommon from "@/i18n/ja.json";
-import { fallbackLng, locales } from "@/i18n/constants";
+import { locales } from "@/i18n/constants";
 
 async function initTranslations(locale: string, namespaces: string[]) {
   const i18nInstance = createInstance();
@@ -19,7 +19,7 @@ async function initTranslations(locale: string, namespaces: string[]) {
     )
     .init({
       lng: locale,
-      fallbackLng,
+      fallbackLng: false,
       supportedLngs: locales,
       defaultNS: "common",
       fallbackNS: "common",

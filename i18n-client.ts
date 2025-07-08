@@ -6,11 +6,10 @@ import {
   initReactI18next,
   useTranslation as useTranslationOrg,
 } from "react-i18next";
-import { useCookies } from "react-cookie";
 import resourcesToBackend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-import { cookieName, fallbackLng, locales } from "@/i18n/constants";
+import { locales } from "@/i18n/constants";
 import { usePathname } from "next/navigation";
 
 const runsOnServerSide = typeof window === "undefined";
@@ -25,13 +24,12 @@ i18next
     )
   )
   .init({
-    fallbackLng,
+    fallbackLng: false,
     supportedLngs: locales,
     defaultNS: "common",
     fallbackNS: "common",
-    lng: undefined, // let detect the language on client side
     detection: {
-      order: ["path", "htmlTag", "cookie", "navigator"],
+      order: ["path", "cookie", "navigator"],
     },
     preload: [],
   });
@@ -42,25 +40,24 @@ export function useTranslation(
   options = {}
 ) {
   const pathname = usePathname();
-  lng = pathname?.split("/")[1];
-  const ret = useTranslationOrg(namespaces, options);
-  const { i18n } = ret;
-  if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
-    i18n?.changeLanguage(lng);
+  lng = pathname?.split("/")[1]!;
+
+  if (runsOnServerSide && i18next.resolvedLanguage !== lng) {
+    i18next.changeLanguage(lng);
   } else {
-    const [activeLng, setActiveLng] = useState(i18n.resolvedLanguage);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [activeLng, setActiveLng] = useState(i18next.resolvedLanguage);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-      if (activeLng === i18n.resolvedLanguage) return;
-      setActiveLng(i18n.resolvedLanguage);
-    }, [activeLng, i18n.resolvedLanguage]);
+      if (activeLng === i18next.resolvedLanguage) return;
+      setActiveLng(i18next.resolvedLanguage);
+    }, [activeLng, i18next.resolvedLanguage]);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-      if (!lng || i18n.resolvedLanguage === lng) return;
-      i18n.changeLanguage(lng);
-    }, [lng, i18n]);
-    // useEffect(() => {
-    //   // if (cookies.i18next === lng) return;
-    //   // setCookie(cookieName, lng, { path: "/" });
-    // }, [lng, cookies.i18next]);
+      if (!lng || i18next.resolvedLanguage === lng) return;
+      i18next.changeLanguage(lng);
+    }, [lng, i18next]);
   }
-  return ret;
+
+  return useTranslationOrg(namespaces, options);
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import acceptLanguage from "accept-language";
-import { fallbackLng, locales, cookieName } from "@/i18n/constants";
+import { locales, cookieName } from "@/i18n/constants";
 
 acceptLanguage.languages(locales);
 
@@ -36,7 +36,7 @@ export function middleware(req: NextRequest) {
   }
 
   lng ??= acceptLanguage.get(req.headers.get("Accept-Language"));
-  lng ??= fallbackLng;
+  lng ??= locales[0];
 
   // Redirect if lng in path is not supported
   if (
