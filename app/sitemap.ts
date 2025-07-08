@@ -1,8 +1,11 @@
 import data from "@/data/data.json";
+import { fallbackLng, locales as availableLocales } from "@/i18n/constants";
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const locales = ["en", "ja"];
+  const locales = availableLocales.map((locale) =>
+    locale.replace(fallbackLng, "")
+  );
 
   const normalPages = [
     { path: "" },
@@ -11,14 +14,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // { path: "/settings" },
   ].flatMap((page) => {
     return locales.map((loc) => ({
-      url: `/${loc}${page.path}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${loc}${page.path}`,
     }));
   });
   const itemPages = data.list.flatMap((item) => {
     return locales.map((loc) => ({
-      url: `/${loc}/item/${item.id}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${loc}/item/${item.id}`,
     }));
   });
 
-  return [...normalPages, ...itemPages];
+  return [...normalPages, ...itemPages].map((page) => {
+    return {
+      ...page,
+      url: page.url.replaceAll(/[^:]\/\//g, "/"),
+    };
+  });
 }

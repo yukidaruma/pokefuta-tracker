@@ -4,12 +4,14 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useCookies } from "react-cookie";
 import { notifications } from "@mantine/notifications";
 
 import Copyable from "@/components/copyable";
 import MantineModal from "@/components/modal";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
+import { cookieName } from "@/i18n/constants";
 
 const SettingsPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -64,11 +66,13 @@ const SettingsPage: React.FC = () => {
     localStorage.clear();
     location.reload();
   };
+  const [cookies, setCookie] = useCookies<typeof cookieName>([]);
   const onChangeLanguage = (
     language: string | null, // Actually language is always non-null
     _option: Mantine.ComboboxItem
   ) => {
     i18n.changeLanguage(language!);
+    setCookie(cookieName, language, { path: "/" });
     router.push(`/${language}/settings`);
   };
 

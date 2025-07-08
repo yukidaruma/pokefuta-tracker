@@ -19,12 +19,27 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Check if accessing fallbackLng path directly - redirect to root
+  if (
+    req.nextUrl.pathname === `/${fallbackLng}` ||
+    req.nextUrl.pathname.startsWith(`/${fallbackLng}/`)
+  ) {
+    const pathWithoutLng =
+      req.nextUrl.pathname.replace(`/${fallbackLng}`, "") || "/";
+    return NextResponse.redirect(new URL(pathWithoutLng, req.url));
+  }
+
   // Path -> Cookie -> Accept-Language -> Fallback
   let lng: string | null = null;
-  for (const locale of locales) {
-    if (req.nextUrl.pathname.startsWith(`/${locale}`)) {
-      lng = locale;
-    }
+  const pathSegments = req.nextUrl.pathname.split("/");
+  const firstSegment = pathSegments[1];
+
+  // Check if first segment is a valid locale
+  // i.e.) exclude /[item] paths
+  if (firstSegment && locales.includes(firstSegment)) {
+    lng = firstSegment;
+    // If accessing non-fallback locale, continue without redirect
+    return NextResponse.next();
   }
 
   if (
@@ -38,20 +53,21 @@ export function middleware(req: NextRequest) {
   lng ??= acceptLanguage.get(req.headers.get("Accept-Language"));
   lng ??= fallbackLng;
 
-  // Redirect if lng in path is not supported
-  if (
-    !locales.some((loc: string) =>
-      req.nextUrl.pathname.startsWith(`/${loc}`)
-    ) &&
-    !req.nextUrl.pathname.startsWith("/_next")
-  ) {
+  let response: NextResponse;
+  if (req.nextUrl.pathname.startsWith("/_next")) {
+    response = NextResponse.next();
+  } else {
     const path = `/${lng}${req.nextUrl.pathname}`;
-    const normalizedPath = path.replace(/\/+$/g, "");
-    return NextResponse.redirect(new URL(normalizedPath, req.url));
+    const normalizedPath = path.replace(/\/+/g, "/").replace(/\/$/, "") || "/";
+
+    // For fallbackLng, omit `/[locale]` prefix in the path
+    if (lng === fallbackLng) {
+      response = NextResponse.rewrite(new URL(normalizedPath, req.url));
+    } else {
+      response = NextResponse.redirect(new URL(normalizedPath, req.url));
+    }
   }
 
-  const response = NextResponse.next();
   response.cookies.set(cookieName, lng);
-
   return response;
 }
