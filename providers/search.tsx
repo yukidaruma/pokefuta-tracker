@@ -43,7 +43,10 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
   const normalizedSearchTerm = normalizeKana(searchTerm).toLowerCase();
   const searchIndexes = React.useMemo(() => {
     const prefNames = Object.entries(
-      i18n.getResourceBundle(i18n.language, "common") as Record<string, string>
+      (i18n.getResourceBundle(i18n.language, "common") ?? {}) as Record<
+        string,
+        string
+      >
     ).flatMap(([key, value]) => (key.startsWith("pref_") ? [value] : []));
     let indexes =
       i18n.language === "en"

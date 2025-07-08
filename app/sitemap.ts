@@ -11,12 +11,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // { path: "/settings" },
   ].flatMap((page) => {
     return locales.map((loc) => ({
-      url: `/${loc}${page.path}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${loc}${page.path}`,
     }));
   });
   const itemPages = data.list.flatMap((item) => {
     return locales.map((loc) => ({
-      url: `/${loc}/item/${item.id}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${loc}/item/${item.id}`,
     }));
   });
 
