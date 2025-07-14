@@ -118,5 +118,8 @@
   "reset": "Reset",
   "reset_confirmation": "Are you sure you want to reset the data?",
   "reset_data": "Resetting data",
-  "reset_warning": "Resetting the data will erase all visited status of Pokéfutas. This action cannot be undone."
+  "reset_warning": "Resetting the data will erase all visited status of Pokéfutas. This action cannot be undone.",
+  "sprite_format": "Image format",
+  "sprite_format_webp": "Enable WebP format",
+  "sprite_format_description": "Using WebP reduces data usage. Uncheck this if you experience image display issues"
 }

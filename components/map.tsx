@@ -12,8 +12,9 @@ import TileLayer from "ol/layer/Tile";
 import WebGLVectorLayer from "ol/layer/WebGLVector";
 
 import data from "@/data/data.json";
+import { useSpriteFormatStorage } from "@/hooks";
 import { useMapCenterContext } from "@/providers/map-center";
-import { SPRITE_SHEET_PATH, SPRITE_SIZE, SPRITES_PER_ROW } from "@/util";
+import { getSpriteSheetPath, SPRITE_SIZE, SPRITES_PER_ROW } from "@/util";
 
 export const ZOOM_LEVEL_WHOLE_JAPAN = 4.8;
 const ZOOM_LEVEL_ZOOMED_IN = 14;
@@ -64,6 +65,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
     const [map, setMap] = React.useState<Map | null>(null);
     const mapRef = React.useRef<HTMLDivElement | null>(null);
     const mapCenterContext = useMapCenterContext();
+    const [enableWebP] = useSpriteFormatStorage();
     const router = useRouter();
 
     const iconFeatures: Feature[] = [];
@@ -101,7 +103,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
 
       const pokefutaRows = Math.ceil(maxPokefutaId / SPRITES_PER_ROW);
       const style = {
-        "icon-src": SPRITE_SHEET_PATH,
+        "icon-src": getSpriteSheetPath(enableWebP),
         "icon-size": [SPRITE_SIZE, SPRITE_SIZE],
         "icon-scale": [
           "interpolate",

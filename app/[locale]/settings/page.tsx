@@ -12,6 +12,7 @@ import MantineModal from "@/components/modal";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
 import { cookieName } from "@/i18n/constants";
+import { useSpriteFormatStorage } from "@/hooks";
 
 const SettingsPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -22,6 +23,7 @@ const SettingsPage: React.FC = () => {
     "import" | "export" | "reset" | null
   >(null);
   const { progress, updateProgress, resetProgress } = useSearchContext();
+  const [enableWebP, setEnableWebP] = useSpriteFormatStorage();
 
   const exportedData = {
     progress: Object.keys(progress).join(","),
@@ -85,7 +87,7 @@ const SettingsPage: React.FC = () => {
       <h3 className="mt-4 text-2xl text-red-700 font-bold">
         {t("manage_data")}
       </h3>
-      <div className="mt-2 flex space-x-6">
+      <div className="mt-1 flex space-x-6">
         <Mantine.Button
           leftSection={<Lucide.ArrowBigDown size={24} />}
           onClick={() => setModalState("import")}
@@ -172,6 +174,7 @@ const SettingsPage: React.FC = () => {
 
       <h3 className="mt-4 text-2xl text-red-700 font-bold">{t("language")}</h3>
       <Mantine.Select
+        className="mt-1"
         maw={300}
         defaultValue={i18n.language}
         onChange={onChangeLanguage}
@@ -182,9 +185,20 @@ const SettingsPage: React.FC = () => {
         allowDeselect={false}
       />
 
+      <h3 className="mt-4 text-2xl text-red-700 font-bold">
+        {t("sprite_format")}
+      </h3>
+      <Mantine.Checkbox
+        className="mt-1"
+        checked={enableWebP}
+        onChange={(event) => setEnableWebP(event.currentTarget.checked)}
+        label={t("sprite_format_webp")}
+        description={t("sprite_format_description")}
+      />
+
       <hr className="my-6" />
       <h3 className="mt-4 text-2xl text-red-700 font-bold">{t("tips")}</h3>
-      <ul className="list-disc pl-6">
+      <ul className="list-disc mt-1 pl-6">
         <li>{t("tip_1")}</li>
       </ul>
     </div>

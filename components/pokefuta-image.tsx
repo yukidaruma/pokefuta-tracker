@@ -1,10 +1,11 @@
 import React from "react";
 import Image from "next/image";
 
+import { useSpriteFormatStorage } from "@/hooks";
 import {
   getPokefutaData,
   getPokemonName,
-  SPRITE_SHEET_PATH,
+  getSpriteSheetPath,
   SPRITES_PER_ROW,
 } from "@/util";
 
@@ -23,11 +24,12 @@ const getSpritePosition = (id: number) => {
 
 const getSpriteBackgroundProps = (
   id: number,
-  size: number
+  size: number,
+  enableWebP: boolean
 ): React.CSSProperties => {
   const { row, col } = getSpritePosition(id);
   return {
-    backgroundImage: `url(${SPRITE_SHEET_PATH})`,
+    backgroundImage: `url(${getSpriteSheetPath(enableWebP)})`,
     backgroundPosition: `-${col * size}px -${row * size}px`,
     backgroundSize: `${SPRITES_PER_ROW * size}px auto`,
   };
@@ -39,6 +41,7 @@ const PokefutaImage: React.FC<PokefutaImageProps> = ({
   isSprite,
 }) => {
   const pokefuta = getPokefutaData(id)!;
+  const [enableWebP] = useSpriteFormatStorage();
   const names = pokefuta.pokemons
     .map((num) => getPokemonName(num, true))
     .join(", ");
@@ -53,7 +56,7 @@ const PokefutaImage: React.FC<PokefutaImageProps> = ({
           flexShrink: 0,
           width: size,
           height: size,
-          ...getSpriteBackgroundProps(pokefuta.id, size),
+          ...getSpriteBackgroundProps(pokefuta.id, size, enableWebP),
         }}
       />
     );

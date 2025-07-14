@@ -27,3 +27,12 @@ export const useGeolocationFirstTimeNoticeStorage = () => {
 
   return [geolocationFirstTimeNotice, setGeolocationFirstTimeNotice] as const;
 };
+
+export const useSpriteFormatStorage = () => {
+  const [enableWebP, setEnableWebP] = useLocalStorage<boolean>({
+    key: "spriteFormat",
+    defaultValue: true, // Default to WebP
+  });
+
+  return [enableWebP, setEnableWebP] as const;
+};
