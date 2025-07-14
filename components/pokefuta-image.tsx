@@ -1,11 +1,36 @@
 import React from "react";
 import Image from "next/image";
 
-import { getPokefutaData, getPokemonName } from "@/util";
+import {
+  getPokefutaData,
+  getPokemonName,
+  SPRITE_SHEET_PATH,
+  SPRITES_PER_ROW,
+} from "@/util";
+
 type PokefutaImageProps = {
   id: number;
   size: number;
   isSprite?: boolean;
+};
+
+const getSpritePosition = (id: number) => {
+  const index = id - 1;
+  const row = Math.floor(index / SPRITES_PER_ROW);
+  const col = index % SPRITES_PER_ROW;
+  return { row, col };
+};
+
+const getSpriteBackgroundProps = (
+  id: number,
+  size: number
+): React.CSSProperties => {
+  const { row, col } = getSpritePosition(id);
+  return {
+    backgroundImage: `url(${SPRITE_SHEET_PATH})`,
+    backgroundPosition: `-${col * size}px -${row * size}px`,
+    backgroundSize: `${SPRITES_PER_ROW * size}px auto`,
+  };
 };
 
 const PokefutaImage: React.FC<PokefutaImageProps> = ({
@@ -19,11 +44,6 @@ const PokefutaImage: React.FC<PokefutaImageProps> = ({
     .join(", ");
 
   if (isSprite) {
-    const SPRITES_PER_ROW = 42;
-    const index = pokefuta.id - 1; // assuming id starts from 1
-    const row = Math.floor(index / SPRITES_PER_ROW);
-    const col = index % SPRITES_PER_ROW;
-
     return (
       <div
         className="relative"
@@ -33,9 +53,7 @@ const PokefutaImage: React.FC<PokefutaImageProps> = ({
           flexShrink: 0,
           width: size,
           height: size,
-          backgroundImage: "url(/images/pokefuta/sprite.png)",
-          backgroundPosition: `-${col * size}px -${row * size}px`,
-          backgroundSize: `${SPRITES_PER_ROW * size}px auto`,
+          ...getSpriteBackgroundProps(pokefuta.id, size),
         }}
       />
     );
