@@ -13,7 +13,7 @@ import WebGLVectorLayer from "ol/layer/WebGLVector";
 
 import data from "@/data/data.json";
 import { useMapCenterContext } from "@/providers/map-center";
-import { SPRITES_PER_ROW } from "@/util";
+import { SPRITE_SHEET_PATH, SPRITE_SIZE, SPRITES_PER_ROW } from "@/util";
 
 export const ZOOM_LEVEL_WHOLE_JAPAN = 4.8;
 const ZOOM_LEVEL_ZOOMED_IN = 14;
@@ -101,8 +101,8 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
 
       const pokefutaRows = Math.ceil(maxPokefutaId / SPRITES_PER_ROW);
       const style = {
-        "icon-src": "/images/pokefuta/sprite.png",
-        "icon-size": [96, 96],
+        "icon-src": SPRITE_SHEET_PATH,
+        "icon-size": [SPRITE_SIZE, SPRITE_SIZE],
         "icon-scale": [
           "interpolate",
           ["linear"],
@@ -124,11 +124,11 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           ...Array.from({ length: pokefutaRows }, (_, i) => [
             // Offset of start of the row
             1 + SPRITES_PER_ROW * i,
-            [0, i * 96],
+            [0, i * SPRITE_SIZE],
 
             // Offset of end of the row
             SPRITES_PER_ROW * (i + 1),
-            [4032 - 96, 96 * i],
+            [(SPRITES_PER_ROW - 1) * SPRITE_SIZE, SPRITE_SIZE * i],
           ]).flat(),
         ],
       } as Record<string, any>;
