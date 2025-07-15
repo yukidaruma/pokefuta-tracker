@@ -4,13 +4,16 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
 
+import HelpContent from "@/components/help-content";
 import Link from "@/components/link";
+import MantineModal from "@/components/modal";
 import { useTranslation } from "@/i18n-client";
 
 const HeaderComponent: React.FC = () => {
   const { t } = useTranslation();
 
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isHelpModalOpen, setIsHelpModalOpen] = React.useState(false);
   const navItems = [
     { href: "/", icon: Lucide.List, label: t("title_list") },
     { href: "/map", icon: Lucide.Map, label: t("title_map") },
@@ -28,6 +31,16 @@ const HeaderComponent: React.FC = () => {
       <Link href="/">
         <h1 className="ml-4 text-white text-2xl font-bold">Pokéfuta Tracker</h1>
       </Link>
+      <div className="ml-auto">
+        <Mantine.ActionIcon
+          color="white"
+          variant="transparent"
+          onClick={() => setIsHelpModalOpen(true)}
+          size="lg"
+        >
+          <Lucide.HelpCircle size={24} />
+        </Mantine.ActionIcon>
+      </div>
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity ${
           isSidebarOpen ? "opacity-60" : "opacity-0 pointer-events-none"
@@ -54,6 +67,17 @@ const HeaderComponent: React.FC = () => {
           ))}
         </ul>
       </nav>
+      <MantineModal
+        opened={isHelpModalOpen}
+        onClose={() => setIsHelpModalOpen(false)}
+        withCloseButton={false}
+        styles={{
+          body: { paddingLeft: 24, paddingRight: 24 },
+        }}
+        size="xl"
+      >
+        <HelpContent />
+      </MantineModal>
     </header>
   );
 };

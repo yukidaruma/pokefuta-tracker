@@ -177,12 +177,6 @@ const SettingsPage: React.FC = () => {
         ]}
         allowDeselect={false}
       />
-
-      <hr className="my-6" />
-      <h3 className="mt-4 text-2xl text-red-700 font-bold">{t("tips")}</h3>
-      <ul className="list-disc pl-6">
-        <li>{t("tip_1")}</li>
-      </ul>
     </div>
   );
 };
