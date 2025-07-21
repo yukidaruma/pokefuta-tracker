@@ -123,11 +123,9 @@ const ItemClientPage: React.FC = () => {
         </div>
         <div className="mt-4 md:mt-0 flex-1">
           <MapComponent
-            key={currentId}
             style={{ height: 450 }}
             highlight={currentId}
-            initialLat={lat}
-            initialLng={lng}
+            navigate={navigateToItem}
           />
           <div className="mt-4 flex flex-col space-y-4">
             <Copyable

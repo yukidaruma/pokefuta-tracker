@@ -10,6 +10,7 @@ import { Point } from "ol/geom";
 import { OSM, Vector as VectorSource } from "ol/source";
 import TileLayer from "ol/layer/Tile";
 import WebGLVectorLayer from "ol/layer/WebGLVector";
+import type { FlatStyleLike } from "ol/style/flat";
 
 import data from "@/data/data.json";
 import { useMapCenterContext } from "@/providers/map-center";
@@ -32,6 +33,8 @@ export type MapComponentProps = {
   // If `highlight` is set, only pokefutas from the same prefecture will be shown
   // If both `ids` and `highlight` are not set, all pokefutas will be shown
   highlight?: number;
+
+  navigate?: (id: number) => void;
 };
 
 export type MapComponentHandle = {
@@ -51,6 +54,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
       hasCrosshair,
       ids,
       highlight,
+      navigate,
     },
     ref
   ) => {
@@ -65,8 +69,9 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
     const mapRef = React.useRef<HTMLDivElement | null>(null);
     const mapCenterContext = useMapCenterContext();
     const router = useRouter();
+    const currentHighlight = React.useRef(highlight);
 
-    const iconFeatures: Feature[] = [];
+    const pokefutaFeatures: Feature[] = [];
     for (const pokefuta of data.list) {
       const iconFeature = new Feature({
         geometry: new Point(
@@ -79,28 +84,17 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         id: pokefuta.id,
       });
 
-      iconFeatures.push(iconFeature);
+      pokefutaFeatures.push(iconFeature);
     }
 
-    const updateMarkerLayer = (map: Map) => {
-      const oldLayer = map.getLayers().item(1);
-      if (oldLayer) {
-        // Replace layer if it already exists
-        map.removeLayer(oldLayer);
-      }
-
-      // Show only pokefutas meeting the conditions
-      const availablePokefutas = ids
-        ? data.list.filter((pokefuta) => ids.includes(pokefuta.id))
-        : data.list;
-
-      const maxPokefutaId = availablePokefutas.reduce(
+    const buildWebGLStyle = (highlight?: number): FlatStyleLike => {
+      const maxPokefutaId = data.list.reduce(
         (max, pokefuta) => Math.max(max, pokefuta.id),
         0
       );
-
       const pokefutaRows = Math.ceil(maxPokefutaId / SPRITES_PER_ROW);
-      const style = {
+
+      const style: FlatStyleLike = {
         "icon-src": SPRITE_SHEET_PATH,
         "icon-size": [SPRITE_SIZE, SPRITE_SIZE],
         "icon-scale": [
@@ -131,19 +125,43 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
             [(SPRITES_PER_ROW - 1) * SPRITE_SIZE, SPRITE_SIZE * i],
           ]).flat(),
         ],
-      } as Record<string, any>;
+      };
+
       if (highlight) {
         style["icon-opacity"] = ["match", ["get", "id"], highlight, 1, 0.5];
       }
 
+      return style;
+    };
+
+    const centerOnHighlight = (mapInstance: Map, highlightId: number) => {
+      const highlightedPokefuta = data.list.find((p) => p.id === highlightId)!;
+      const [lat, lng] = highlightedPokefuta.coords;
+      mapInstance.getView().setCenter(fromLonLat([Number(lng), Number(lat)]));
+      mapInstance.getView().setZoom(ZOOM_LEVEL_ZOOMED_IN);
+    };
+
+    const updatePokefutaLayer = (map: Map) => {
+      const oldLayer = map.getLayers().item(1);
+      if (oldLayer) {
+        map.removeLayer(oldLayer);
+      }
+
+      // Show only pokefutas meeting the conditions
+      const visiblePokefutas = ids
+        ? data.list.filter((pokefuta) => ids.includes(pokefuta.id))
+        : data.list;
+
+      const filteredFeatures = pokefutaFeatures.filter((feature) => {
+        return visiblePokefutas.some(
+          (pokefuta) => pokefuta.id === feature.getId()
+        );
+      });
+
       const vectorLayer = new WebGLVectorLayer({
-        style,
+        style: buildWebGLStyle(highlight),
         source: new VectorSource({
-          features: iconFeatures.filter((feature) => {
-            return availablePokefutas.some(
-              (pokefuta) => pokefuta.id === feature.getId()
-            );
-          }),
+          features: filteredFeatures,
         }),
       });
       map.addLayer(vectorLayer);
@@ -171,7 +189,8 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           const hoveredFeature = newMap.getFeaturesAtPixel(e.pixel)[0];
           const isClickable =
             hoveredFeature &&
-            (!highlight || hoveredFeature.getId() !== highlight);
+            (!currentHighlight.current ||
+              hoveredFeature.getId() !== currentHighlight.current);
           newMap.getViewport().style.cursor = isClickable ? "pointer" : "";
         });
 
@@ -179,10 +198,15 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           const clickedFeature = newMap.getFeaturesAtPixel(e.pixel)[0];
           const isClickable =
             clickedFeature &&
-            (!highlight || clickedFeature.getId() !== highlight);
+            (!currentHighlight.current ||
+              clickedFeature.getId() !== currentHighlight.current);
 
           if (isClickable) {
-            router.push(`/item/${clickedFeature.getId()}`);
+            if (navigate) {
+              navigate(clickedFeature.getId() as number);
+            } else {
+              router.push(`/item/${clickedFeature.getId()}`);
+            }
           }
         });
 
@@ -196,12 +220,24 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
           mapCenterContext.setCoordinates(centerLatLong[1], centerLatLong[0]);
         });
 
-        updateMarkerLayer(newMap);
+        updatePokefutaLayer(newMap);
+
+        // Auto-center on initial render
+        if (highlight) {
+          centerOnHighlight(newMap, highlight);
+        }
+
         setMap(newMap);
       }
 
       return () => {
         if (map) {
+          // Dispose of all layers before cleanup
+          map.getLayers().forEach((layer) => {
+            if (layer.dispose) {
+              layer.dispose();
+            }
+          });
           map.setTarget(undefined);
         }
       };
@@ -212,7 +248,14 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
         return;
       }
 
-      updateMarkerLayer(map);
+      currentHighlight.current = highlight;
+
+      updatePokefutaLayer(map);
+
+      // Auto-center on highlighted pokefuta change
+      if (highlight) {
+        centerOnHighlight(map, highlight);
+      }
     }, [ids, highlight]);
 
     return (
