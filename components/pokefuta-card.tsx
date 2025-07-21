@@ -12,8 +12,16 @@ export const PokefutaCard: React.FC<{
   pokefuta: PokefutaData;
   progress: Record<number, boolean>;
   updateProgress?: (id: number, visited: boolean) => void;
+  navigate?: (id: number) => void;
   children?: React.ReactNode;
-}> = ({ isEnglish, pokefuta, progress, updateProgress, children }) => {
+}> = ({
+  isEnglish,
+  pokefuta,
+  progress,
+  updateProgress,
+  navigate,
+  children,
+}) => {
   const disableLink = React.useRef(false);
 
   const names = pokefuta.pokemons
@@ -30,29 +38,21 @@ export const PokefutaCard: React.FC<{
     }
   );
 
-  return (
-    <Link
-      onClick={(e) => {
-        if (disableLink.current) {
-          disableLink.current = false;
-          e.preventDefault();
-        }
-      }}
-      key={pokefuta.id}
-      href={`/item/${pokefuta.id}`}
-      className={`flex space-x-2 p-4 rounded-lg shadow select-none ${
-        hasVisited ? "bg-blue-50" : ""
-      }`}
-      prefetch={false}
-      onContextMenu={
-        /* Disable context menu on Android */
-        (e) => e.preventDefault()
-      }
-      style={{
-        WebkitTouchCallout: "none", // Disable long press menu on iOS
-      }}
-      {...handlers}
-    >
+  const handleClick = (e: React.MouseEvent) => {
+    if (disableLink.current) {
+      disableLink.current = false;
+      e.preventDefault();
+      return;
+    }
+
+    if (navigate) {
+      e.preventDefault();
+      navigate(pokefuta.id);
+    }
+  };
+
+  const CardContent = (
+    <>
       <PokefutaImage id={pokefuta.id} size={72} isSprite />
       <div>
         <p>
@@ -62,6 +62,29 @@ export const PokefutaCard: React.FC<{
       </div>
       <Mantine.Box flex={1} />
       <Lucide.ChevronRight className="self-center" />
+    </>
+  );
+
+  const commonProps = {
+    className: `flex space-x-2 p-4 rounded-lg shadow select-none cursor-pointer ${
+      hasVisited ? "bg-blue-50" : ""
+    }`,
+    onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
+    style: { WebkitTouchCallout: "none" as const },
+    ...handlers,
+  };
+
+  if (navigate) {
+    return (
+      <a href={`/item/${pokefuta.id}`} onClick={handleClick} {...commonProps}>
+        {CardContent}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={`/item/${pokefuta.id}`} prefetch={false} {...commonProps}>
+      {CardContent}
     </Link>
   );
 };

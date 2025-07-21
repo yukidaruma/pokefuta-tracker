@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useMemo, useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
@@ -30,14 +30,39 @@ const ItemClientPage: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   const params = useParams()!;
-  const id = Number(params.id as string);
-  const pokefutaData = getPokefutaData(id)!;
+  const [currentId, setCurrentId] = useState(Number(params.id as string));
+  const pokefutaData = getPokefutaData(currentId)!;
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const newId = Number(window.location.pathname.split("/").pop());
+      if (newId && getPokefutaData(newId)) {
+        setCurrentId(newId);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Navigation function using History API
+  const navigateToItem = (newId: number) => {
+    const locale = params.locale as string;
+    const newPath = `/${locale}/item/${newId}`;
+
+    // Update URL without full page reload
+    window.history.pushState({ id: newId }, "", newPath);
+
+    // Update local state
+    setCurrentId(newId);
+  };
 
   const [showAll, setShowAll] = useState(false);
   const { progress, updateProgress } = useSearchContext();
-  const hasVisited = progress[id];
+  const hasVisited = progress[currentId];
   const toggleVisited = () => {
-    updateProgress(id, !hasVisited);
+    updateProgress(currentId, !hasVisited);
   };
 
   const [lat, lng] = pokefutaData.coords;
@@ -60,13 +85,13 @@ const ItemClientPage: React.FC = () => {
 
     return data.list.filter((pokefuta) => {
       return (
-        pokefuta.id !== id && // Exclude current Pokéfuta
+        pokefuta.id !== currentId && // Exclude current Pokéfuta
         pokefuta.pokemons.some((pokeNum) =>
           familyPokemonNumbers.has(normalizePokemonNumber(pokeNum))
         )
       );
     });
-  }, [id]);
+  }, [currentId]);
 
   return (
     <div className="flex flex-col flex-1 space-y-4">
@@ -87,19 +112,20 @@ const ItemClientPage: React.FC = () => {
       <div className="flex flex-col md:flex-row">
         <div className="flex self-start justify-center flex-1 mx-auto max-w-[480px]">
           <div className="sm:hidden">
-            <PokefutaImage id={id} size={200} />
+            <PokefutaImage id={currentId} size={200} />
           </div>
           <div className="hidden sm:block md:hidden">
-            <PokefutaImage id={id} size={280} />
+            <PokefutaImage id={currentId} size={280} />
           </div>
           <div className="hidden md:block">
-            <PokefutaImage id={id} size={360} />
+            <PokefutaImage id={currentId} size={360} />
           </div>
         </div>
         <div className="mt-4 md:mt-0 flex-1">
           <MapComponent
+            key={currentId}
             style={{ height: 450 }}
-            highlight={id}
+            highlight={currentId}
             initialLat={lat}
             initialLng={lng}
           />
@@ -131,7 +157,7 @@ const ItemClientPage: React.FC = () => {
               <ExternalLink
                 href={`https://local.pokemon.jp/${
                   isEnglish ? "en/" : ""
-                }manhole/desc/${id}/`}
+                }manhole/desc/${currentId}/`}
               >
                 {t("link_to_official_pokefuta_page")}
               </ExternalLink>
@@ -177,7 +203,11 @@ const ItemClientPage: React.FC = () => {
             <Mantine.Divider className="my-6" />
 
             <h4 className="font-bold">{t("pokefutas_nearby")}</h4>
-            <PokefutasNearby pokefutaData={pokefutaData} maxDistance={150} />
+            <PokefutasNearby
+              pokefutaData={pokefutaData}
+              maxDistance={150}
+              navigate={navigateToItem}
+            />
 
             <div className="flex items-center">
               <h4 className="font-bold">
@@ -208,6 +238,7 @@ const ItemClientPage: React.FC = () => {
                   ? Number.MAX_SAFE_INTEGER
                   : DEFAULT_POKEFUTAS_NEARBY_COUNT
               }
+              navigate={navigateToItem}
             />
           </div>
         </div>

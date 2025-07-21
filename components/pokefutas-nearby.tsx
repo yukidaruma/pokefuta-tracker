@@ -12,6 +12,7 @@ const PokefutasNearby: React.FC<{
   lat?: number;
   lng?: number;
   maxDistance?: number; // in km
+  navigate?: (id: number) => void;
 }> = ({
   pokefutaData,
   count = DEFAULT_POKEFUTAS_NEARBY_COUNT,
@@ -19,6 +20,7 @@ const PokefutasNearby: React.FC<{
   lat,
   lng,
   maxDistance,
+  navigate,
 }) => {
   const { t, i18n } = useTranslation();
   const { progress, updateProgress } = useSearchContext();
@@ -46,6 +48,7 @@ const PokefutasNearby: React.FC<{
               pokefuta={pokefuta}
               progress={progress}
               updateProgress={updateProgress}
+              navigate={navigate}
             >
               <span className="text-xs text-gray-600">
                 {pokefuta.distance.toFixed(1)} km
