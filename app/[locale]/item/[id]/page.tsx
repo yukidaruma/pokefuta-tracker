@@ -1,15 +1,17 @@
 import { Metadata, ResolvingMetadata } from "next";
 
 import ItemClientPage from "./client-page";
+
+import data from "@/data/data.json";
 import {
   getPokefutaData,
   getPokefutaImage,
-  getPokemonName,
   getPokemonNamesCombined,
   getPrefectureByCode,
   getTranslatedCityName,
 } from "@/util";
 import { useTranslation } from "@/i18n";
+import { locales } from "@/i18n/constants";
 
 export async function generateMetadata(
   { params }: { params: Promise<{ locale: string; id: string }> },
@@ -44,6 +46,21 @@ export async function generateMetadata(
       images: getPokefutaImage(pageId),
     },
   };
+}
+
+export function generateStaticParams() {
+  const params = [];
+
+  for (const locale of locales) {
+    for (const item of data.list) {
+      params.push({
+        locale,
+        id: item.id.toString(),
+      });
+    }
+  }
+
+  return params;
 }
 
 const ItemPage: React.FC = async () => {

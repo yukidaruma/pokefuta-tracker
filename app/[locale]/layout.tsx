@@ -10,6 +10,7 @@ import HeaderComponent from "@/components/header";
 import ClientPageRootComponent from "@/components/client-page-root";
 import ScrollToTop from "@/components/scroll-to-top";
 import { useTranslation } from "@/i18n";
+import { locales } from "@/i18n/constants";
 import { SearchProvider } from "@/providers/search";
 
 export async function generateMetadata({
@@ -29,6 +30,12 @@ export async function generateMetadata({
 export const viewport: Viewport = {
   themeColor: "#e7000b",
 };
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({
+    locale,
+  }));
+}
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
