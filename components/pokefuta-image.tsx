@@ -6,6 +6,7 @@ import {
   getPokemonName,
   SPRITE_SHEET_PATH,
   SPRITES_PER_ROW,
+  getPokefutaImageUrl,
 } from "@/util";
 
 type PokefutaImageProps = {
@@ -63,7 +64,7 @@ const PokefutaImage: React.FC<PokefutaImageProps> = ({
     <Image
       priority={false}
       alt={`Image of pokefuta with ${names}`}
-      src={`/images/pokefuta/${pokefuta.id}.png`}
+      src={getPokefutaImageUrl(pokefuta.id)}
       width={size}
       height={size}
     />

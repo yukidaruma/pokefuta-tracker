@@ -5,16 +5,19 @@ import cityTranslation from "@/data/municipality-translation.json";
 
 export type PokefutaData = (typeof data.list)[number];
 
-export const SPRITE_SHEET_PATH = "/images/pokefuta/sprite.png";
+const DATA_VERSION = data.list.length; // TODO: Add a version-like field in data.json
+export const SPRITE_SHEET_PATH = `/images/pokefuta/sprite.png?v=${DATA_VERSION}`;
 export const SPRITE_SHEET_WIDTH = 4032;
 export const SPRITE_SIZE = 96;
 export const SPRITES_PER_ROW = SPRITE_SHEET_WIDTH / SPRITE_SIZE;
+export const getPokefutaImageUrl = (id: number) =>
+  `/images/pokefuta/${id}.png?v=${DATA_VERSION}`;
 
 export const getPokefutaData = (id: number) => {
   return data.list.find((item) => item.id === id) ?? null;
 };
 export const getPokefutaImage = (id: number) => {
-  return `/images/pokefuta/${id}.png`;
+  return getPokefutaImageUrl(id);
 };
 export const getPokemonName = (
   num: string | number,
