@@ -1,10 +1,11 @@
 import * as Lucide from "lucide-react";
+import React from "react";
 import * as Mantine from "@mantine/core";
 import { useLongPress } from "@mantine/hooks";
-import React from "react";
 
-import Link from "./link";
+import Link from "@/components/link";
 import PokefutaImage from "@/components/pokefuta-image";
+import { useTranslation } from "@/i18n-client";
 import { getPokemonName, getTranslatedCityName, PokefutaData } from "@/util";
 
 export const PokefutaCard: React.FC<{
@@ -22,6 +23,7 @@ export const PokefutaCard: React.FC<{
   navigate,
   children,
 }) => {
+  const { i18n } = useTranslation();
   const disableLink = React.useRef(false);
 
   const names = pokefuta.pokemons
@@ -76,7 +78,11 @@ export const PokefutaCard: React.FC<{
 
   if (navigate) {
     return (
-      <a href={`/item/${pokefuta.id}`} onClick={handleClick} {...commonProps}>
+      <a
+        href={`/${i18n.language}/item/${pokefuta.id}`}
+        onClick={handleClick}
+        {...commonProps}
+      >
         {CardContent}
       </a>
     );
