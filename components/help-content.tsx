@@ -18,7 +18,6 @@ const HelpContent: React.FC = () => {
     {
       titleKey: "title_list",
       helpKey: "help_list_page",
-      tips: ["help_list_page_tip1"],
     },
     { titleKey: "help_details_page_title", helpKey: "help_details_page" },
     { titleKey: "title_map", helpKey: "help_map_page" },

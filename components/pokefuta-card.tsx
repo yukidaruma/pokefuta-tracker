@@ -1,7 +1,6 @@
 import * as Lucide from "lucide-react";
 import React from "react";
 import * as Mantine from "@mantine/core";
-import { useLongPress } from "@mantine/hooks";
 
 import Link from "@/components/link";
 import PokefutaImage from "@/components/pokefuta-image";
@@ -24,29 +23,13 @@ export const PokefutaCard: React.FC<{
   children,
 }) => {
   const { i18n } = useTranslation();
-  const disableLink = React.useRef(false);
 
   const names = pokefuta.pokemons
     .map((num) => getPokemonName(num, isEnglish))
     .join(", ");
   const hasVisited = progress[pokefuta.id] ?? false;
-  const handlers = useLongPress(
-    () => {
-      disableLink.current = true;
-      updateProgress?.(pokefuta.id, !hasVisited);
-    },
-    {
-      threshold: 500,
-    }
-  );
 
   const handleClick = (e: React.MouseEvent) => {
-    if (disableLink.current) {
-      disableLink.current = false;
-      e.preventDefault();
-      return;
-    }
-
     if (navigate) {
       e.preventDefault();
       navigate(pokefuta.id);
@@ -73,7 +56,6 @@ export const PokefutaCard: React.FC<{
     }`,
     onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
     style: { WebkitTouchCallout: "none" as const },
-    ...handlers,
   };
 
   if (navigate) {
