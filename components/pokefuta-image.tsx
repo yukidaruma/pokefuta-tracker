@@ -1,13 +1,9 @@
 import React from "react";
 import Image from "next/image";
 
+import { SPRITE_SHEET_PATH, SPRITES_PER_ROW } from "@/constants";
+import { getPokefutaData, getPokemonName } from "@/util";
 import images from "@/data/images";
-import {
-  getPokefutaData,
-  getPokemonName,
-  SPRITE_SHEET_PATH,
-  SPRITES_PER_ROW,
-} from "@/util";
 
 type PokefutaImageProps = {
   id: number;
