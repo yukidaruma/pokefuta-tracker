@@ -50,7 +50,7 @@ const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const ProgressPage = () => {
+const ProgressPage: React.FC<{ params: { locale: string } }> = ({ params }) => {
   const { t } = useTranslation();
   const { progress } = useSearchContext();
 
@@ -152,7 +152,7 @@ const ProgressPage = () => {
                 return;
               }
 
-              router.push(`/#${lowerCaseSelectedPref}`);
+              router.push(`/${params.locale}/#${lowerCaseSelectedPref}`);
             }}
             cityColors={colors}
           />
