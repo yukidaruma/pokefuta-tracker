@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { use } from "react";
 
 // Order of these CSS imports is important
 import "@mantine/core/styles.layer.css";
@@ -57,10 +58,12 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 const RootLayout: React.FC<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }> = ({ children, params }) => {
+  const { locale } = use(params);
+
   return (
-    <html lang={params.locale} data-mantine-color-scheme="light">
+    <html lang={locale} data-mantine-color-scheme="light">
       <body className="antialiased">
         <Layout>{children}</Layout>
       </body>

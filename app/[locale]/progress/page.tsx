@@ -4,7 +4,7 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import ReactMapJapan from "@react-map/japan";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { use } from "react";
 
 import Link from "@/components/link";
 import data from "@/data/data.json";
@@ -50,7 +50,10 @@ const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const ProgressPage: React.FC<{ params: { locale: string } }> = ({ params }) => {
+const ProgressPage: React.FC<{ params: Promise<{ locale: string }> }> = ({
+  params,
+}) => {
+  const { locale } = use(params);
   const { t } = useTranslation();
   const { progress } = useSearchContext();
 
@@ -152,7 +155,7 @@ const ProgressPage: React.FC<{ params: { locale: string } }> = ({ params }) => {
                 return;
               }
 
-              router.push(`/${params.locale}/#${lowerCaseSelectedPref}`);
+              router.push(`/${locale}/#${lowerCaseSelectedPref}`);
             }}
             cityColors={colors}
           />
