@@ -126,6 +126,7 @@ const ItemClientPage: React.FC = () => {
             style={{ height: 450 }}
             highlight={currentId}
             navigate={navigateToItem}
+            hasCrosshair
           />
           <div className="mt-4 flex flex-col space-y-4">
             <Copyable
