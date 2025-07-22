@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
@@ -17,6 +17,7 @@ import PokefutasNearby, {
 } from "@/components/pokefutas-nearby";
 import { useTranslation } from "@/i18n-client";
 import { useSearchContext } from "@/providers/search";
+import { useWishlistContext } from "@/providers/wishlist";
 import {
   buildGoogleMapsNavigationUrl,
   getPokefutaData,
@@ -35,7 +36,7 @@ const ItemClientPage: React.FC = () => {
 
   // Handle browser back/forward navigation
   useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
+    const handlePopState = () => {
       const newId = Number(window.location.pathname.split("/").pop());
       if (newId && getPokefutaData(newId)) {
         setCurrentId(newId);
@@ -60,9 +61,14 @@ const ItemClientPage: React.FC = () => {
 
   const [showAll, setShowAll] = useState(false);
   const { progress, updateProgress } = useSearchContext();
+  const { wishlist, updateWishlist } = useWishlistContext();
   const hasVisited = progress[currentId];
+  const isWishlisted = wishlist[currentId];
   const toggleVisited = () => {
     updateProgress(currentId, !hasVisited);
+  };
+  const toggleWishlisted = () => {
+    updateWishlist(currentId, !isWishlisted);
   };
 
   const [lat, lng] = pokefutaData.coords;
@@ -182,22 +188,46 @@ const ItemClientPage: React.FC = () => {
               </ExternalLink>
             </div>
 
-            {hasVisited ? (
-              <Mantine.Button
-                leftSection={<Lucide.X />}
-                color="red"
-                onClick={toggleVisited}
-              >
-                <span>{t("to_mark_as_unvisited")}</span>
-              </Mantine.Button>
-            ) : (
-              <Mantine.Button
-                leftSection={<Lucide.Check />}
-                onClick={toggleVisited}
-              >
-                <span>{t("to_mark_as_visited")}</span>
-              </Mantine.Button>
-            )}
+            <div className="flex flex-row gap-2 flex-wrap">
+              {hasVisited ? (
+                <Mantine.Button
+                  leftSection={<Lucide.Check />}
+                  variant="filled"
+                  color="blue"
+                  onClick={toggleVisited}
+                >
+                  <span>{t("to_mark_as_unvisited")}</span>
+                </Mantine.Button>
+              ) : (
+                <Mantine.Button
+                  leftSection={<Lucide.Check />}
+                  variant="outline"
+                  color="blue"
+                  onClick={toggleVisited}
+                >
+                  <span>{t("to_mark_as_visited")}</span>
+                </Mantine.Button>
+              )}
+              {isWishlisted ? (
+                <Mantine.Button
+                  leftSection={<Lucide.Heart fill="white" />}
+                  variant="filled"
+                  color="pink"
+                  onClick={toggleWishlisted}
+                >
+                  <span>{t("remove_from_wishlist")}</span>
+                </Mantine.Button>
+              ) : (
+                <Mantine.Button
+                  leftSection={<Lucide.Heart />}
+                  variant="outline"
+                  color="pink"
+                  onClick={toggleWishlisted}
+                >
+                  <span>{t("add_to_wishlist")}</span>
+                </Mantine.Button>
+              )}
+            </div>
 
             <Mantine.Divider className="my-6" />
 

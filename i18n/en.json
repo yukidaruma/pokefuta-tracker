@@ -93,8 +93,10 @@
   "pokefutas_of_evolution_family": "Pokéfutas of evolution family",
   "title_item_address": "{{city}}, {{pref}}",
   "title_item_pokemons": "Pokéfuta of {{pokemons}}",
-  "to_mark_as_unvisited": "Mark as unvisited",
+  "to_mark_as_unvisited": "Visited",
   "to_mark_as_visited": "Mark as visited",
+  "add_to_wishlist": "Add to your wishlist",
+  "remove_from_wishlist": "On wishlist",
 
   "#": "/map page",
   "title_map": "Pokéfuta map",

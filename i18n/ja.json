@@ -93,8 +93,10 @@
   "pokefutas_of_evolution_family": "関連するポケモンのポケふた",
   "title_item_address": "{{pref}}{{city}}",
   "title_item_pokemons": "{{pokemons}}のポケふた",
-  "to_mark_as_unvisited": "訪問済みを解除する",
+  "to_mark_as_unvisited": "訪問済み",
   "to_mark_as_visited": "訪問済みにする",
+  "add_to_wishlist": "行きたいリストに追加する",
+  "remove_from_wishlist": "行きたいリストに追加済み",
 
   "#": "/map page",
   "title_map": "ポケふたマップ",

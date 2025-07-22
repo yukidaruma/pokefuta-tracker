@@ -17,6 +17,16 @@ export const useUpdateEffect = (
   }, dependencies);
 };
 
+export const useGeolocationFirstTimeNoticeStorage = () => {
+  const [geolocationFirstTimeNotice, setGeolocationFirstTimeNotice] =
+    useLocalStorage<boolean>({
+      key: "geolocationFirstTimeNotice",
+      defaultValue: true,
+    });
+
+  return [geolocationFirstTimeNotice, setGeolocationFirstTimeNotice] as const;
+};
+
 export const useProgressStorage = () => {
   const [progress, setProgress] = useLocalStorage<Record<string, boolean>>({
     key: "progress",
@@ -35,12 +45,20 @@ export const useProgressStorage = () => {
   return [progress, updateProgress, resetProgress] as const;
 };
 
-export const useGeolocationFirstTimeNoticeStorage = () => {
-  const [geolocationFirstTimeNotice, setGeolocationFirstTimeNotice] =
-    useLocalStorage<boolean>({
-      key: "geolocationFirstTimeNotice",
-      defaultValue: true,
-    });
+export const useWishlistStorage = () => {
+  const [wishlist, setWishlist] = useLocalStorage<Record<string, boolean>>({
+    key: "wishlist",
+    defaultValue: {},
+  });
+  const updateWishlist = (id: string | number, value: boolean) => {
+    if (value) {
+      setWishlist((prev) => ({ ...prev, [id]: true }));
+    } else {
+      const { [id]: _, ...rest } = wishlist;
+      setWishlist(rest);
+    }
+  };
+  const resetWishlist = () => setWishlist({});
 
-  return [geolocationFirstTimeNotice, setGeolocationFirstTimeNotice] as const;
+  return [wishlist, updateWishlist, resetWishlist] as const;
 };

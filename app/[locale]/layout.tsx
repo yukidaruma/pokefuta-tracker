@@ -13,6 +13,7 @@ import ScrollToTop from "@/components/scroll-to-top";
 import { useTranslation } from "@/i18n";
 import { locales } from "@/i18n/constants";
 import { SearchProvider } from "@/providers/search";
+import { WishlistProvider } from "@/providers/wishlist";
 
 export async function generateMetadata({
   params,
@@ -47,9 +48,11 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <ScrollToTop />
         <HeaderComponent />
         <SearchProvider>
-          <main className="w-full max-w-screen-xl mx-auto overflow-auto xl:my-8 xl:rounded-xl p-4 xl:p-8 bg-white flex flex-1">
-            {children}
-          </main>
+          <WishlistProvider>
+            <main className="w-full max-w-screen-xl mx-auto overflow-auto xl:my-8 xl:rounded-xl p-4 xl:p-8 bg-white flex flex-1">
+              {children}
+            </main>
+          </WishlistProvider>
         </SearchProvider>
         <FooterComponent />
       </ClientPageRootComponent>
