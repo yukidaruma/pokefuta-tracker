@@ -5,8 +5,8 @@ import { REPO_URL } from "@/constants";
 const FooterComponent: React.FC = () => {
   return (
     <footer className="w-full px-2 py-4 bg-gray-800 text-center">
-      <p className="text-sm text-gray-300">
-        Made with ❄ by{" "}
+      <p className="text-sm text-gray-100">
+        Made with <span style={{ color: "#80bfff" }}>❄</span> by{" "}
         <a
           href="https://yuki.games"
           className="hover:underline hover:text-gray-50"
@@ -17,7 +17,7 @@ const FooterComponent: React.FC = () => {
         .
       </p>
 
-      <div className="flex items-center justify-center space-x-2 mt-1 text-xs text-gray-400">
+      <div className="flex items-center justify-center space-x-2 mt-1 text-xs text-gray-300">
         <a
           href={REPO_URL}
           className="hover:underline hover:text-gray-50"
@@ -28,7 +28,7 @@ const FooterComponent: React.FC = () => {
 
         <Mantine.Divider
           h={8}
-          className="!border-gray-600 !self-auto"
+          className="!border-gray-500 !self-auto"
           orientation="vertical"
         />
 
