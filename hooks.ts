@@ -1,4 +1,21 @@
+import { type DependencyList, useEffect, useRef } from "react";
 import { useLocalStorage } from "@mantine/hooks";
+
+export const useUpdateEffect = (
+  callback: () => void,
+  dependencies: DependencyList
+) => {
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    return callback();
+  }, dependencies);
+};
 
 export const useProgressStorage = () => {
   const [progress, setProgress] = useLocalStorage<Record<string, boolean>>({
