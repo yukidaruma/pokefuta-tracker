@@ -1,5 +1,6 @@
 import * as Mantine from "@mantine/core";
-import ExternalLink from "./external-link";
+
+import { REPO_URL } from "@/constants";
 
 const FooterComponent: React.FC = () => {
   return (
@@ -18,7 +19,7 @@ const FooterComponent: React.FC = () => {
 
       <div className="flex items-center justify-center space-x-2 mt-1 text-xs text-gray-400">
         <a
-          href="https://github.com/yukidaruma/pokefuta-tracker"
+          href={REPO_URL}
           className="hover:underline hover:text-gray-50"
           target="_blank"
         >
