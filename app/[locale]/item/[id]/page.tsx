@@ -18,6 +18,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { locale, id } = await params;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t, i18n } = await useTranslation(locale, ["common"]);
   const pageId = Number(id);
   const pokefutaData = getPokefutaData(pageId);
