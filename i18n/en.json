@@ -11,6 +11,7 @@
   "search_show_wishlisted": "Show only Pokéfutas on wishlist",
   "search_found": "Found",
   "search_include_evos": "Include evolutions",
+  "search_include_evos_example": "e.g. searching \"Pikachu\" will include Pokéfutas with Pichu and Raichu in results",
   "search_options": "Search Options",
   "search_options_active": "Search options are active",
   "search_suggestions_empty": "No suggestions found",

@@ -184,15 +184,20 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
             </label>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-start space-x-2">
             <Mantine.Checkbox
               id="include-evolution"
               checked={includeEvolutions}
               onChange={(e) => setIncludeEvolutions(e.target.checked)}
             />
-            <label htmlFor="include-evolution">
-              {t("search_include_evos")}
-            </label>
+            <div>
+              <label htmlFor="include-evolution">
+                {t("search_include_evos")}
+              </label>
+              <div className="text-xs text-gray-500 mt-1">
+                {t("search_include_evos_example")}
+              </div>
+            </div>
           </div>
         </div>
       )}

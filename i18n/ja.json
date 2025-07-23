@@ -11,6 +11,7 @@
   "search_show_wishlisted": "行きたいリスト内のポケふたのみ表示する",
   "search_found": "検索結果",
   "search_include_evos": "進化系を含む",
+  "search_include_evos_example": "例:　「ピカチュウ」で検索すると、ピチュウやライチュウのポケふたも検索結果に含むようになります",
   "search_options": "検索オプション",
   "search_options_active": "検索オプションが有効です",
   "search_suggestions_empty": "候補が見つかりません",
