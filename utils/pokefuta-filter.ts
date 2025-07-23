@@ -9,13 +9,14 @@ import {
   type PokefutaData,
 } from "@/utils/pokefuta";
 
-type FilterField = "visited";
+type FilterField = "visited" | "wishlisted";
 type FilterOperator = "true" | "false";
 export type FilterTuple = readonly [FilterField, FilterOperator];
 
 type FilterOptions = {
   language: string;
   progress?: Record<number, boolean>;
+  wishlist?: Record<number, boolean>;
   includeEvolutions?: boolean;
 };
 
@@ -26,7 +27,10 @@ export const getFilteredPokefutas = (
 ) => {
   let results = data.list.concat();
 
-  results = applyConditionalFilters(results, filters, options);
+  if (filters.length > 0) {
+    results = applyConditionalFilters(results, filters, options);
+  }
+
   results = applySearchTermFilter(results, searchTerm, options);
 
   return results;
@@ -37,19 +41,29 @@ const applyConditionalFilters = (
   filters: FilterTuple[],
   options: {
     progress?: Record<number, boolean>;
+    wishlist?: Record<number, boolean>;
   }
 ) => {
-  const fieldComparators = {
+  const fieldComparators: Record<FilterField, (id: number) => boolean> = {
     visited(id: number) {
       return !!options.progress?.[id];
     },
-  } satisfies Record<FilterField, (id: number) => boolean>;
+    wishlisted(id: number) {
+      return !!options.wishlist?.[id];
+    },
+  };
 
   return pokefutas.filter((pokefuta) => {
     for (const [field, operator] of filters) {
       const value = fieldComparators[field](pokefuta.id);
-      if (operator === "true" && !value) return false;
-      if (operator === "false" && value) return false;
+      switch (operator) {
+        case "true":
+          if (!value) return false;
+          break;
+        case "false":
+          if (value) return false;
+          break;
+      }
     }
     return true;
   });

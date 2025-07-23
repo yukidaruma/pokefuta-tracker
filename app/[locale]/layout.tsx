@@ -47,13 +47,13 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         {/* Fix scrolling position with sticky header https://github.com/vercel/next.js/issues/45187#issuecomment-1639518030 */}
         <ScrollToTop />
         <HeaderComponent />
-        <SearchProvider>
-          <WishlistProvider>
+        <WishlistProvider>
+          <SearchProvider>
             <main className="w-full max-w-screen-xl mx-auto overflow-auto xl:my-8 xl:rounded-xl p-4 xl:p-8 bg-white flex flex-1">
               {children}
             </main>
-          </WishlistProvider>
-        </SearchProvider>
+          </SearchProvider>
+        </WishlistProvider>
         <FooterComponent />
       </ClientPageRootComponent>
     </div>

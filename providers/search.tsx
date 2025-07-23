@@ -8,15 +8,18 @@ import data from "@/data/data.json";
 import cityTranslation from "@/data/municipality-translation.json";
 import { useTranslation } from "@/i18n/client";
 import { useProgressStorage } from "@/utils/hooks";
+import { useWishlistContext } from "@/providers/wishlist";
 import { normalizeKana, PokefutaData, unique } from "@/utils/pokefuta";
 import { FilterTuple, getFilteredPokefutas } from "@/utils/pokefuta-filter";
 
 type SearchFieldsProps = {
   searchTerm: string;
   hideVisited: boolean;
+  showWishlisted: boolean;
   includeEvolutions: boolean;
   setSearchTerm: (term: string) => void;
   setHideVisited: (hide: boolean) => void;
+  setShowWishlisted: (show: boolean) => void;
   setIncludeEvolutions: (include: boolean) => void;
   filteredPokefutas: PokefutaData[];
   progression: number;
@@ -25,9 +28,11 @@ type SearchFieldsProps = {
 const SearchFields: React.FC<SearchFieldsProps> = ({
   searchTerm,
   hideVisited,
+  showWishlisted,
   includeEvolutions,
   setSearchTerm,
   setHideVisited,
+  setShowWishlisted,
   setIncludeEvolutions,
   filteredPokefutas,
   progression,
@@ -149,11 +154,12 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
         >
           {t("search_options")}
         </Mantine.Button>
-        {!showOptions && (hideVisited || includeEvolutions) && (
-          <span className="text-sm text-gray-500">
-            {t("search_options_active")}
-          </span>
-        )}
+        {!showOptions &&
+          (hideVisited || showWishlisted || includeEvolutions) && (
+            <span className="text-sm text-gray-500">
+              {t("search_options_active")}
+            </span>
+          )}
       </div>
 
       {showOptions && (
@@ -165,6 +171,17 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
               onChange={(e) => setHideVisited(e.target.checked)}
             />
             <label htmlFor="hide-visited">{t("search_exclude_visited")}</label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Mantine.Checkbox
+              id="show-wishlisted"
+              checked={showWishlisted}
+              onChange={(e) => setShowWishlisted(e.target.checked)}
+            />
+            <label htmlFor="show-wishlisted">
+              {t("search_show_wishlisted")}
+            </label>
           </div>
 
           <div className="flex items-center space-x-2">
@@ -194,9 +211,11 @@ export default SearchFields;
 type SearchContextProps = {
   searchTerm: string;
   hideVisited: boolean;
+  showWishlisted: boolean;
   includeEvolutions: boolean;
   setSearchTerm: (term: string) => void;
   setHideVisited: (hide: boolean) => void;
+  setShowWishlisted: (show: boolean) => void;
   setIncludeEvolutions: (include: boolean) => void;
   filteredPokefutas: PokefutaData[];
   form: React.ReactNode;
@@ -211,21 +230,26 @@ const SearchContext = React.createContext<SearchContextProps>(
 
 const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { i18n } = useTranslation();
-  const [searchTerm, setSearchTerm] = React.useState<string>("");
-  const [hideVisited, setHideVisited] = React.useState<boolean>(false);
-  const [includeEvolutions, setIncludeEvolutions] =
-    React.useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [hideVisited, setHideVisited] = React.useState(false);
+  const [showWishlisted, setShowWishlisted] = React.useState(false);
+  const [includeEvolutions, setIncludeEvolutions] = React.useState(false);
 
   const [progress, updateProgress, resetProgress] = useProgressStorage();
+  const { wishlist } = useWishlistContext();
 
   const filteredPokefutas = React.useMemo(() => {
-    const filters: FilterTuple[] = hideVisited ? [["visited", "false"]] : [];
+    const filters: FilterTuple[] = [];
+    if (hideVisited) filters.push(["visited", "false"]);
+    if (showWishlisted) filters.push(["wishlisted", "true"]);
+    
     return getFilteredPokefutas(searchTerm, filters, {
       language: i18n.language,
       progress,
+      wishlist,
       includeEvolutions,
     });
-  }, [i18n.language, searchTerm, progress, hideVisited, includeEvolutions]);
+  }, [i18n.language, searchTerm, progress, wishlist, hideVisited, showWishlisted, includeEvolutions]);
   const filteredProgression = Object.entries(progress).filter(
     ([id, visited]) => {
       return (
@@ -240,9 +264,11 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
       value={{
         searchTerm,
         hideVisited,
+        showWishlisted,
         includeEvolutions,
         setSearchTerm,
         setHideVisited,
+        setShowWishlisted,
         setIncludeEvolutions,
         filteredPokefutas,
         progress,
@@ -252,9 +278,11 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
           <SearchFields
             searchTerm={searchTerm}
             hideVisited={hideVisited}
+            showWishlisted={showWishlisted}
             includeEvolutions={includeEvolutions}
             setSearchTerm={setSearchTerm}
             setHideVisited={setHideVisited}
+            setShowWishlisted={setShowWishlisted}
             setIncludeEvolutions={setIncludeEvolutions}
             filteredPokefutas={filteredPokefutas}
             progression={filteredProgression}
