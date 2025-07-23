@@ -1,7 +1,9 @@
 "use client";
 
-import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
+import { KeyPrefix } from "i18next";
+import * as Lucide from "lucide-react";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 import HelpContent from "@/components/help-content";
@@ -9,17 +11,25 @@ import Link from "@/components/link";
 import MantineModal from "@/components/modal";
 import { useTranslation } from "@/i18n/client";
 
+type NavItem = {
+  href: string;
+  icon: React.ElementType;
+  labelKey: KeyPrefix<"common">;
+};
+export const navItems: NavItem[] = [
+  { href: "/", icon: Lucide.List, labelKey: "title_list" },
+  { href: "/map", icon: Lucide.Map, labelKey: "title_map" },
+  { href: "/progress", icon: Lucide.BarChart2, labelKey: "title_progress" },
+  { href: "/settings", icon: Lucide.Settings, labelKey: "title_settings" },
+];
+
 const HeaderComponent: React.FC = () => {
   const { t } = useTranslation();
+  const pathname = usePathname();
+  const pathWithoutLocale = pathname?.replace(/^\/[a-z]{2}/, "") || "/";
 
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = React.useState(false);
-  const navItems = [
-    { href: "/", icon: Lucide.List, label: t("title_list") },
-    { href: "/map", icon: Lucide.Map, label: t("title_map") },
-    { href: "/progress", icon: Lucide.BarChart2, label: t("title_progress") },
-    { href: "/settings", icon: Lucide.Settings, label: t("title_settings") },
-  ];
 
   return (
     <header className="bg-red-600 p-4 flex items-center sticky top-0 z-[1000]">
@@ -53,18 +63,29 @@ const HeaderComponent: React.FC = () => {
         }`}
       >
         <ul className="min-w-[16em] py-4">
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className="flex items-center px-4 py-2 hover:bg-gray-100 transition-colors"
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <item.icon color="gray" className="h-6 w-6 mr-4" />
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const isCurrentPage =
+              pathWithoutLocale === item.href ||
+              (item.href !== "/" && pathWithoutLocale.startsWith(item.href));
+
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`flex items-center px-4 py-2 hover:bg-gray-100 transition-colors ${
+                    isCurrentPage ? "bg-red-50 text-red-700" : ""
+                  }`}
+                  onClick={() => setIsSidebarOpen(false)}
+                >
+                  <item.icon
+                    color={isCurrentPage ? "#b91c1c" : "gray"}
+                    className="h-6 w-6 mr-4"
+                  />
+                  <span>{t(item.labelKey as any)}</span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
       <MantineModal
@@ -76,7 +97,7 @@ const HeaderComponent: React.FC = () => {
         }}
         size="xl"
       >
-        <HelpContent />
+        <HelpContent onClose={() => setIsHelpModalOpen(false)} />
       </MantineModal>
     </header>
   );

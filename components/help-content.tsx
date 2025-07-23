@@ -1,20 +1,25 @@
 import * as Mantine from "@mantine/core";
 import { KeyPrefix } from "i18next";
-import { useTranslation } from "react-i18next";
+import { usePathname } from "next/navigation";
 
+import { navItems } from "@/components/header";
+import Link from "@/components/link";
 import data from "@/data/data.json";
+import { useTranslation } from "@/i18n/client";
 import { REPO_URL } from "@/utils/constants";
 
-type ScreenSectionData = {
+type PageSectionData = {
   titleKey: KeyPrefix<"common">;
   helpKey: KeyPrefix<"common">;
   tips?: Array<KeyPrefix<"common">>;
 };
 
-const HelpContent: React.FC = () => {
+const HelpContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
   const { t } = useTranslation();
+  const pathname = usePathname();
+  const pathWithoutLocale = pathname?.replace(/^\/[a-z]{2}/, "") || "/";
 
-  const screenSections: ScreenSectionData[] = [
+  const pageSection: PageSectionData[] = [
     {
       titleKey: "title_list",
       helpKey: "help_list_page",
@@ -24,6 +29,18 @@ const HelpContent: React.FC = () => {
     { titleKey: "title_progress", helpKey: "help_progress_page" },
     { titleKey: "title_settings", helpKey: "help_settings_page" },
   ];
+
+  const getCurrentPageSection = () => {
+    if (pathWithoutLocale.includes("/item/")) return "help_details_page_title";
+    const currentNavItem = navItems.find(
+      (item) =>
+        pathWithoutLocale === item.href ||
+        (item.href !== "/" && pathWithoutLocale.startsWith(item.href))
+    );
+    return currentNavItem?.labelKey;
+  };
+
+  const currentPageTitleKey = getCurrentPageSection();
 
   return (
     <>
@@ -55,33 +72,45 @@ const HelpContent: React.FC = () => {
         {t("page_descriptions")}
       </h3>
       <div className="mt-4 space-y-2">
-        {screenSections.map(({ titleKey, helpKey, tips }) => (
-          <div key={titleKey}>
-            <h4 className="text-lg font-semibold text-red-700">
-              {t(titleKey)}
-            </h4>
-            <p>{t(helpKey)}</p>
-            {tips?.map((tipKey) => (
-              <p key={tipKey} className="text-gray-700">
-                {t(tipKey)}
-              </p>
-            ))}
-          </div>
-        ))}
+        {pageSection.map(({ titleKey, helpKey, tips }) => {
+          const navItem = navItems.find((item) => item.labelKey === titleKey);
+          const href = navItem ? navItem.href : null;
+
+          return (
+            <div key={titleKey}>
+              <h4 className="text-lg font-semibold text-red-700">
+                {href ? (
+                  <Link
+                    href={href}
+                    className="hover:underline"
+                    onClick={onClose}
+                  >
+                    {t(titleKey as any)}
+                  </Link>
+                ) : (
+                  t(titleKey as any)
+                )}
+                {titleKey === currentPageTitleKey && (
+                  <span className="ml-2 text-sm text-gray-500 font-normal">
+                    ({t("current_page")})
+                  </span>
+                )}
+              </h4>
+              <p>{t(helpKey as any)}</p>
+              {tips?.map((tipKey) => (
+                <p key={tipKey} className="text-gray-700">
+                  {t(tipKey as any)}
+                </p>
+              ))}
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-6 text-center">
-        <Mantine.ModalBaseCloseButton
-          py={8}
-          px={20}
-          c="white"
-          bg="gray"
-          w="unset"
-          h="2.5rem"
-          icon={<></>}
-        >
+        <Mantine.Button onClick={onClose} color="gray">
           {t("close_help")}
-        </Mantine.ModalBaseCloseButton>
+        </Mantine.Button>
       </div>
     </>
   );

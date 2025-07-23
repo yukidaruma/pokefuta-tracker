@@ -78,6 +78,7 @@
   "about_description": "Pokéfuta Tracker is a web app for recording your visits to Poké Lids (Pokéfuta), artistic covers for utility holes. Currently {{count}} Poké Lids data are available.",
   "last_updated_at": "Last updated at",
   "page_descriptions": "Features",
+  "current_page": "current page",
   "help_list_page": "A page that displays Poké Lids from all over Japan organized by prefecture. You can also search for Poké Lids using place names or Pokémon names.",
   "help_details_page_title": "Pokéfuta Details",
   "help_details_page": "A page that displays detailed information about Poké Lids.",
