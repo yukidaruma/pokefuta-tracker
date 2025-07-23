@@ -3,6 +3,8 @@
   "app_description": "ポケふたの訪問記録アプリ",
   "cancel": "キャンセル",
   "error": "エラー",
+  "help": "ヘルプ",
+  "menu": "メニュー",
   "search": "検索",
   "search_example": "例: 「ピカチュウ」「北海道」",
   "search_exclude_visited": "訪問済みのポケふたを除外する",

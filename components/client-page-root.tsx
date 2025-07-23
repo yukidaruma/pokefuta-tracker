@@ -1,4 +1,4 @@
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, TooltipGroup } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 
 const ClientPageRootComponent: React.FC<{ children: React.ReactNode }> = ({
@@ -6,8 +6,10 @@ const ClientPageRootComponent: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   return (
     <MantineProvider>
-      <Notifications />
-      {children}
+      <TooltipGroup openDelay={500}>
+        <Notifications />
+        {children}
+      </TooltipGroup>
     </MantineProvider>
   );
 };

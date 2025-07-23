@@ -33,23 +33,27 @@ const HeaderComponent: React.FC = () => {
 
   const header = (
     <header className="bg-red-600 p-4 flex items-center sticky top-0 z-10">
-      <Mantine.Burger
-        color="white"
-        opened={isSidebarOpen}
-        onClick={() => setIsSidebarOpen((prev) => !prev)}
-      />
+      <Mantine.Tooltip label={t("menu" as any)}>
+        <Mantine.Burger
+          color="white"
+          opened={isSidebarOpen}
+          onClick={() => setIsSidebarOpen((prev) => !prev)}
+        />
+      </Mantine.Tooltip>
       <Link href="/">
         <h1 className="ml-4 text-white text-2xl font-bold">Pokéfuta Tracker</h1>
       </Link>
       <div className="ml-auto">
-        <Mantine.ActionIcon
-          color="white"
-          variant="transparent"
-          onClick={() => setIsHelpModalOpen(true)}
-          size="lg"
-        >
-          <Lucide.HelpCircle size={24} />
-        </Mantine.ActionIcon>
+        <Mantine.Tooltip label={t("help" as any)}>
+          <Mantine.ActionIcon
+            color="white"
+            variant="transparent"
+            onClick={() => setIsHelpModalOpen(true)}
+            size="lg"
+          >
+            <Lucide.HelpCircle size={24} />
+          </Mantine.ActionIcon>
+        </Mantine.Tooltip>
       </div>
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity ${
