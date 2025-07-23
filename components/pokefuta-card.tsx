@@ -5,6 +5,7 @@ import * as Mantine from "@mantine/core";
 import Link from "@/components/link";
 import PokefutaImage from "@/components/pokefuta-image";
 import { useTranslation } from "@/i18n/client";
+import { useWishlistContext } from "@/providers/wishlist";
 import {
   getPokemonName,
   getTranslatedCityName,
@@ -27,11 +28,13 @@ export const PokefutaCard: React.FC<{
   children,
 }) => {
   const { i18n } = useTranslation();
+  const { wishlist } = useWishlistContext();
 
   const names = pokefuta.pokemons
     .map((num) => getPokemonName(num, isEnglish))
     .join(", ");
   const hasVisited = progress[pokefuta.id] ?? false;
+  const isWishlisted = wishlist[pokefuta.id] ?? false;
 
   const handleClick = (e: React.MouseEvent) => {
     if (navigate) {
@@ -50,6 +53,9 @@ export const PokefutaCard: React.FC<{
         <p className="text-sm text-gray-600">{names}</p>
       </div>
       <Mantine.Box flex={1} />
+      {isWishlisted && (
+        <Lucide.Heart className="self-center text-pink-500" fill="currentColor" size={20} />
+      )}
       <Lucide.ChevronRight className="self-center" />
     </>
   );
