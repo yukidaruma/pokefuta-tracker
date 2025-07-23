@@ -31,8 +31,8 @@ const HeaderComponent: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = React.useState(false);
 
-  return (
-    <header className="bg-red-600 p-4 flex items-center sticky top-0 z-[1000]">
+  const header = (
+    <header className="bg-red-600 p-4 flex items-center sticky top-0 z-10">
       <Mantine.Burger
         color="white"
         opened={isSidebarOpen}
@@ -57,6 +57,13 @@ const HeaderComponent: React.FC = () => {
         }`}
         onClick={() => setIsSidebarOpen(false)}
       />
+    </header>
+  );
+
+  return (
+    <>
+      {header}
+
       <nav
         className={`fixed top-0 left-0 h-full bg-white shadow-lg z-50 transform transition-transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -88,6 +95,7 @@ const HeaderComponent: React.FC = () => {
           })}
         </ul>
       </nav>
+
       <MantineModal
         opened={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
@@ -99,7 +107,7 @@ const HeaderComponent: React.FC = () => {
       >
         <HelpContent onClose={() => setIsHelpModalOpen(false)} />
       </MantineModal>
-    </header>
+    </>
   );
 };
 
