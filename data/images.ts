@@ -406,6 +406,13 @@ import Image405 from "@/public/images/pokefuta/405.png";
 import Image406 from "@/public/images/pokefuta/406.png";
 import Image407 from "@/public/images/pokefuta/407.png";
 import Image408 from "@/public/images/pokefuta/408.png";
+import Image409 from "@/public/images/pokefuta/409.png";
+import Image410 from "@/public/images/pokefuta/410.png";
+import Image411 from "@/public/images/pokefuta/411.png";
+import Image412 from "@/public/images/pokefuta/412.png";
+import Image413 from "@/public/images/pokefuta/413.png";
+import Image414 from "@/public/images/pokefuta/414.png";
+import Image415 from "@/public/images/pokefuta/415.png";
 
 const images: Record<number, StaticImageData> = {
   "1": Image1,
@@ -812,6 +819,13 @@ const images: Record<number, StaticImageData> = {
   "406": Image406,
   "407": Image407,
   "408": Image408,
+  "409": Image409,
+  "410": Image410,
+  "411": Image411,
+  "412": Image412,
+  "413": Image413,
+  "414": Image414,
+  "415": Image415,
 };
 
 export default images;
