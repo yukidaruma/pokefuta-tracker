@@ -129,6 +129,21 @@ const ItemClientPage: React.FC = () => {
             navigate={navigateToItem}
             hasCrosshair
           />
+
+          {pokefutaData.notice && (
+            <div className="mt-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800">
+              <p>
+                <span className="font-bold">{t("notice")}</span>
+                {isEnglish && (
+                  <span className="ml-1 text-xs">
+                    ({t("notice_available_in_japanese")})
+                  </span>
+                )}
+              </p>
+              <p>{pokefutaData.notice}</p>
+            </div>
+          )}
+
           <div className="mt-4 flex flex-col space-y-4">
             <Copyable
               value={pokefutaData.address}

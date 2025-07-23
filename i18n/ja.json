@@ -93,6 +93,8 @@
   "title_list": "ポケふた一覧",
 
   "#": "/[id] page",
+  "notice": "注意事項",
+  "notice_available_in_japanese": "(English-specific text)",
   "link_to_google_maps_navigation": "経路検索 (Google Maps)",
   "link_to_official_pokefuta_page": "ポケふた公式ページ",
   "pokefutas_nearby": "このポケふたの周辺のポケふた",
