@@ -8,12 +8,8 @@ import data from "@/data/data.json";
 import cityTranslation from "@/data/municipality-translation.json";
 import { useTranslation } from "@/i18n/client";
 import { useProgressStorage } from "@/utils/hooks";
-import {
-  getFilteredPokefutas,
-  normalizeKana,
-  PokefutaData,
-  unique,
-} from "@/utils/pokefuta";
+import { normalizeKana, PokefutaData, unique } from "@/utils/pokefuta";
+import { FilterTuple, getFilteredPokefutas } from "@/utils/pokefuta-filter";
 
 type SearchFieldsProps = {
   searchTerm: string;
@@ -193,13 +189,13 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [progress, updateProgress, resetProgress] = useProgressStorage();
 
   const filteredPokefutas = React.useMemo(() => {
-    return getFilteredPokefutas(searchTerm, {
+    const filters: FilterTuple[] = hideVisited ? [["visited", "false"]] : [];
+    return getFilteredPokefutas(searchTerm, filters, {
       language: i18n.language,
       progress,
-      hideVisited,
       includeEvolutions,
     });
-  }, [searchTerm, progress, hideVisited, includeEvolutions]);
+  }, [i18n.language, searchTerm, progress, hideVisited, includeEvolutions]);
   const filteredProgression = Object.entries(progress).filter(
     ([id, visited]) => {
       return (

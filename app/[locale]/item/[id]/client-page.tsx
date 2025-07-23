@@ -14,7 +14,6 @@ import PokefutasNearby, {
   DEFAULT_POKEFUTAS_NEARBY_COUNT,
 } from "@/components/pokefutas-nearby";
 import data from "@/data/data.json";
-import evolutions from "@/data/evolutions.json";
 import { useTranslation } from "@/i18n/client";
 import { useSearchContext } from "@/providers/search";
 import { useWishlistContext } from "@/providers/wishlist";
@@ -26,6 +25,7 @@ import {
   getTranslatedCityName,
   normalizePokemonNumber,
 } from "@/utils/pokefuta";
+import { findEvolutionChain } from "@/utils/pokefuta-filter";
 
 const ItemClientPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -75,17 +75,14 @@ const ItemClientPage: React.FC = () => {
   const isEnglish = i18n.language === "en";
 
   const evolutionFamilyPokefutas = useMemo(() => {
-    const familyPokemonNumbers = new Set();
+    const familyPokemonNumbers = new Set<number>();
 
     const pokemonNumbers = pokefutaData.pokemons.map(normalizePokemonNumber);
-    outer: for (const evolutionChain of evolutions) {
+
+    for (const pokemonNumber of pokemonNumbers) {
+      const evolutionChain = findEvolutionChain(pokemonNumber);
       for (const pokeNum of evolutionChain) {
-        if (pokemonNumbers.includes(pokeNum)) {
-          for (const pokeNum2 of evolutionChain) {
-            familyPokemonNumbers.add(pokeNum2);
-          }
-          continue outer;
-        }
+        familyPokemonNumbers.add(pokeNum);
       }
     }
 

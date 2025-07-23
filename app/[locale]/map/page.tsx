@@ -17,7 +17,7 @@ import {
 } from "@/providers/geolocation";
 import { MapCenterContext, MapCenterProvider } from "@/providers/map-center";
 import { SearchContext } from "@/providers/search";
-import { getFilteredPokefutas } from "@/utils/pokefuta";
+import { getFilteredPokefutas } from "@/utils/pokefuta-filter";
 
 const MapPage = () => {
   const { t } = useTranslation();
