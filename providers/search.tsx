@@ -33,6 +33,7 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
   progression,
 }) => {
   const [popupOpened, setPopupOpened] = React.useState(false);
+  const [showOptions, setShowOptions] = React.useState(false);
   const { t, i18n } = useTranslation();
 
   type SearchIndex = [normalized: string, original: string];
@@ -133,22 +134,51 @@ const SearchFields: React.FC<SearchFieldsProps> = ({
       </div>
 
       <div className="mt-2 flex items-center space-x-2">
-        <Mantine.Checkbox
-          id="hide-visited"
-          checked={hideVisited}
-          onChange={(e) => setHideVisited(e.target.checked)}
-        />
-        <label htmlFor="hide-visited">{t("search_exclude_visited")}</label>
+        <Mantine.Button
+          variant="transparent"
+          size="sm"
+          className="!px-0 h-auto font-normal"
+          onClick={() => setShowOptions(!showOptions)}
+          rightSection={
+            showOptions ? (
+              <Lucide.ChevronUp size={16} />
+            ) : (
+              <Lucide.ChevronDown size={16} />
+            )
+          }
+        >
+          {t("search_options")}
+        </Mantine.Button>
+        {!showOptions && (hideVisited || includeEvolutions) && (
+          <span className="text-sm text-gray-500">
+            {t("search_options_active")}
+          </span>
+        )}
       </div>
 
-      <div className="mt-2 flex items-center space-x-2">
-        <Mantine.Checkbox
-          id="include-evolution"
-          checked={includeEvolutions}
-          onChange={(e) => setIncludeEvolutions(e.target.checked)}
-        />
-        <label htmlFor="include-evolution">{t("search_include_evos")}</label>
-      </div>
+      {showOptions && (
+        <div className="mt-2 space-y-2 text-sm">
+          <div className="flex items-center space-x-2">
+            <Mantine.Checkbox
+              id="hide-visited"
+              checked={hideVisited}
+              onChange={(e) => setHideVisited(e.target.checked)}
+            />
+            <label htmlFor="hide-visited">{t("search_exclude_visited")}</label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Mantine.Checkbox
+              id="include-evolution"
+              checked={includeEvolutions}
+              onChange={(e) => setIncludeEvolutions(e.target.checked)}
+            />
+            <label htmlFor="include-evolution">
+              {t("search_include_evos")}
+            </label>
+          </div>
+        </div>
+      )}
 
       <div className="mt-8"></div>
 

@@ -8,6 +8,8 @@
   "search_exclude_visited": "訪問済みのポケふたを除外する",
   "search_found": "検索結果",
   "search_include_evos": "進化系を含む",
+  "search_options": "検索オプション",
+  "search_options_active": "検索オプションが有効です",
   "search_suggestions_empty": "候補が見つかりません",
   "search_suggestions_hint": "候補が表示されます",
   "share": "共有",
