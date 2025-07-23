@@ -1,6 +1,6 @@
 import * as Mantine from "@mantine/core";
 
-import { REPO_URL } from "@/constants";
+import { REPO_URL } from "@/utils/constants";
 
 const FooterComponent: React.FC = () => {
   return (

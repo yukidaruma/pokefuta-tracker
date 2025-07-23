@@ -2,10 +2,10 @@
 
 import React from "react";
 
-import { SearchContext, useSearchContext } from "@/providers/search";
-import { getPrefectureByCode, type PokefutaData } from "@/util";
-import { useTranslation } from "@/i18n-client";
 import { PokefutaCard } from "@/components/pokefuta-card";
+import { useTranslation } from "@/i18n/client";
+import { SearchContext, useSearchContext } from "@/providers/search";
+import { getPrefectureByCode, type PokefutaData } from "@/utils/pokefuta";
 
 const IndexPage: React.FC = () => {
   const { t, i18n } = useTranslation();

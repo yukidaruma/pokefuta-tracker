@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useWishlistStorage } from "@/hooks";
+
+import { useWishlistStorage } from "@/utils/hooks";
 
 type WishlistContextProps = {
   wishlist: Record<string, boolean>;

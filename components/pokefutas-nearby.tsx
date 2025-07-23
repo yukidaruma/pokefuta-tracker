@@ -1,7 +1,7 @@
-import { useTranslation } from "@/i18n-client";
+import { PokefutaCard } from "@/components/pokefuta-card";
+import { useTranslation } from "@/i18n/client";
 import { useSearchContext } from "@/providers/search";
-import { getNearbyPokefutas, type PokefutaData } from "@/util";
-import { PokefutaCard } from "./pokefuta-card";
+import { getNearbyPokefutas, type PokefutaData } from "@/utils/pokefuta";
 
 export const DEFAULT_POKEFUTAS_NEARBY_COUNT = 6;
 

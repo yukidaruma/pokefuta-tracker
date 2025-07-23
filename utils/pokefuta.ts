@@ -1,8 +1,8 @@
-import { DATA_VERSION } from "@/constants";
 import data from "@/data/data.json";
 import evolutions from "@/data/evolutions.json";
 import prefs from "@/data/prefs.json";
 import cityTranslation from "@/data/municipality-translation.json";
+import { DATA_VERSION } from "@/utils/constants";
 
 export type PokefutaData = (typeof data.list)[number];
 

@@ -1,13 +1,11 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 
-import data from "@/data/data.json";
-import evolutions from "@/data/evolutions.json";
 import Copyable from "@/components/copyable";
 import ExternalLink from "@/components/external-link";
 import MapComponent from "@/components/map";
@@ -15,7 +13,9 @@ import PokefutaImage from "@/components/pokefuta-image";
 import PokefutasNearby, {
   DEFAULT_POKEFUTAS_NEARBY_COUNT,
 } from "@/components/pokefutas-nearby";
-import { useTranslation } from "@/i18n-client";
+import data from "@/data/data.json";
+import evolutions from "@/data/evolutions.json";
+import { useTranslation } from "@/i18n/client";
 import { useSearchContext } from "@/providers/search";
 import { useWishlistContext } from "@/providers/wishlist";
 import {
@@ -25,7 +25,7 @@ import {
   getPrefectureByCode,
   getTranslatedCityName,
   normalizePokemonNumber,
-} from "@/util";
+} from "@/utils/pokefuta";
 
 const ItemClientPage: React.FC = () => {
   const { t, i18n } = useTranslation();

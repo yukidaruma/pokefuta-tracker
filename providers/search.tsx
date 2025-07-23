@@ -4,16 +4,16 @@ import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";
 
-import cityTranslation from "@/data/municipality-translation.json";
 import data from "@/data/data.json";
+import cityTranslation from "@/data/municipality-translation.json";
+import { useTranslation } from "@/i18n/client";
+import { useProgressStorage } from "@/utils/hooks";
 import {
   getFilteredPokefutas,
   normalizeKana,
   PokefutaData,
   unique,
-} from "@/util";
-import { useProgressStorage } from "@/hooks";
-import { useTranslation } from "@/i18n-client";
+} from "@/utils/pokefuta";
 
 type SearchFieldsProps = {
   searchTerm: string;

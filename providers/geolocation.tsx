@@ -2,9 +2,9 @@
 
 import React from "react";
 
-import { useGeolocationFirstTimeNoticeStorage } from "@/hooks";
-import { useTranslation } from "@/i18n-client";
 import MantineModal from "@/components/modal";
+import { useTranslation } from "@/i18n/client";
+import { useGeolocationFirstTimeNoticeStorage } from "@/utils/hooks";
 
 type GeolocationContextProps = {
   latitude: number | null;

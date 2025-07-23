@@ -1,6 +1,7 @@
-import { useTranslation } from "@/i18n-client";
 import NextLink from "next/link";
 import React from "react";
+
+import { useTranslation } from "@/i18n/client";
 
 const Link: React.FC<React.ComponentProps<typeof NextLink>> = (props) => {
   const { i18n } = useTranslation();

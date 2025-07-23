@@ -9,9 +9,9 @@ import React, { use } from "react";
 import Link from "@/components/link";
 import data from "@/data/data.json";
 import prefs from "@/data/prefs.json";
-import { useTranslation } from "@/i18n-client";
+import { useTranslation } from "@/i18n/client";
 import { useSearchContext } from "@/providers/search";
-import { getPrefectureByCode, PokefutaData } from "@/util";
+import { getPrefectureByCode, PokefutaData } from "@/utils/pokefuta";
 
 const svgToImage = async (element: SVGElement) => {
   const canvas = document.createElement("canvas");

@@ -5,16 +5,20 @@ import { useRouter } from "next/navigation";
 
 import "ol/ol.css";
 import { Feature, Map, View } from "ol";
-import { fromLonLat, toLonLat } from "ol/proj";
 import { Point } from "ol/geom";
-import { OSM, Vector as VectorSource } from "ol/source";
 import TileLayer from "ol/layer/Tile";
 import WebGLVectorLayer from "ol/layer/WebGLVector";
+import { fromLonLat, toLonLat } from "ol/proj";
+import { OSM, Vector as VectorSource } from "ol/source";
 import type { FlatStyleLike } from "ol/style/flat";
 
-import { SPRITE_SHEET_PATH, SPRITE_SIZE, SPRITES_PER_ROW } from "@/constants";
 import data from "@/data/data.json";
 import { useMapCenterContext } from "@/providers/map-center";
+import {
+  SPRITE_SHEET_PATH,
+  SPRITE_SIZE,
+  SPRITES_PER_ROW,
+} from "@/utils/constants";
 
 export const ZOOM_LEVEL_WHOLE_JAPAN = 4.8;
 const ZOOM_LEVEL_ZOOMED_IN = 14;

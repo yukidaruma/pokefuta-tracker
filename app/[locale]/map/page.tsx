@@ -9,7 +9,7 @@ import MapComponent, {
   ZOOM_LEVEL_WHOLE_JAPAN,
 } from "@/components/map";
 import PokefutasNearby from "@/components/pokefutas-nearby";
-import { useTranslation } from "@/i18n-client";
+import { useTranslation } from "@/i18n/client";
 import {
   GeolocationContext,
   GeolocationProvider,
@@ -17,7 +17,7 @@ import {
 } from "@/providers/geolocation";
 import { MapCenterContext, MapCenterProvider } from "@/providers/map-center";
 import { SearchContext } from "@/providers/search";
-import { getFilteredPokefutas } from "@/util";
+import { getFilteredPokefutas } from "@/utils/pokefuta";
 
 const MapPage = () => {
   const { t } = useTranslation();

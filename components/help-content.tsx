@@ -3,7 +3,7 @@ import { KeyPrefix } from "i18next";
 import { useTranslation } from "react-i18next";
 
 import data from "@/data/data.json";
-import { REPO_URL } from "@/constants";
+import { REPO_URL } from "@/utils/constants";
 
 type ScreenSectionData = {
   titleKey: KeyPrefix<"common">;

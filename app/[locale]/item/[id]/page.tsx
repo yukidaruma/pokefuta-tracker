@@ -3,15 +3,15 @@ import { Metadata, ResolvingMetadata } from "next";
 import ItemClientPage from "./client-page";
 
 import data from "@/data/data.json";
+import { useTranslation } from "@/i18n/server";
+import { locales } from "@/i18n/constants";
 import {
   getPokefutaData,
   getPokefutaImage,
   getPokemonNamesCombined,
   getPrefectureByCode,
   getTranslatedCityName,
-} from "@/util";
-import { useTranslation } from "@/i18n";
-import { locales } from "@/i18n/constants";
+} from "@/utils/pokefuta";
 
 export async function generateMetadata(
   { params }: { params: Promise<{ locale: string; id: string }> },

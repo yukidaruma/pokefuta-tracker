@@ -7,7 +7,7 @@ import React from "react";
 import HelpContent from "@/components/help-content";
 import Link from "@/components/link";
 import MantineModal from "@/components/modal";
-import { useTranslation } from "@/i18n-client";
+import { useTranslation } from "@/i18n/client";
 
 const HeaderComponent: React.FC = () => {
   const { t } = useTranslation();

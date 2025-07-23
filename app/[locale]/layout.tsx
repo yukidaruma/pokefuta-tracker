@@ -10,8 +10,8 @@ import FooterComponent from "@/components/footer";
 import HeaderComponent from "@/components/header";
 import ClientPageRootComponent from "@/components/client-page-root";
 import ScrollToTop from "@/components/scroll-to-top";
-import { useTranslation } from "@/i18n";
 import { locales } from "@/i18n/constants";
+import { useTranslation } from "@/i18n/server";
 import { SearchProvider } from "@/providers/search";
 import { WishlistProvider } from "@/providers/wishlist";
 

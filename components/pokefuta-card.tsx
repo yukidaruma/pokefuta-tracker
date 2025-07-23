@@ -4,8 +4,12 @@ import * as Mantine from "@mantine/core";
 
 import Link from "@/components/link";
 import PokefutaImage from "@/components/pokefuta-image";
-import { useTranslation } from "@/i18n-client";
-import { getPokemonName, getTranslatedCityName, PokefutaData } from "@/util";
+import { useTranslation } from "@/i18n/client";
+import {
+  getPokemonName,
+  getTranslatedCityName,
+  PokefutaData,
+} from "@/utils/pokefuta";
 
 export const PokefutaCard: React.FC<{
   isEnglish: boolean;
