@@ -32,7 +32,19 @@ const ItemClientPage: React.FC = () => {
 
   const params = useParams()!;
   const [currentId, setCurrentId] = useState(Number(params.id as string));
+  const [showAll, setShowAll] = useState(false);
+  const { progress, updateProgress } = useSearchContext();
+  const { wishlist, updateWishlist } = useWishlistContext();
+  const hasVisited = progress[currentId];
+  const isWishlisted = wishlist[currentId];
+
   const pokefutaData = getPokefutaData(currentId)!;
+  const toggleVisited = () => {
+    updateProgress(currentId, !hasVisited);
+  };
+  const toggleWishlisted = () => {
+    updateWishlist(currentId, !isWishlisted);
+  };
 
   // Handle browser back/forward navigation
   useEffect(() => {
@@ -52,23 +64,9 @@ const ItemClientPage: React.FC = () => {
     const locale = params.locale as string;
     const newPath = `/${locale}/item/${newId}`;
 
-    // Update URL without full page reload
     window.history.pushState({ id: newId }, "", newPath);
-
-    // Update local state
     setCurrentId(newId);
-  };
-
-  const [showAll, setShowAll] = useState(false);
-  const { progress, updateProgress } = useSearchContext();
-  const { wishlist, updateWishlist } = useWishlistContext();
-  const hasVisited = progress[currentId];
-  const isWishlisted = wishlist[currentId];
-  const toggleVisited = () => {
-    updateProgress(currentId, !hasVisited);
-  };
-  const toggleWishlisted = () => {
-    updateWishlist(currentId, !isWishlisted);
+    setShowAll(false);
   };
 
   const [lat, lng] = pokefutaData.coords;
