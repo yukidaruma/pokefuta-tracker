@@ -66,36 +66,39 @@ const ProgressPage: React.FC<{ params: Promise<{ locale: string }> }> = ({
       .filter((pref) => !found[pref.code])
       .map((pref) => pref.code);
 
-    return prefs.reduce((acc, pref) => {
-      const capitalizedPrefName = capitalize(pref.name);
+    return prefs.reduce(
+      (acc, pref) => {
+        const capitalizedPrefName = capitalize(pref.name);
 
-      // Gray out the prefectures without pokefutas
-      if (prefsWithoutPokefutas.includes(pref.code)) {
-        acc[capitalizedPrefName] = "gray";
+        // Gray out the prefectures without pokefutas
+        if (prefsWithoutPokefutas.includes(pref.code)) {
+          acc[capitalizedPrefName] = "gray";
+          return acc;
+        }
+
+        // Color the prefectures based on the ratio of visited pokefutas
+        //
+        // 0%: Red
+        // 1-99%: Yellow
+        // 100%: Green
+        const pokefutasInPref = data.list.filter(
+          (pokefuta) => pokefuta.pref === pref.code
+        );
+        const visitedPokefutas = pokefutasInPref.filter(
+          (pokefuta) => progress[pokefuta.id]
+        );
+        const visitedRatio = visitedPokefutas.length / pokefutasInPref.length;
+
+        acc[capitalizedPrefName] =
+          visitedRatio === 0
+            ? "#ff6e66"
+            : visitedRatio < 1
+              ? "#f8d772"
+              : "#90d582";
         return acc;
-      }
-
-      // Color the prefectures based on the ratio of visited pokefutas
-      //
-      // 0%: Red
-      // 1-99%: Yellow
-      // 100%: Green
-      const pokefutasInPref = data.list.filter(
-        (pokefuta) => pokefuta.pref === pref.code
-      );
-      const visitedPokefutas = pokefutasInPref.filter(
-        (pokefuta) => progress[pokefuta.id]
-      );
-      const visitedRatio = visitedPokefutas.length / pokefutasInPref.length;
-
-      acc[capitalizedPrefName] =
-        visitedRatio === 0
-          ? "#ff6e66"
-          : visitedRatio < 1
-          ? "#f8d772"
-          : "#90d582";
-      return acc;
-    }, {} as Record<string, string>);
+      },
+      {} as Record<string, string>
+    );
   }, [progress]);
 
   const copyImage = async () => {
@@ -122,12 +125,15 @@ const ProgressPage: React.FC<{ params: Promise<{ locale: string }> }> = ({
     });
   };
 
-  const groupedPokefutas = data.list.reduce((acc, pokefuta) => {
-    const gruopKey = getPrefectureByCode(pokefuta.pref)!.region;
-    acc[gruopKey] ??= [];
-    acc[gruopKey].push(pokefuta);
-    return acc;
-  }, {} as Record<string, PokefutaData[]>);
+  const groupedPokefutas = data.list.reduce(
+    (acc, pokefuta) => {
+      const gruopKey = getPrefectureByCode(pokefuta.pref)!.region;
+      acc[gruopKey] ??= [];
+      acc[gruopKey].push(pokefuta);
+      return acc;
+    },
+    {} as Record<string, PokefutaData[]>
+  );
 
   const router = useRouter();
 
@@ -189,11 +195,14 @@ const ProgressPage: React.FC<{ params: Promise<{ locale: string }> }> = ({
               }
               return acc;
             }, 0);
-            const groupedByPrefecture = items.reduce((acc, pokefuta) => {
-              acc[pokefuta.pref] ??= [];
-              acc[pokefuta.pref].push(pokefuta);
-              return acc;
-            }, {} as Record<number, PokefutaData[]>);
+            const groupedByPrefecture = items.reduce(
+              (acc, pokefuta) => {
+                acc[pokefuta.pref] ??= [];
+                acc[pokefuta.pref].push(pokefuta);
+                return acc;
+              },
+              {} as Record<number, PokefutaData[]>
+            );
 
             const percentage = (groupProgress / items.length) * 100;
             return (

@@ -247,14 +247,22 @@ const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const filters: FilterTuple[] = [];
     if (hideVisited) filters.push(["visited", "false"]);
     if (showWishlisted) filters.push(["wishlisted", "true"]);
-    
+
     return getFilteredPokefutas(searchTerm, filters, {
       language: i18n.language,
       progress,
       wishlist,
       includeEvolutions,
     });
-  }, [i18n.language, searchTerm, progress, wishlist, hideVisited, showWishlisted, includeEvolutions]);
+  }, [
+    i18n.language,
+    searchTerm,
+    progress,
+    wishlist,
+    hideVisited,
+    showWishlisted,
+    includeEvolutions,
+  ]);
   const filteredProgression = Object.entries(progress).filter(
     ([id, visited]) => {
       return (

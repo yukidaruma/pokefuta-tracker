@@ -54,7 +54,11 @@ export const PokefutaCard: React.FC<{
       </div>
       <Mantine.Box flex={1} />
       {isWishlisted && (
-        <Lucide.Heart className="self-center text-pink-500" fill="currentColor" size={20} />
+        <Lucide.Heart
+          className="self-center text-pink-500"
+          fill="currentColor"
+          size={20}
+        />
       )}
       <Lucide.ChevronRight className="self-center" />
     </>
