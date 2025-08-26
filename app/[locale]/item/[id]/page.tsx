@@ -5,6 +5,7 @@ import ItemClientPage from "./client-page";
 import data from "@/data/data.json";
 import { useTranslation } from "@/i18n/server";
 import { locales } from "@/i18n/constants";
+import { generateAlternates } from "@/utils/metadata";
 import {
   getPokefutaData,
   getPokefutaImage,
@@ -46,6 +47,9 @@ export async function generateMetadata(
     openGraph: {
       images: getPokefutaImage(pageId),
     },
+    alternates: generateAlternates({
+      pathname: `/item/${id}`,
+    }),
   };
 }
 
