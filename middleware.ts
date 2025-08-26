@@ -47,7 +47,7 @@ export function middleware(req: NextRequest) {
   ) {
     const path = `/${lng}${req.nextUrl.pathname}`;
     const normalizedPath = path.replace(/\/+$/g, "");
-    return NextResponse.redirect(new URL(normalizedPath, req.url));
+    return NextResponse.redirect(new URL(normalizedPath, req.url), 308);
   }
 
   const response = NextResponse.next();
