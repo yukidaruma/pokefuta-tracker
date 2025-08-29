@@ -8,7 +8,7 @@ import { notifications } from "@mantine/notifications";
 
 import Copyable from "@/components/copyable";
 import MantineModal from "@/components/modal";
-import { useTranslation } from "@/i18n/client";
+import { I18N_STORAGE_KEY, useTranslation } from "@/i18n/client";
 import { useSearchContext } from "@/providers/search";
 
 const SettingsPage: React.FC = () => {
@@ -70,6 +70,7 @@ const SettingsPage: React.FC = () => {
   ) => {
     i18n.changeLanguage(language!);
     router.push(`/${language}/settings`);
+    localStorage.setItem(I18N_STORAGE_KEY, language!);
   };
 
   return (

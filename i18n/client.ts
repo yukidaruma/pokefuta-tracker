@@ -14,6 +14,8 @@ import { usePathname } from "next/navigation";
 
 const runsOnServerSide = typeof window === "undefined";
 
+export const I18N_STORAGE_KEY = "lang";
+
 i18next
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -29,7 +31,8 @@ i18next
     defaultNS: "common",
     fallbackNS: "common",
     detection: {
-      order: ["path", "cookie", "navigator"],
+      lookupLocalStorage: I18N_STORAGE_KEY,
+      order: ["path", "localStorage", "navigator"],
     },
     preload: [],
   });
