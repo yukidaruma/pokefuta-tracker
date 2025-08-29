@@ -1,4 +1,5 @@
 import { type DependencyList, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { useLocalStorage } from "@mantine/hooks";
 
 export const useUpdateEffect = (
@@ -15,6 +16,11 @@ export const useUpdateEffect = (
 
     return callback();
   }, dependencies);
+};
+
+export const usePathname = () => {
+  const location = useLocation();
+  return location.pathname;
 };
 
 export const useGeolocationFirstTimeNoticeStorage = () => {

@@ -1,15 +1,13 @@
-"use client";
-
 import * as Mantine from "@mantine/core";
 import { KeyPrefix } from "i18next";
 import * as Lucide from "lucide-react";
-import { usePathname } from "next/navigation";
 import React from "react";
 
 import HelpContent from "@/components/help-content";
 import Link from "@/components/link";
 import MantineModal from "@/components/modal";
 import { useTranslation } from "@/i18n/client";
+import { usePathname } from "@/utils/hooks";
 
 type NavItem = {
   href: string;

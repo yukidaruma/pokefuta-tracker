@@ -1,5 +1,3 @@
-"use client";
-
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
 import React from "react";

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 
 import { PokefutaCard } from "@/components/pokefuta-card";
@@ -7,7 +5,7 @@ import { useTranslation } from "@/i18n/client";
 import { SearchContext, useSearchContext } from "@/providers/search";
 import { getPrefectureByCode, type PokefutaData } from "@/utils/pokefuta";
 
-const IndexClientPage: React.FC = () => {
+const IndexPage: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   const { progress, updateProgress } = useSearchContext();
@@ -56,15 +54,12 @@ const IndexClientPage: React.FC = () => {
   return (
     <SearchContext.Consumer>
       {({ form, filteredPokefutas }) => {
-        const groupedPokefutas = filteredPokefutas.reduce(
-          (acc, pokefuta) => {
-            const gruopKey = pokefuta.pref;
-            acc[gruopKey] ??= [];
-            acc[gruopKey].push(pokefuta);
-            return acc;
-          },
-          {} as Record<string, PokefutaData[]>
-        );
+        const groupedPokefutas = filteredPokefutas.reduce((acc, pokefuta) => {
+          const gruopKey = pokefuta.pref;
+          acc[gruopKey] ??= [];
+          acc[gruopKey].push(pokefuta);
+          return acc;
+        }, {} as Record<string, PokefutaData[]>);
 
         return (
           <div className="space-y-4 w-full">
@@ -131,4 +126,4 @@ const IndexClientPage: React.FC = () => {
   );
 };
 
-export default IndexClientPage;
+export default IndexPage;

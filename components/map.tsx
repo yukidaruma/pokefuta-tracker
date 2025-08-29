@@ -1,7 +1,4 @@
-"use client";
-
 import React from "react";
-import { useRouter } from "next/navigation";
 
 import "ol/ol.css";
 import { Feature, Map, View } from "ol";
@@ -14,6 +11,7 @@ import type { FlatStyleLike } from "ol/style/flat";
 
 import data from "@/data/data.json";
 import { useMapCenterContext } from "@/providers/map-center";
+import { useNavigate } from "@/src/router";
 import {
   SPRITE_SHEET_PATH,
   SPRITE_SIZE,
@@ -38,7 +36,7 @@ export type MapComponentProps = {
   // If both `ids` and `highlight` are not set, all pokefutas will be shown
   highlight?: number;
 
-  navigate?: (id: number) => void;
+  onNavigate?: (id: number) => void;
 };
 
 export type MapComponentHandle = {
@@ -58,7 +56,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
       hasCrosshair,
       ids,
       highlight,
-      navigate,
+      onNavigate,
     },
     ref
   ) => {
@@ -72,7 +70,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
     const [map, setMap] = React.useState<Map | null>(null);
     const mapRef = React.useRef<HTMLDivElement | null>(null);
     const mapCenterContext = useMapCenterContext();
-    const router = useRouter();
+    const navigate = useNavigate();
     const currentHighlight = React.useRef(highlight);
 
     const pokefutaFeatures: Feature[] = [];
@@ -206,10 +204,10 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
               clickedFeature.getId() !== currentHighlight.current);
 
           if (isClickable) {
-            if (navigate) {
-              navigate(clickedFeature.getId() as number);
+            if (onNavigate) {
+              onNavigate(clickedFeature.getId() as number);
             } else {
-              router.push(`/item/${clickedFeature.getId()}`);
+              navigate(`/item/${clickedFeature.getId()}`);
             }
           }
         });

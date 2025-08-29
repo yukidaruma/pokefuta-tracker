@@ -1,12 +1,12 @@
 import * as Mantine from "@mantine/core";
 import { KeyPrefix } from "i18next";
-import { usePathname } from "next/navigation";
 
 import { navItems } from "@/components/header";
 import Link from "@/components/link";
 import data from "@/data/data.json";
 import { useTranslation } from "@/i18n/client";
 import { REPO_URL } from "@/utils/constants";
+import { usePathname } from "@/utils/hooks";
 
 type PageSectionData = {
   titleKey: KeyPrefix<"common">;
@@ -51,18 +51,19 @@ const HelpContent: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
 
       <p className="mt-4 text-xs text-gray-600">
         {t("last_updated_at")}:{" "}
-        {new Date(process.env.NEXT_PUBLIC_BUILD_DATE!).toLocaleString()} (rev:{" "}
-        {process.env.NEXT_PUBLIC_GIT_COMMIT_SHA === "unknown" ? (
+        {new Date(import.meta.env.VITE_PUBLIC_BUILD_DATE!).toLocaleString()}{" "}
+        (rev:{" "}
+        {import.meta.env.VITE_PUBLIC_GIT_COMMIT_SHA === "unknown" ? (
           "unknown"
         ) : (
           <a
-            href={`${REPO_URL}/commit/${process.env.NEXT_PUBLIC_GIT_COMMIT_SHA!.substring(
+            href={`${REPO_URL}/commit/${import.meta.env.VITE_PUBLIC_GIT_COMMIT_SHA!.substring(
               0,
               7
             )}`}
             target="_blank"
           >
-            {process.env.NEXT_PUBLIC_GIT_COMMIT_SHA!.substring(0, 7)}
+            {import.meta.env.VITE_PUBLIC_GIT_COMMIT_SHA!.substring(0, 7)}
           </a>
         )}
         )

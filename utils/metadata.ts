@@ -8,7 +8,7 @@ interface GenerateAlternatesOptions {
 export function generateAlternates({
   pathname,
 }: GenerateAlternatesOptions): Metadata["alternates"] {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const baseUrl = import.meta.env.VITE_PUBLIC_SITE_URL;
   const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(\/|$)/, "/");
 
   let finalPath = pathWithoutLocale;

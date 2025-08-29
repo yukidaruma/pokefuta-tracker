@@ -1,8 +1,4 @@
-"use client";
-
 import Link from "@/components/link";
-
-// Importing `useTranslation` from this file will cause an error.
 
 const NotFoundPage: React.FC = async () => {
   return (

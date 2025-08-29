@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 
 import images from "@/data/images";
 import { SPRITE_SHEET_PATH, SPRITES_PER_ROW } from "@/utils/constants";
@@ -57,14 +56,13 @@ const PokefutaImage: React.FC<PokefutaImageProps> = ({
   }
 
   return (
-    <Image
+    <img
       style={{
         borderRadius: "50%",
         borderColor: "transparent",
       }}
       alt={`Image of pokefuta with ${names}`}
       src={images[id]!}
-      placeholder="blur"
       width={size}
       height={size}
       key={id}

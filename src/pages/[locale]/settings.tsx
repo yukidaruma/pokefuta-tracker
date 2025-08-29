@@ -1,8 +1,5 @@
-"use client";
-
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { notifications } from "@mantine/notifications";
 
@@ -10,10 +7,11 @@ import Copyable from "@/components/copyable";
 import MantineModal from "@/components/modal";
 import { useTranslation } from "@/i18n/client";
 import { useSearchContext } from "@/providers/search";
+import { useNavigate } from "@/src/router";
 
 const SettingsPage: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const [importTextareaValue, setImportTextareaValue] = React.useState("");
   const [modalState, setModalState] = React.useState<
@@ -69,7 +67,7 @@ const SettingsPage: React.FC = () => {
     _option: Mantine.ComboboxItem
   ) => {
     i18n.changeLanguage(language!);
-    router.push(`/${language}/settings`);
+    navigate(`/${language}/settings`);
   };
 
   return (

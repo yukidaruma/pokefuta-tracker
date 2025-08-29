@@ -1,8 +1,4 @@
-"use client";
-
-import { usePathname } from "next/navigation";
-
-import { useUpdateEffect } from "@/utils/hooks";
+import { usePathname, useUpdateEffect } from "@/utils/hooks";
 
 const ScrollToTop: React.FC = () => {
   const pathname = usePathname();
