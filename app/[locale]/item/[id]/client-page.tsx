@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
@@ -38,7 +38,11 @@ const ItemClientPage: React.FC = () => {
   const hasVisited = progress[currentId];
   const isWishlisted = wishlist[currentId];
 
-  const pokefutaData = getPokefutaData(currentId)!;
+  const pokefutaData = getPokefutaData(currentId);
+  if (!pokefutaData) {
+    return notFound();
+  }
+
   const toggleVisited = () => {
     updateProgress(currentId, !hasVisited);
   };
