@@ -12,6 +12,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function MapPage() {
-  return <MapClientPage />;
+export default function MapPage({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  return <MapClientPage params={params} />;
 }

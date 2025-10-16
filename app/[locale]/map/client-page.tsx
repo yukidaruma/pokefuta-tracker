@@ -2,7 +2,7 @@
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
-import React from "react";
+import React, { use } from "react";
 
 import MapComponent, {
   MapComponentHandle,
@@ -19,8 +19,13 @@ import { MapCenterContext, MapCenterProvider } from "@/providers/map-center";
 import { SearchContext } from "@/providers/search";
 import { getFilteredPokefutas } from "@/utils/pokefuta-filter";
 
-const MapPage = () => {
+const MapPage = ({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}) => {
   const { t } = useTranslation();
+  const { locale } = use(params);
   const [geolocationGen, setGeolocationGen] = React.useState(0);
 
   return (
@@ -39,6 +44,7 @@ const MapPage = () => {
                 {(context) => (
                   <>
                     <MapPageChild
+                      locale={locale}
                       geolocationGen={geolocationGen}
                       filteredPokefutas={filteredPokefutas}
                     />
@@ -80,9 +86,10 @@ const MapPage = () => {
 };
 
 const MapPageChild: React.FC<{
+  locale: string;
   geolocationGen: number;
   filteredPokefutas?: ReturnType<typeof getFilteredPokefutas>;
-}> = ({ geolocationGen, filteredPokefutas }) => {
+}> = ({ locale, geolocationGen, filteredPokefutas }) => {
   const mapRef = React.useRef<MapComponentHandle>(null);
   const geolocationContext = useGeolocationContext();
 
@@ -102,6 +109,7 @@ const MapPageChild: React.FC<{
   return (
     <MapComponent
       ref={mapRef}
+      locale={locale}
       style={{ height: 600 }}
       zoom={ZOOM_LEVEL_WHOLE_JAPAN}
       ids={filteredPokefutas?.map((item) => item.id)}

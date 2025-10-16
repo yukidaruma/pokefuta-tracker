@@ -28,6 +28,7 @@ export type MapComponentProps = {
   zoom?: number;
   initialLat?: string | number;
   initialLng?: string | number;
+  locale?: string;
   hasCrosshair?: boolean;
 
   // Ids to show on the map
@@ -55,6 +56,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
       initialLng = 139.775397,
       initialLat = 35.717715,
 
+      locale,
       hasCrosshair,
       ids,
       highlight,
@@ -209,7 +211,7 @@ const MapComponent = React.forwardRef<MapComponentHandle, MapComponentProps>(
             if (navigate) {
               navigate(clickedFeature.getId() as number);
             } else {
-              router.push(`/item/${clickedFeature.getId()}`);
+              router.push(`/${locale}/item/${clickedFeature.getId()}`);
             }
           }
         });

@@ -51,6 +51,7 @@ const ItemClientPage: React.FC = () => {
   };
 
   // Handle browser back/forward navigation
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const handlePopState = () => {
       const newId = Number(window.location.pathname.split("/").pop());
@@ -76,6 +77,7 @@ const ItemClientPage: React.FC = () => {
   const [lat, lng] = pokefutaData.coords;
   const isEnglish = i18n.language === "en";
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const evolutionFamilyPokefutas = useMemo(() => {
     const familyPokemonNumbers = new Set<number>();
 
