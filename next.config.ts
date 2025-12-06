@@ -17,8 +17,6 @@ const nextConfig: NextConfig = {
       })() ||
       "unknown",
   },
-  // https://github.com/vercel/next.js/issues/61228#issuecomment-2002035619
-  distDir: process.env.NODE_ENV === "development" ? ".next/dev" : ".next/build",
   images: {
     minimumCacheTTL: 31536000,
   },
