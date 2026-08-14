@@ -2,9 +2,9 @@ import type { Metadata, ResolvingMetadata, Viewport } from "next";
 import { use } from "react";
 
 // Order of these CSS imports is important
+import "../globals.css";
 import "@mantine/core/styles.layer.css";
 import "@mantine/notifications/styles.css";
-import "../globals.css";
 
 import FooterComponent from "@/components/footer";
 import HeaderComponent from "@/components/header";

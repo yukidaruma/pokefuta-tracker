@@ -1,10 +1,6 @@
-@import "tailwindcss";
+@layer base, mantine, components, utilities;
 
-@layer tailwind {
-  @tailwind base;
-}
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 body {
   font-family:
