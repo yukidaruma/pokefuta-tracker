@@ -2,12 +2,13 @@
 
 import * as Lucide from "lucide-react";
 import * as Mantine from "@mantine/core";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
 import data from "@/data/data.json";
 import cityTranslation from "@/data/municipality-translation.json";
 import { useTranslation } from "@/i18n/client";
-import { useProgressStorage } from "@/utils/hooks";
+import { useProgressStorage, useUpdateEffect } from "@/utils/hooks";
 import { useWishlistContext } from "@/providers/wishlist";
 import { normalizeKana, PokefutaData, unique } from "@/utils/pokefuta";
 import { FilterTuple, getFilteredPokefutas } from "@/utils/pokefuta-filter";
@@ -235,13 +236,32 @@ const SearchContext = React.createContext<SearchContextProps>(
 
 const SearchProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { i18n } = useTranslation();
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = React.useState(
+    () => searchParams.get("q") ?? ""
+  );
   const [hideVisited, setHideVisited] = React.useState(false);
   const [showWishlisted, setShowWishlisted] = React.useState(false);
   const [includeEvolutions, setIncludeEvolutions] = React.useState(false);
 
   const [progress, updateProgress, resetProgress] = useProgressStorage();
   const { wishlist } = useWishlistContext();
+
+  useUpdateEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchTerm.trim()) {
+      params.set("q", searchTerm);
+    } else {
+      params.delete("q");
+    }
+
+    const query = params.toString();
+    router.replace(`${pathname}${query ? `?${query}` : ""}`, {
+      scroll: false,
+    });
+  }, [searchTerm]);
 
   const filteredPokefutas = React.useMemo(() => {
     const filters: FilterTuple[] = [];

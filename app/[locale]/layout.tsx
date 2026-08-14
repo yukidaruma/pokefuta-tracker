@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata, Viewport } from "next";
-import { use } from "react";
+import { Suspense, use } from "react";
 
 // Order of these CSS imports is important
 import "../globals.css";
@@ -48,11 +48,13 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <ScrollToTop />
         <HeaderComponent />
         <WishlistProvider>
-          <SearchProvider>
-            <main className="w-full max-w-screen-xl mx-auto overflow-auto xl:my-8 xl:rounded-xl p-4 xl:p-8 bg-white flex flex-1">
-              {children}
-            </main>
-          </SearchProvider>
+          <Suspense>
+            <SearchProvider>
+              <main className="w-full max-w-screen-xl mx-auto overflow-auto xl:my-8 xl:rounded-xl p-4 xl:p-8 bg-white flex flex-1">
+                {children}
+              </main>
+            </SearchProvider>
+          </Suspense>
         </WishlistProvider>
         <FooterComponent />
       </ClientPageRootComponent>
