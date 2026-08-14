@@ -1,12 +1,20 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import { fixupConfigRules } from "@eslint/compat";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
-const flatCompat = new FlatCompat();
+export default defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  globalIgnores([
+    ".next/**",
+    ".next-dev/**",
+    ".vercel/**",
+    ".wrangler/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
 
-/**
- * @type {import("eslint").Linter.Config}
- */
-export default fixupConfigRules(
-  flatCompat.extends("next/core-web-vitals"),
-  flatCompat.extends("next/typescript")
-);
+    // fork of @react-map/japan, not project source.
+    "japan/**",
+  ]),
+]);
