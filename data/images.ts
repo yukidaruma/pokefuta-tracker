@@ -413,6 +413,77 @@ import Image412 from "@/public/images/pokefuta/412.png";
 import Image413 from "@/public/images/pokefuta/413.png";
 import Image414 from "@/public/images/pokefuta/414.png";
 import Image415 from "@/public/images/pokefuta/415.png";
+import Image416 from "@/public/images/pokefuta/416.png";
+import Image417 from "@/public/images/pokefuta/417.png";
+import Image418 from "@/public/images/pokefuta/418.png";
+import Image419 from "@/public/images/pokefuta/419.png";
+import Image420 from "@/public/images/pokefuta/420.png";
+import Image421 from "@/public/images/pokefuta/421.png";
+import Image422 from "@/public/images/pokefuta/422.png";
+import Image423 from "@/public/images/pokefuta/423.png";
+import Image424 from "@/public/images/pokefuta/424.png";
+import Image425 from "@/public/images/pokefuta/425.png";
+import Image426 from "@/public/images/pokefuta/426.png";
+import Image427 from "@/public/images/pokefuta/427.png";
+import Image428 from "@/public/images/pokefuta/428.png";
+import Image429 from "@/public/images/pokefuta/429.png";
+import Image430 from "@/public/images/pokefuta/430.png";
+import Image431 from "@/public/images/pokefuta/431.png";
+import Image432 from "@/public/images/pokefuta/432.png";
+import Image433 from "@/public/images/pokefuta/433.png";
+import Image434 from "@/public/images/pokefuta/434.png";
+import Image435 from "@/public/images/pokefuta/435.png";
+import Image436 from "@/public/images/pokefuta/436.png";
+import Image437 from "@/public/images/pokefuta/437.png";
+import Image438 from "@/public/images/pokefuta/438.png";
+import Image439 from "@/public/images/pokefuta/439.png";
+import Image440 from "@/public/images/pokefuta/440.png";
+import Image441 from "@/public/images/pokefuta/441.png";
+import Image442 from "@/public/images/pokefuta/442.png";
+import Image443 from "@/public/images/pokefuta/443.png";
+import Image444 from "@/public/images/pokefuta/444.png";
+import Image445 from "@/public/images/pokefuta/445.png";
+import Image446 from "@/public/images/pokefuta/446.png";
+import Image447 from "@/public/images/pokefuta/447.png";
+import Image448 from "@/public/images/pokefuta/448.png";
+import Image449 from "@/public/images/pokefuta/449.png";
+import Image450 from "@/public/images/pokefuta/450.png";
+import Image451 from "@/public/images/pokefuta/451.png";
+import Image452 from "@/public/images/pokefuta/452.png";
+import Image453 from "@/public/images/pokefuta/453.png";
+import Image454 from "@/public/images/pokefuta/454.png";
+import Image455 from "@/public/images/pokefuta/455.png";
+import Image456 from "@/public/images/pokefuta/456.png";
+import Image457 from "@/public/images/pokefuta/457.png";
+import Image458 from "@/public/images/pokefuta/458.png";
+import Image459 from "@/public/images/pokefuta/459.png";
+import Image460 from "@/public/images/pokefuta/460.png";
+import Image461 from "@/public/images/pokefuta/461.png";
+import Image462 from "@/public/images/pokefuta/462.png";
+import Image463 from "@/public/images/pokefuta/463.png";
+import Image464 from "@/public/images/pokefuta/464.png";
+import Image465 from "@/public/images/pokefuta/465.png";
+import Image466 from "@/public/images/pokefuta/466.png";
+import Image467 from "@/public/images/pokefuta/467.png";
+import Image468 from "@/public/images/pokefuta/468.png";
+import Image469 from "@/public/images/pokefuta/469.png";
+import Image470 from "@/public/images/pokefuta/470.png";
+import Image471 from "@/public/images/pokefuta/471.png";
+import Image472 from "@/public/images/pokefuta/472.png";
+import Image473 from "@/public/images/pokefuta/473.png";
+import Image474 from "@/public/images/pokefuta/474.png";
+import Image475 from "@/public/images/pokefuta/475.png";
+import Image476 from "@/public/images/pokefuta/476.png";
+import Image477 from "@/public/images/pokefuta/477.png";
+import Image478 from "@/public/images/pokefuta/478.png";
+import Image479 from "@/public/images/pokefuta/479.png";
+import Image480 from "@/public/images/pokefuta/480.png";
+import Image481 from "@/public/images/pokefuta/481.png";
+import Image482 from "@/public/images/pokefuta/482.png";
+import Image483 from "@/public/images/pokefuta/483.png";
+import Image484 from "@/public/images/pokefuta/484.png";
+import Image485 from "@/public/images/pokefuta/485.png";
+import Image486 from "@/public/images/pokefuta/486.png";
 
 const images: Record<number, StaticImageData> = {
   "1": Image1,
@@ -826,6 +897,77 @@ const images: Record<number, StaticImageData> = {
   "413": Image413,
   "414": Image414,
   "415": Image415,
+  "416": Image416,
+  "417": Image417,
+  "418": Image418,
+  "419": Image419,
+  "420": Image420,
+  "421": Image421,
+  "422": Image422,
+  "423": Image423,
+  "424": Image424,
+  "425": Image425,
+  "426": Image426,
+  "427": Image427,
+  "428": Image428,
+  "429": Image429,
+  "430": Image430,
+  "431": Image431,
+  "432": Image432,
+  "433": Image433,
+  "434": Image434,
+  "435": Image435,
+  "436": Image436,
+  "437": Image437,
+  "438": Image438,
+  "439": Image439,
+  "440": Image440,
+  "441": Image441,
+  "442": Image442,
+  "443": Image443,
+  "444": Image444,
+  "445": Image445,
+  "446": Image446,
+  "447": Image447,
+  "448": Image448,
+  "449": Image449,
+  "450": Image450,
+  "451": Image451,
+  "452": Image452,
+  "453": Image453,
+  "454": Image454,
+  "455": Image455,
+  "456": Image456,
+  "457": Image457,
+  "458": Image458,
+  "459": Image459,
+  "460": Image460,
+  "461": Image461,
+  "462": Image462,
+  "463": Image463,
+  "464": Image464,
+  "465": Image465,
+  "466": Image466,
+  "467": Image467,
+  "468": Image468,
+  "469": Image469,
+  "470": Image470,
+  "471": Image471,
+  "472": Image472,
+  "473": Image473,
+  "474": Image474,
+  "475": Image475,
+  "476": Image476,
+  "477": Image477,
+  "478": Image478,
+  "479": Image479,
+  "480": Image480,
+  "481": Image481,
+  "482": Image482,
+  "483": Image483,
+  "484": Image484,
+  "485": Image485,
+  "486": Image486,
 };
 
 export default images;
